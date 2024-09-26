@@ -1,6 +1,6 @@
 {
   "name": "cosmos-telescope",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "patrykw",
   "description": "cosmos telescope js module",
   "main": "index.js",
