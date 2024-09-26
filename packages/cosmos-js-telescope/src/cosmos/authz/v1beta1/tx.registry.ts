@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { GeneratedType, Registry } from "@cosmjs/proto-signing";
-import { MsgGrant, MsgExec, MsgRevoke } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/cosmos.authz.v1beta1.MsgGrant", MsgGrant], ["/cosmos.authz.v1beta1.MsgExec", MsgExec], ["/cosmos.authz.v1beta1.MsgRevoke", MsgRevoke]];
+import { MsgGrant, MsgExec, MsgRevoke, MsgRevokeAll, MsgPruneExpiredGrants } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/cosmos.authz.v1beta1.MsgGrant", MsgGrant], ["/cosmos.authz.v1beta1.MsgExec", MsgExec], ["/cosmos.authz.v1beta1.MsgRevoke", MsgRevoke], ["/cosmos.authz.v1beta1.MsgRevokeAll", MsgRevokeAll], ["/cosmos.authz.v1beta1.MsgPruneExpiredGrants", MsgPruneExpiredGrants]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -26,6 +26,18 @@ export const MessageComposer = {
         typeUrl: "/cosmos.authz.v1beta1.MsgRevoke",
         value: MsgRevoke.encode(value).finish()
       };
+    },
+    revokeAll(value: MsgRevokeAll) {
+      return {
+        typeUrl: "/cosmos.authz.v1beta1.MsgRevokeAll",
+        value: MsgRevokeAll.encode(value).finish()
+      };
+    },
+    pruneExpiredGrants(value: MsgPruneExpiredGrants) {
+      return {
+        typeUrl: "/cosmos.authz.v1beta1.MsgPruneExpiredGrants",
+        value: MsgPruneExpiredGrants.encode(value).finish()
+      };
     }
   },
   withTypeUrl: {
@@ -44,6 +56,18 @@ export const MessageComposer = {
     revoke(value: MsgRevoke) {
       return {
         typeUrl: "/cosmos.authz.v1beta1.MsgRevoke",
+        value
+      };
+    },
+    revokeAll(value: MsgRevokeAll) {
+      return {
+        typeUrl: "/cosmos.authz.v1beta1.MsgRevokeAll",
+        value
+      };
+    },
+    pruneExpiredGrants(value: MsgPruneExpiredGrants) {
+      return {
+        typeUrl: "/cosmos.authz.v1beta1.MsgPruneExpiredGrants",
         value
       };
     }
@@ -65,6 +89,18 @@ export const MessageComposer = {
       return {
         typeUrl: "/cosmos.authz.v1beta1.MsgRevoke",
         value: MsgRevoke.fromPartial(value)
+      };
+    },
+    revokeAll(value: MsgRevokeAll) {
+      return {
+        typeUrl: "/cosmos.authz.v1beta1.MsgRevokeAll",
+        value: MsgRevokeAll.fromPartial(value)
+      };
+    },
+    pruneExpiredGrants(value: MsgPruneExpiredGrants) {
+      return {
+        typeUrl: "/cosmos.authz.v1beta1.MsgPruneExpiredGrants",
+        value: MsgPruneExpiredGrants.fromPartial(value)
       };
     }
   }

@@ -1,10 +1,11 @@
 //@ts-nocheck
 import { Params, ParamsAmino, ParamsSDKType, Validator, ValidatorAmino, ValidatorSDKType, Delegation, DelegationAmino, DelegationSDKType, UnbondingDelegation, UnbondingDelegationAmino, UnbondingDelegationSDKType, Redelegation, RedelegationAmino, RedelegationSDKType } from "./staking";
+import { Timestamp } from "../../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { bytesFromBase64, base64FromBytes, toTimestamp, fromTimestamp } from "../../../helpers";
 /** GenesisState defines the staking module's genesis state. */
 export interface GenesisState {
-  /** params defines all the paramaters of related to deposit. */
+  /** params defines all the parameters of related to deposit. */
   params: Params;
   /**
    * last_total_power tracks the total amounts of bonded tokens recorded during
@@ -16,7 +17,7 @@ export interface GenesisState {
    * of the last-block's bonded validators.
    */
   lastValidatorPowers: LastValidatorPower[];
-  /** delegations defines the validator set at genesis. */
+  /** validators defines the validator set at genesis. */
   validators: Validator[];
   /** delegations defines the delegations active at genesis. */
   delegations: Delegation[];
@@ -24,7 +25,10 @@ export interface GenesisState {
   unbondingDelegations: UnbondingDelegation[];
   /** redelegations defines the redelegations active at genesis. */
   redelegations: Redelegation[];
+  /** exported defines a bool to identify whether the chain dealing with exported or initialized genesis. */
   exported: boolean;
+  rotationIndexRecords: RotationIndexRecord[];
+  rotationQueue: RotationQueueRecord[];
 }
 export interface GenesisStateProtoMsg {
   typeUrl: "/cosmos.staking.v1beta1.GenesisState";
@@ -32,27 +36,30 @@ export interface GenesisStateProtoMsg {
 }
 /** GenesisState defines the staking module's genesis state. */
 export interface GenesisStateAmino {
-  /** params defines all the paramaters of related to deposit. */
-  params?: ParamsAmino;
+  /** params defines all the parameters of related to deposit. */
+  params: ParamsAmino;
   /**
    * last_total_power tracks the total amounts of bonded tokens recorded during
    * the previous end block.
    */
-  last_total_power?: string;
+  last_total_power: string;
   /**
    * last_validator_powers is a special index that provides a historical list
    * of the last-block's bonded validators.
    */
-  last_validator_powers?: LastValidatorPowerAmino[];
-  /** delegations defines the validator set at genesis. */
-  validators?: ValidatorAmino[];
+  last_validator_powers: LastValidatorPowerAmino[];
+  /** validators defines the validator set at genesis. */
+  validators: ValidatorAmino[];
   /** delegations defines the delegations active at genesis. */
-  delegations?: DelegationAmino[];
+  delegations: DelegationAmino[];
   /** unbonding_delegations defines the unbonding delegations active at genesis. */
-  unbonding_delegations?: UnbondingDelegationAmino[];
+  unbonding_delegations: UnbondingDelegationAmino[];
   /** redelegations defines the redelegations active at genesis. */
-  redelegations?: RedelegationAmino[];
+  redelegations: RedelegationAmino[];
+  /** exported defines a bool to identify whether the chain dealing with exported or initialized genesis. */
   exported?: boolean;
+  rotation_index_records: RotationIndexRecordAmino[];
+  rotation_queue: RotationQueueRecordAmino[];
 }
 export interface GenesisStateAminoMsg {
   type: "cosmos-sdk/GenesisState";
@@ -68,6 +75,8 @@ export interface GenesisStateSDKType {
   unbonding_delegations: UnbondingDelegationSDKType[];
   redelegations: RedelegationSDKType[];
   exported: boolean;
+  rotation_index_records: RotationIndexRecordSDKType[];
+  rotation_queue: RotationQueueRecordSDKType[];
 }
 /** LastValidatorPower required for validator set update logic. */
 export interface LastValidatorPower {
@@ -96,6 +105,43 @@ export interface LastValidatorPowerSDKType {
   address: string;
   power: bigint;
 }
+export interface RotationIndexRecord {
+  address: Uint8Array;
+  time?: Date;
+}
+export interface RotationIndexRecordProtoMsg {
+  typeUrl: "/cosmos.staking.v1beta1.RotationIndexRecord";
+  value: Uint8Array;
+}
+export interface RotationIndexRecordAmino {
+  address?: string;
+  time?: string;
+}
+export interface RotationIndexRecordAminoMsg {
+  type: "cosmos-sdk/RotationIndexRecord";
+  value: RotationIndexRecordAmino;
+}
+export interface RotationIndexRecordSDKType {
+  address: Uint8Array;
+  time?: Date;
+}
+export interface RotationQueueRecord {
+  time?: Date;
+}
+export interface RotationQueueRecordProtoMsg {
+  typeUrl: "/cosmos.staking.v1beta1.RotationQueueRecord";
+  value: Uint8Array;
+}
+export interface RotationQueueRecordAmino {
+  time?: string;
+}
+export interface RotationQueueRecordAminoMsg {
+  type: "cosmos-sdk/RotationQueueRecord";
+  value: RotationQueueRecordAmino;
+}
+export interface RotationQueueRecordSDKType {
+  time?: Date;
+}
 function createBaseGenesisState(): GenesisState {
   return {
     params: Params.fromPartial({}),
@@ -105,7 +151,9 @@ function createBaseGenesisState(): GenesisState {
     delegations: [],
     unbondingDelegations: [],
     redelegations: [],
-    exported: false
+    exported: false,
+    rotationIndexRecords: [],
+    rotationQueue: []
   };
 }
 export const GenesisState = {
@@ -134,6 +182,12 @@ export const GenesisState = {
     }
     if (message.exported === true) {
       writer.uint32(64).bool(message.exported);
+    }
+    for (const v of message.rotationIndexRecords) {
+      RotationIndexRecord.encode(v!, writer.uint32(74).fork()).ldelim();
+    }
+    for (const v of message.rotationQueue) {
+      RotationQueueRecord.encode(v!, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -168,6 +222,12 @@ export const GenesisState = {
         case 8:
           message.exported = reader.bool();
           break;
+        case 9:
+          message.rotationIndexRecords.push(RotationIndexRecord.decode(reader, reader.uint32()));
+          break;
+        case 11:
+          message.rotationQueue.push(RotationQueueRecord.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -185,6 +245,8 @@ export const GenesisState = {
     message.unbondingDelegations = object.unbondingDelegations?.map(e => UnbondingDelegation.fromPartial(e)) || [];
     message.redelegations = object.redelegations?.map(e => Redelegation.fromPartial(e)) || [];
     message.exported = object.exported ?? false;
+    message.rotationIndexRecords = object.rotationIndexRecords?.map(e => RotationIndexRecord.fromPartial(e)) || [];
+    message.rotationQueue = object.rotationQueue?.map(e => RotationQueueRecord.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: GenesisStateAmino): GenesisState {
@@ -203,12 +265,14 @@ export const GenesisState = {
     if (object.exported !== undefined && object.exported !== null) {
       message.exported = object.exported;
     }
+    message.rotationIndexRecords = object.rotation_index_records?.map(e => RotationIndexRecord.fromAmino(e)) || [];
+    message.rotationQueue = object.rotation_queue?.map(e => RotationQueueRecord.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: GenesisState): GenesisStateAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
-    obj.last_total_power = message.lastTotalPower ? base64FromBytes(message.lastTotalPower) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params) : Params.toAmino(Params.fromPartial({}));
+    obj.last_total_power = message.lastTotalPower ? base64FromBytes(message.lastTotalPower) : "";
     if (message.lastValidatorPowers) {
       obj.last_validator_powers = message.lastValidatorPowers.map(e => e ? LastValidatorPower.toAmino(e) : undefined);
     } else {
@@ -235,6 +299,16 @@ export const GenesisState = {
       obj.redelegations = message.redelegations;
     }
     obj.exported = message.exported === false ? undefined : message.exported;
+    if (message.rotationIndexRecords) {
+      obj.rotation_index_records = message.rotationIndexRecords.map(e => e ? RotationIndexRecord.toAmino(e) : undefined);
+    } else {
+      obj.rotation_index_records = message.rotationIndexRecords;
+    }
+    if (message.rotationQueue) {
+      obj.rotation_queue = message.rotationQueue.map(e => e ? RotationQueueRecord.toAmino(e) : undefined);
+    } else {
+      obj.rotation_queue = message.rotationQueue;
+    }
     return obj;
   },
   fromAminoMsg(object: GenesisStateAminoMsg): GenesisState {
@@ -337,6 +411,156 @@ export const LastValidatorPower = {
     return {
       typeUrl: "/cosmos.staking.v1beta1.LastValidatorPower",
       value: LastValidatorPower.encode(message).finish()
+    };
+  }
+};
+function createBaseRotationIndexRecord(): RotationIndexRecord {
+  return {
+    address: new Uint8Array(),
+    time: undefined
+  };
+}
+export const RotationIndexRecord = {
+  typeUrl: "/cosmos.staking.v1beta1.RotationIndexRecord",
+  encode(message: RotationIndexRecord, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.address.length !== 0) {
+      writer.uint32(10).bytes(message.address);
+    }
+    if (message.time !== undefined) {
+      Timestamp.encode(toTimestamp(message.time), writer.uint32(50).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): RotationIndexRecord {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRotationIndexRecord();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.bytes();
+          break;
+        case 6:
+          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<RotationIndexRecord>): RotationIndexRecord {
+    const message = createBaseRotationIndexRecord();
+    message.address = object.address ?? new Uint8Array();
+    message.time = object.time ?? undefined;
+    return message;
+  },
+  fromAmino(object: RotationIndexRecordAmino): RotationIndexRecord {
+    const message = createBaseRotationIndexRecord();
+    if (object.address !== undefined && object.address !== null) {
+      message.address = bytesFromBase64(object.address);
+    }
+    if (object.time !== undefined && object.time !== null) {
+      message.time = fromTimestamp(Timestamp.fromAmino(object.time));
+    }
+    return message;
+  },
+  toAmino(message: RotationIndexRecord): RotationIndexRecordAmino {
+    const obj: any = {};
+    obj.address = message.address ? base64FromBytes(message.address) : undefined;
+    obj.time = message.time ? Timestamp.toAmino(toTimestamp(message.time)) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: RotationIndexRecordAminoMsg): RotationIndexRecord {
+    return RotationIndexRecord.fromAmino(object.value);
+  },
+  toAminoMsg(message: RotationIndexRecord): RotationIndexRecordAminoMsg {
+    return {
+      type: "cosmos-sdk/RotationIndexRecord",
+      value: RotationIndexRecord.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: RotationIndexRecordProtoMsg): RotationIndexRecord {
+    return RotationIndexRecord.decode(message.value);
+  },
+  toProto(message: RotationIndexRecord): Uint8Array {
+    return RotationIndexRecord.encode(message).finish();
+  },
+  toProtoMsg(message: RotationIndexRecord): RotationIndexRecordProtoMsg {
+    return {
+      typeUrl: "/cosmos.staking.v1beta1.RotationIndexRecord",
+      value: RotationIndexRecord.encode(message).finish()
+    };
+  }
+};
+function createBaseRotationQueueRecord(): RotationQueueRecord {
+  return {
+    time: undefined
+  };
+}
+export const RotationQueueRecord = {
+  typeUrl: "/cosmos.staking.v1beta1.RotationQueueRecord",
+  encode(message: RotationQueueRecord, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.time !== undefined) {
+      Timestamp.encode(toTimestamp(message.time), writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): RotationQueueRecord {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRotationQueueRecord();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 2:
+          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<RotationQueueRecord>): RotationQueueRecord {
+    const message = createBaseRotationQueueRecord();
+    message.time = object.time ?? undefined;
+    return message;
+  },
+  fromAmino(object: RotationQueueRecordAmino): RotationQueueRecord {
+    const message = createBaseRotationQueueRecord();
+    if (object.time !== undefined && object.time !== null) {
+      message.time = fromTimestamp(Timestamp.fromAmino(object.time));
+    }
+    return message;
+  },
+  toAmino(message: RotationQueueRecord): RotationQueueRecordAmino {
+    const obj: any = {};
+    obj.time = message.time ? Timestamp.toAmino(toTimestamp(message.time)) : undefined;
+    return obj;
+  },
+  fromAminoMsg(object: RotationQueueRecordAminoMsg): RotationQueueRecord {
+    return RotationQueueRecord.fromAmino(object.value);
+  },
+  toAminoMsg(message: RotationQueueRecord): RotationQueueRecordAminoMsg {
+    return {
+      type: "cosmos-sdk/RotationQueueRecord",
+      value: RotationQueueRecord.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: RotationQueueRecordProtoMsg): RotationQueueRecord {
+    return RotationQueueRecord.decode(message.value);
+  },
+  toProto(message: RotationQueueRecord): Uint8Array {
+    return RotationQueueRecord.encode(message).finish();
+  },
+  toProtoMsg(message: RotationQueueRecord): RotationQueueRecordProtoMsg {
+    return {
+      typeUrl: "/cosmos.staking.v1beta1.RotationQueueRecord",
+      value: RotationQueueRecord.encode(message).finish()
     };
   }
 };

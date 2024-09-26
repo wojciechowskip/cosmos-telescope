@@ -29,11 +29,38 @@ export interface QueryValidatorsRequestSDKType {
   status: string;
   pagination?: PageRequestSDKType;
 }
+/** ValidatorInfo contains the validator's address and public key. */
+export interface ValidatorInfo {
+  /** consensus_address is the consensus address of the validator. */
+  consensusAddress: string;
+}
+export interface ValidatorInfoProtoMsg {
+  typeUrl: "/cosmos.staking.v1beta1.ValidatorInfo";
+  value: Uint8Array;
+}
+/** ValidatorInfo contains the validator's address and public key. */
+export interface ValidatorInfoAmino {
+  /** consensus_address is the consensus address of the validator. */
+  consensus_address?: string;
+}
+export interface ValidatorInfoAminoMsg {
+  type: "cosmos-sdk/ValidatorInfo";
+  value: ValidatorInfoAmino;
+}
+/** ValidatorInfo contains the validator's address and public key. */
+export interface ValidatorInfoSDKType {
+  consensus_address: string;
+}
 /** QueryValidatorsResponse is response type for the Query/Validators RPC method */
 export interface QueryValidatorsResponse {
-  /** validators contains all the queried validators. */
   validators: Validator[];
-  /** pagination defines the pagination in the response. */
+  /**
+   * validator_info contains additional information for each validator.
+   * The order of the elements in this list corresponds to the order of the elements in the validators list.
+   * For example, if you want the ValidatorInfo for the third validator in the validators list,
+   * you should look at the third element in the validator_info list.
+   */
+  validatorInfo: ValidatorInfo[];
   pagination?: PageResponse;
 }
 export interface QueryValidatorsResponseProtoMsg {
@@ -42,9 +69,14 @@ export interface QueryValidatorsResponseProtoMsg {
 }
 /** QueryValidatorsResponse is response type for the Query/Validators RPC method */
 export interface QueryValidatorsResponseAmino {
-  /** validators contains all the queried validators. */
-  validators?: ValidatorAmino[];
-  /** pagination defines the pagination in the response. */
+  validators: ValidatorAmino[];
+  /**
+   * validator_info contains additional information for each validator.
+   * The order of the elements in this list corresponds to the order of the elements in the validators list.
+   * For example, if you want the ValidatorInfo for the third validator in the validators list,
+   * you should look at the third element in the validator_info list.
+   */
+  validator_info: ValidatorInfoAmino[];
   pagination?: PageResponseAmino;
 }
 export interface QueryValidatorsResponseAminoMsg {
@@ -54,6 +86,7 @@ export interface QueryValidatorsResponseAminoMsg {
 /** QueryValidatorsResponse is response type for the Query/Validators RPC method */
 export interface QueryValidatorsResponseSDKType {
   validators: ValidatorSDKType[];
+  validator_info: ValidatorInfoSDKType[];
   pagination?: PageResponseSDKType;
 }
 /** QueryValidatorRequest is response type for the Query/Validator RPC method */
@@ -80,7 +113,7 @@ export interface QueryValidatorRequestSDKType {
 }
 /** QueryValidatorResponse is response type for the Query/Validator RPC method */
 export interface QueryValidatorResponse {
-  /** validator defines the the validator info. */
+  /** validator defines the validator info. */
   validator: Validator;
 }
 export interface QueryValidatorResponseProtoMsg {
@@ -89,8 +122,8 @@ export interface QueryValidatorResponseProtoMsg {
 }
 /** QueryValidatorResponse is response type for the Query/Validator RPC method */
 export interface QueryValidatorResponseAmino {
-  /** validator defines the the validator info. */
-  validator?: ValidatorAmino;
+  /** validator defines the validator info. */
+  validator: ValidatorAmino;
 }
 export interface QueryValidatorResponseAminoMsg {
   type: "cosmos-sdk/QueryValidatorResponse";
@@ -154,7 +187,7 @@ export interface QueryValidatorDelegationsResponseProtoMsg {
  * Query/ValidatorDelegations RPC method
  */
 export interface QueryValidatorDelegationsResponseAmino {
-  delegation_responses?: DelegationResponseAmino[];
+  delegation_responses: DelegationResponseAmino[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino;
 }
@@ -224,7 +257,7 @@ export interface QueryValidatorUnbondingDelegationsResponseProtoMsg {
  * Query/ValidatorUnbondingDelegations RPC method.
  */
 export interface QueryValidatorUnbondingDelegationsResponseAmino {
-  unbonding_responses?: UnbondingDelegationAmino[];
+  unbonding_responses: UnbondingDelegationAmino[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino;
 }
@@ -343,7 +376,7 @@ export interface QueryUnbondingDelegationResponseProtoMsg {
  */
 export interface QueryUnbondingDelegationResponseAmino {
   /** unbond defines the unbonding information of a delegation. */
-  unbond?: UnbondingDelegationAmino;
+  unbond: UnbondingDelegationAmino;
 }
 export interface QueryUnbondingDelegationResponseAminoMsg {
   type: "cosmos-sdk/QueryUnbondingDelegationResponse";
@@ -412,7 +445,7 @@ export interface QueryDelegatorDelegationsResponseProtoMsg {
  */
 export interface QueryDelegatorDelegationsResponseAmino {
   /** delegation_responses defines all the delegations' info of a delegator. */
-  delegation_responses?: DelegationResponseAmino[];
+  delegation_responses: DelegationResponseAmino[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino;
 }
@@ -482,7 +515,7 @@ export interface QueryDelegatorUnbondingDelegationsResponseProtoMsg {
  * Query/UnbondingDelegatorDelegations RPC method.
  */
 export interface QueryDelegatorUnbondingDelegationsResponseAmino {
-  unbonding_responses?: UnbondingDelegationAmino[];
+  unbonding_responses: UnbondingDelegationAmino[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino;
 }
@@ -562,7 +595,7 @@ export interface QueryRedelegationsResponseProtoMsg {
  * method.
  */
 export interface QueryRedelegationsResponseAmino {
-  redelegation_responses?: RedelegationResponseAmino[];
+  redelegation_responses: RedelegationResponseAmino[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino;
 }
@@ -619,7 +652,7 @@ export interface QueryDelegatorValidatorsRequestSDKType {
  * Query/DelegatorValidators RPC method.
  */
 export interface QueryDelegatorValidatorsResponse {
-  /** validators defines the the validators' info of a delegator. */
+  /** validators defines the validators' info of a delegator. */
   validators: Validator[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponse;
@@ -633,8 +666,8 @@ export interface QueryDelegatorValidatorsResponseProtoMsg {
  * Query/DelegatorValidators RPC method.
  */
 export interface QueryDelegatorValidatorsResponseAmino {
-  /** validators defines the the validators' info of a delegator. */
-  validators?: ValidatorAmino[];
+  /** validators defines the validators' info of a delegator. */
+  validators: ValidatorAmino[];
   /** pagination defines the pagination in the response. */
   pagination?: PageResponseAmino;
 }
@@ -691,7 +724,7 @@ export interface QueryDelegatorValidatorRequestSDKType {
  * Query/DelegatorValidator RPC method.
  */
 export interface QueryDelegatorValidatorResponse {
-  /** validator defines the the validator info. */
+  /** validator defines the validator info. */
   validator: Validator;
 }
 export interface QueryDelegatorValidatorResponseProtoMsg {
@@ -703,8 +736,8 @@ export interface QueryDelegatorValidatorResponseProtoMsg {
  * Query/DelegatorValidator RPC method.
  */
 export interface QueryDelegatorValidatorResponseAmino {
-  /** validator defines the the validator info. */
-  validator?: ValidatorAmino;
+  /** validator defines the validator info. */
+  validator: ValidatorAmino;
 }
 export interface QueryDelegatorValidatorResponseAminoMsg {
   type: "cosmos-sdk/QueryDelegatorValidatorResponse";
@@ -721,6 +754,7 @@ export interface QueryDelegatorValidatorResponseSDKType {
  * QueryHistoricalInfoRequest is request type for the Query/HistoricalInfo RPC
  * method.
  */
+/** @deprecated */
 export interface QueryHistoricalInfoRequest {
   /** height defines at which height to query the historical info. */
   height: bigint;
@@ -733,6 +767,7 @@ export interface QueryHistoricalInfoRequestProtoMsg {
  * QueryHistoricalInfoRequest is request type for the Query/HistoricalInfo RPC
  * method.
  */
+/** @deprecated */
 export interface QueryHistoricalInfoRequestAmino {
   /** height defines at which height to query the historical info. */
   height?: string;
@@ -745,6 +780,7 @@ export interface QueryHistoricalInfoRequestAminoMsg {
  * QueryHistoricalInfoRequest is request type for the Query/HistoricalInfo RPC
  * method.
  */
+/** @deprecated */
 export interface QueryHistoricalInfoRequestSDKType {
   height: bigint;
 }
@@ -752,8 +788,10 @@ export interface QueryHistoricalInfoRequestSDKType {
  * QueryHistoricalInfoResponse is response type for the Query/HistoricalInfo RPC
  * method.
  */
+/** @deprecated */
 export interface QueryHistoricalInfoResponse {
   /** hist defines the historical info at the given height. */
+  /** @deprecated */
   hist?: HistoricalInfo;
 }
 export interface QueryHistoricalInfoResponseProtoMsg {
@@ -764,8 +802,10 @@ export interface QueryHistoricalInfoResponseProtoMsg {
  * QueryHistoricalInfoResponse is response type for the Query/HistoricalInfo RPC
  * method.
  */
+/** @deprecated */
 export interface QueryHistoricalInfoResponseAmino {
   /** hist defines the historical info at the given height. */
+  /** @deprecated */
   hist?: HistoricalInfoAmino;
 }
 export interface QueryHistoricalInfoResponseAminoMsg {
@@ -776,7 +816,9 @@ export interface QueryHistoricalInfoResponseAminoMsg {
  * QueryHistoricalInfoResponse is response type for the Query/HistoricalInfo RPC
  * method.
  */
+/** @deprecated */
 export interface QueryHistoricalInfoResponseSDKType {
+  /** @deprecated */
   hist?: HistoricalInfoSDKType;
 }
 /** QueryPoolRequest is request type for the Query/Pool RPC method. */
@@ -805,7 +847,7 @@ export interface QueryPoolResponseProtoMsg {
 /** QueryPoolResponse is response type for the Query/Pool RPC method. */
 export interface QueryPoolResponseAmino {
   /** pool defines the pool info. */
-  pool?: PoolAmino;
+  pool: PoolAmino;
 }
 export interface QueryPoolResponseAminoMsg {
   type: "cosmos-sdk/QueryPoolResponse";
@@ -841,7 +883,7 @@ export interface QueryParamsResponseProtoMsg {
 /** QueryParamsResponse is response type for the Query/Params RPC method. */
 export interface QueryParamsResponseAmino {
   /** params holds all the parameters of this module. */
-  params?: ParamsAmino;
+  params: ParamsAmino;
 }
 export interface QueryParamsResponseAminoMsg {
   type: "cosmos-sdk/QueryParamsResponse";
@@ -932,9 +974,79 @@ export const QueryValidatorsRequest = {
     };
   }
 };
+function createBaseValidatorInfo(): ValidatorInfo {
+  return {
+    consensusAddress: ""
+  };
+}
+export const ValidatorInfo = {
+  typeUrl: "/cosmos.staking.v1beta1.ValidatorInfo",
+  encode(message: ValidatorInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
+    if (message.consensusAddress !== "") {
+      writer.uint32(10).string(message.consensusAddress);
+    }
+    return writer;
+  },
+  decode(input: BinaryReader | Uint8Array, length?: number): ValidatorInfo {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseValidatorInfo();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.consensusAddress = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromPartial(object: Partial<ValidatorInfo>): ValidatorInfo {
+    const message = createBaseValidatorInfo();
+    message.consensusAddress = object.consensusAddress ?? "";
+    return message;
+  },
+  fromAmino(object: ValidatorInfoAmino): ValidatorInfo {
+    const message = createBaseValidatorInfo();
+    if (object.consensus_address !== undefined && object.consensus_address !== null) {
+      message.consensusAddress = object.consensus_address;
+    }
+    return message;
+  },
+  toAmino(message: ValidatorInfo): ValidatorInfoAmino {
+    const obj: any = {};
+    obj.consensus_address = message.consensusAddress === "" ? undefined : message.consensusAddress;
+    return obj;
+  },
+  fromAminoMsg(object: ValidatorInfoAminoMsg): ValidatorInfo {
+    return ValidatorInfo.fromAmino(object.value);
+  },
+  toAminoMsg(message: ValidatorInfo): ValidatorInfoAminoMsg {
+    return {
+      type: "cosmos-sdk/ValidatorInfo",
+      value: ValidatorInfo.toAmino(message)
+    };
+  },
+  fromProtoMsg(message: ValidatorInfoProtoMsg): ValidatorInfo {
+    return ValidatorInfo.decode(message.value);
+  },
+  toProto(message: ValidatorInfo): Uint8Array {
+    return ValidatorInfo.encode(message).finish();
+  },
+  toProtoMsg(message: ValidatorInfo): ValidatorInfoProtoMsg {
+    return {
+      typeUrl: "/cosmos.staking.v1beta1.ValidatorInfo",
+      value: ValidatorInfo.encode(message).finish()
+    };
+  }
+};
 function createBaseQueryValidatorsResponse(): QueryValidatorsResponse {
   return {
     validators: [],
+    validatorInfo: [],
     pagination: undefined
   };
 }
@@ -944,8 +1056,11 @@ export const QueryValidatorsResponse = {
     for (const v of message.validators) {
       Validator.encode(v!, writer.uint32(10).fork()).ldelim();
     }
+    for (const v of message.validatorInfo) {
+      ValidatorInfo.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
     if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+      PageResponse.encode(message.pagination, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -960,6 +1075,9 @@ export const QueryValidatorsResponse = {
           message.validators.push(Validator.decode(reader, reader.uint32()));
           break;
         case 2:
+          message.validatorInfo.push(ValidatorInfo.decode(reader, reader.uint32()));
+          break;
+        case 3:
           message.pagination = PageResponse.decode(reader, reader.uint32());
           break;
         default:
@@ -972,12 +1090,14 @@ export const QueryValidatorsResponse = {
   fromPartial(object: Partial<QueryValidatorsResponse>): QueryValidatorsResponse {
     const message = createBaseQueryValidatorsResponse();
     message.validators = object.validators?.map(e => Validator.fromPartial(e)) || [];
+    message.validatorInfo = object.validatorInfo?.map(e => ValidatorInfo.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
     return message;
   },
   fromAmino(object: QueryValidatorsResponseAmino): QueryValidatorsResponse {
     const message = createBaseQueryValidatorsResponse();
     message.validators = object.validators?.map(e => Validator.fromAmino(e)) || [];
+    message.validatorInfo = object.validator_info?.map(e => ValidatorInfo.fromAmino(e)) || [];
     if (object.pagination !== undefined && object.pagination !== null) {
       message.pagination = PageResponse.fromAmino(object.pagination);
     }
@@ -989,6 +1109,11 @@ export const QueryValidatorsResponse = {
       obj.validators = message.validators.map(e => e ? Validator.toAmino(e) : undefined);
     } else {
       obj.validators = message.validators;
+    }
+    if (message.validatorInfo) {
+      obj.validator_info = message.validatorInfo.map(e => e ? ValidatorInfo.toAmino(e) : undefined);
+    } else {
+      obj.validator_info = message.validatorInfo;
     }
     obj.pagination = message.pagination ? PageResponse.toAmino(message.pagination) : undefined;
     return obj;
@@ -1128,7 +1253,7 @@ export const QueryValidatorResponse = {
   },
   toAmino(message: QueryValidatorResponse): QueryValidatorResponseAmino {
     const obj: any = {};
-    obj.validator = message.validator ? Validator.toAmino(message.validator) : undefined;
+    obj.validator = message.validator ? Validator.toAmino(message.validator) : Validator.toAmino(Validator.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryValidatorResponseAminoMsg): QueryValidatorResponse {
@@ -1756,7 +1881,7 @@ export const QueryUnbondingDelegationResponse = {
   },
   toAmino(message: QueryUnbondingDelegationResponse): QueryUnbondingDelegationResponseAmino {
     const obj: any = {};
-    obj.unbond = message.unbond ? UnbondingDelegation.toAmino(message.unbond) : undefined;
+    obj.unbond = message.unbond ? UnbondingDelegation.toAmino(message.unbond) : UnbondingDelegation.toAmino(UnbondingDelegation.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryUnbondingDelegationResponseAminoMsg): QueryUnbondingDelegationResponse {
@@ -2586,7 +2711,7 @@ export const QueryDelegatorValidatorResponse = {
   },
   toAmino(message: QueryDelegatorValidatorResponse): QueryDelegatorValidatorResponseAmino {
     const obj: any = {};
-    obj.validator = message.validator ? Validator.toAmino(message.validator) : undefined;
+    obj.validator = message.validator ? Validator.toAmino(message.validator) : Validator.toAmino(Validator.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryDelegatorValidatorResponseAminoMsg): QueryDelegatorValidatorResponse {
@@ -2849,7 +2974,7 @@ export const QueryPoolResponse = {
   },
   toAmino(message: QueryPoolResponse): QueryPoolResponseAmino {
     const obj: any = {};
-    obj.pool = message.pool ? Pool.toAmino(message.pool) : undefined;
+    obj.pool = message.pool ? Pool.toAmino(message.pool) : Pool.toAmino(Pool.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryPoolResponseAminoMsg): QueryPoolResponse {
@@ -2974,7 +3099,7 @@ export const QueryParamsResponse = {
   },
   toAmino(message: QueryParamsResponse): QueryParamsResponseAmino {
     const obj: any = {};
-    obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.params = message.params ? Params.toAmino(message.params) : Params.toAmino(Params.fromPartial({}));
     return obj;
   },
   fromAminoMsg(object: QueryParamsResponseAminoMsg): QueryParamsResponse {
