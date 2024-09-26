@@ -6,7 +6,7 @@
   "main": "index.js",
   "module": "esm/index.js",
   "types": "index.d.ts",
-  "homepage": "https://github.com/wojciechowskip/cosmos-js-telescope",
+  "homepage": "https://github.com/wojciechowskip/cosmos-telescope",
   "license": "SEE LICENSE IN LICENSE",
   "publishConfig": {
     "access": "public",
@@ -14,10 +14,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wojciechowskip/cosmos-js-telescope"
+    "url": "https://github.com/wojciechowskip/cosmos-telescope"
   },
   "bugs": {
-    "url": "https://github.com/wojciechowskip/cosmos-js-telescope/issues"
+    "url": "https://github.com/wojciechowskip/cosmos-telescope/issues"
   },
   "scripts": {
     "copy": "copyfiles -f ../../LICENSE README.md package.json dist",
