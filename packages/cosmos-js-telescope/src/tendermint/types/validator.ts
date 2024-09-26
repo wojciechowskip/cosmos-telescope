@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { PublicKey, PublicKeyAmino, PublicKeySDKType } from "../crypto/keys";
 import { BinaryReader, BinaryWriter } from "../../binary";
+import { GlobalDecoderRegistry } from "../../registry";
 import { bytesFromBase64, base64FromBytes } from "../../helpers";
 export interface ValidatorSet {
   validators: Validator[];
@@ -80,6 +81,15 @@ function createBaseValidatorSet(): ValidatorSet {
 }
 export const ValidatorSet = {
   typeUrl: "/tendermint.types.ValidatorSet",
+  is(o: any): o is ValidatorSet {
+    return o && (o.$typeUrl === ValidatorSet.typeUrl || Array.isArray(o.validators) && (!o.validators.length || Validator.is(o.validators[0])) && typeof o.totalVotingPower === "bigint");
+  },
+  isSDK(o: any): o is ValidatorSetSDKType {
+    return o && (o.$typeUrl === ValidatorSet.typeUrl || Array.isArray(o.validators) && (!o.validators.length || Validator.isSDK(o.validators[0])) && typeof o.total_voting_power === "bigint");
+  },
+  isAmino(o: any): o is ValidatorSetAmino {
+    return o && (o.$typeUrl === ValidatorSet.typeUrl || Array.isArray(o.validators) && (!o.validators.length || Validator.isAmino(o.validators[0])) && typeof o.total_voting_power === "bigint");
+  },
   encode(message: ValidatorSet, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.validators) {
       Validator.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -160,6 +170,7 @@ export const ValidatorSet = {
     };
   }
 };
+GlobalDecoderRegistry.register(ValidatorSet.typeUrl, ValidatorSet);
 function createBaseValidator(): Validator {
   return {
     address: new Uint8Array(),
@@ -170,6 +181,15 @@ function createBaseValidator(): Validator {
 }
 export const Validator = {
   typeUrl: "/tendermint.types.Validator",
+  is(o: any): o is Validator {
+    return o && (o.$typeUrl === Validator.typeUrl || (o.address instanceof Uint8Array || typeof o.address === "string") && PublicKey.is(o.pubKey) && typeof o.votingPower === "bigint" && typeof o.proposerPriority === "bigint");
+  },
+  isSDK(o: any): o is ValidatorSDKType {
+    return o && (o.$typeUrl === Validator.typeUrl || (o.address instanceof Uint8Array || typeof o.address === "string") && PublicKey.isSDK(o.pub_key) && typeof o.voting_power === "bigint" && typeof o.proposer_priority === "bigint");
+  },
+  isAmino(o: any): o is ValidatorAmino {
+    return o && (o.$typeUrl === Validator.typeUrl || (o.address instanceof Uint8Array || typeof o.address === "string") && PublicKey.isAmino(o.pub_key) && typeof o.voting_power === "bigint" && typeof o.proposer_priority === "bigint");
+  },
   encode(message: Validator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address.length !== 0) {
       writer.uint32(10).bytes(message.address);
@@ -259,6 +279,7 @@ export const Validator = {
     };
   }
 };
+GlobalDecoderRegistry.register(Validator.typeUrl, Validator);
 function createBaseSimpleValidator(): SimpleValidator {
   return {
     pubKey: undefined,
@@ -267,6 +288,15 @@ function createBaseSimpleValidator(): SimpleValidator {
 }
 export const SimpleValidator = {
   typeUrl: "/tendermint.types.SimpleValidator",
+  is(o: any): o is SimpleValidator {
+    return o && (o.$typeUrl === SimpleValidator.typeUrl || typeof o.votingPower === "bigint");
+  },
+  isSDK(o: any): o is SimpleValidatorSDKType {
+    return o && (o.$typeUrl === SimpleValidator.typeUrl || typeof o.voting_power === "bigint");
+  },
+  isAmino(o: any): o is SimpleValidatorAmino {
+    return o && (o.$typeUrl === SimpleValidator.typeUrl || typeof o.voting_power === "bigint");
+  },
   encode(message: SimpleValidator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.pubKey !== undefined) {
       PublicKey.encode(message.pubKey, writer.uint32(10).fork()).ldelim();
@@ -334,3 +364,4 @@ export const SimpleValidator = {
     };
   }
 };
+GlobalDecoderRegistry.register(SimpleValidator.typeUrl, SimpleValidator);

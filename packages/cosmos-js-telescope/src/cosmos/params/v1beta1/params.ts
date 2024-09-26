@@ -1,5 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** ParameterChangeProposal defines a proposal to change one or more parameters. */
 export interface ParameterChangeProposal {
   $typeUrl?: "/cosmos.params.v1beta1.ParameterChangeProposal";
@@ -73,6 +74,16 @@ function createBaseParameterChangeProposal(): ParameterChangeProposal {
 }
 export const ParameterChangeProposal = {
   typeUrl: "/cosmos.params.v1beta1.ParameterChangeProposal",
+  aminoType: "cosmos-sdk/ParameterChangeProposal",
+  is(o: any): o is ParameterChangeProposal {
+    return o && (o.$typeUrl === ParameterChangeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && Array.isArray(o.changes) && (!o.changes.length || ParamChange.is(o.changes[0])));
+  },
+  isSDK(o: any): o is ParameterChangeProposalSDKType {
+    return o && (o.$typeUrl === ParameterChangeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && Array.isArray(o.changes) && (!o.changes.length || ParamChange.isSDK(o.changes[0])));
+  },
+  isAmino(o: any): o is ParameterChangeProposalAmino {
+    return o && (o.$typeUrl === ParameterChangeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && Array.isArray(o.changes) && (!o.changes.length || ParamChange.isAmino(o.changes[0])));
+  },
   encode(message: ParameterChangeProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
@@ -159,6 +170,8 @@ export const ParameterChangeProposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(ParameterChangeProposal.typeUrl, ParameterChangeProposal);
+GlobalDecoderRegistry.registerAminoProtoMapping(ParameterChangeProposal.aminoType, ParameterChangeProposal.typeUrl);
 function createBaseParamChange(): ParamChange {
   return {
     subspace: "",
@@ -168,6 +181,16 @@ function createBaseParamChange(): ParamChange {
 }
 export const ParamChange = {
   typeUrl: "/cosmos.params.v1beta1.ParamChange",
+  aminoType: "cosmos-sdk/ParamChange",
+  is(o: any): o is ParamChange {
+    return o && (o.$typeUrl === ParamChange.typeUrl || typeof o.subspace === "string" && typeof o.key === "string" && typeof o.value === "string");
+  },
+  isSDK(o: any): o is ParamChangeSDKType {
+    return o && (o.$typeUrl === ParamChange.typeUrl || typeof o.subspace === "string" && typeof o.key === "string" && typeof o.value === "string");
+  },
+  isAmino(o: any): o is ParamChangeAmino {
+    return o && (o.$typeUrl === ParamChange.typeUrl || typeof o.subspace === "string" && typeof o.key === "string" && typeof o.value === "string");
+  },
   encode(message: ParamChange, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.subspace !== "") {
       writer.uint32(10).string(message.subspace);
@@ -252,3 +275,5 @@ export const ParamChange = {
     };
   }
 };
+GlobalDecoderRegistry.register(ParamChange.typeUrl, ParamChange);
+GlobalDecoderRegistry.registerAminoProtoMapping(ParamChange.aminoType, ParamChange.typeUrl);

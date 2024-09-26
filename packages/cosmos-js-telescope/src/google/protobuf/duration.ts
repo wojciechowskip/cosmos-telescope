@@ -1,5 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../binary";
+import { GlobalDecoderRegistry } from "../../registry";
 /**
  * A Duration represents a signed, fixed-length span of time represented
  * as a count of seconds and fractions of seconds at nanosecond
@@ -218,6 +219,15 @@ function createBaseDuration(): Duration {
 }
 export const Duration = {
   typeUrl: "/google.protobuf.Duration",
+  is(o: any): o is Duration {
+    return o && (o.$typeUrl === Duration.typeUrl || typeof o.seconds === "bigint" && typeof o.nanos === "number");
+  },
+  isSDK(o: any): o is DurationSDKType {
+    return o && (o.$typeUrl === Duration.typeUrl || typeof o.seconds === "bigint" && typeof o.nanos === "number");
+  },
+  isAmino(o: any): o is DurationAmino {
+    return o && (o.$typeUrl === Duration.typeUrl || typeof o.seconds === "bigint" && typeof o.nanos === "number");
+  },
   encode(message: Duration, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.seconds !== BigInt(0)) {
       writer.uint32(8).int64(message.seconds);
@@ -279,3 +289,4 @@ export const Duration = {
     };
   }
 };
+GlobalDecoderRegistry.register(Duration.typeUrl, Duration);
