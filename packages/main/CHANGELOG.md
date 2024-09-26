@@ -6,3 +6,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ## 0.0.2 (2024-09-26)
 
 **Note:** Version bump only for package cosmos-telescope
+
+
+
+
+
+## 0.0.2 (2024-09-26)
+
+**Note:** Version bump only for package cosmos-telescope
