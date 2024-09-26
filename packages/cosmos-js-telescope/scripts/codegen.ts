@@ -15,10 +15,11 @@ export const options: TelescopeInput = {
   options: {
     interfaces: {
       enabled: true,
-      useUnionTypes: true
+      useUnionTypes: false
     },
     prototypes: {
       enabled: true,
+      addTypeUrlToDecoders: true,
       excluded: {
         packages: [
           'ibc.applications.fee.v1', // issue with parsing protos (LCD routes with nested objects in params)
@@ -71,9 +72,6 @@ export const options: TelescopeInput = {
       enabled: true,
       customTypes: {
         useCosmosSDKDec: false
-      },
-      exceptions: {
-        ...AMINO_MAP
       },
     },
     lcdClients: {
