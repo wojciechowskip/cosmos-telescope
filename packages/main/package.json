@@ -1,12 +1,12 @@
 {
-  "name": "main",
+  "name": "cosmos-telescope",
   "version": "0.0.1",
   "author": "patrykw",
-  "description": "main",
+  "description": "cosmos telescope js module",
   "main": "index.js",
   "module": "esm/index.js",
   "types": "index.d.ts",
-  "homepage": "https://github.com/patrykw/main",
+  "homepage": "",
   "license": "MIT",
   "publishConfig": {
     "access": "public",
@@ -14,10 +14,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/patrykw/main"
+    "url": "https://github.com/wojciechowskip/cosmos-telescope"
   },
   "bugs": {
-    "url": "https://github.com/patrykw/main/issues"
+    "url": "https://github.com/wojciechowskip/cosmos-telescope/issues"
   },
   "scripts": {
     "copy": "copyfiles -f ../../LICENSE README.md package.json dist",

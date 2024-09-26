@@ -1,22 +1,9 @@
 # main
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/545047/188804067-28e67e5e-0214-4449-ab04-2e0c564a6885.svg" width="80"><br />
-    main
-</p>
-
-<p align="center" width="100%">
-  <a href="https://github.com/patrykw/main/actions/workflows/run-tests.yml">
-    <img height="20" src="https://github.com/patrykw/main/actions/workflows/run-tests.yml/badge.svg" />
-  </a>
-   <a href="https://github.com/patrykw/main/blob/main/LICENSE"><img height="20" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
-</p>
-
-
 ## install
 
 ```sh
-npm install main
+npm install cosmos-telescope
 ```
 ## Table of contents
 
