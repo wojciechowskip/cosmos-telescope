@@ -1,6 +1,6 @@
 {
   "name": "cosmos-js-telescope",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "author": "patrykw <patryk.wojciechowski.dev@gmail.com>",
   "description": "cosmos-js-telescope",
   "main": "index.js",
