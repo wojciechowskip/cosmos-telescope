@@ -72,6 +72,9 @@ export const options: TelescopeInput = {
       customTypes: {
         useCosmosSDKDec: false
       },
+      exceptions: {
+        ...AMINO_MAP
+      },
     },
     lcdClients: {
       enabled: false
@@ -94,7 +97,6 @@ export const options: TelescopeInput = {
     }
   }
 };
-
 
 telescope(options)
   .then(() => {
