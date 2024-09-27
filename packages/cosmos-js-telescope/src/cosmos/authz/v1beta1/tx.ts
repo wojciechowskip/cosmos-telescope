@@ -13,6 +13,8 @@ export interface MsgGrant {
   grantee: string;
   grant: Grant;
 }
+
+
 export interface MsgGrantProtoMsg {
   typeUrl: "/cosmos.authz.v1beta1.MsgGrant";
   value: Uint8Array;
