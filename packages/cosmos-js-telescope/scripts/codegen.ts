@@ -15,7 +15,7 @@ export const options: TelescopeInput = {
   options: {
     interfaces: {
       enabled: true,
-      useUnionTypes: true,
+      useUnionTypes: false,
       useGlobalDecoderRegistry: true,
     },
     prototypes: {
