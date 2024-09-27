@@ -15,14 +15,10 @@ export const options: TelescopeInput = {
   options: {
     interfaces: {
       enabled: true,
-      useUnionTypes: false,
-      useGlobalDecoderRegistry: true,
+      useUnionTypes: true
     },
     prototypes: {
       enabled: true,
-      addTypeUrlToObjects: true,
-      addTypeUrlToDecoders: true,
-      addAminoTypeToObjects: true,
       excluded: {
         packages: [
           'ibc.applications.fee.v1', // issue with parsing protos (LCD routes with nested objects in params)
@@ -95,8 +91,7 @@ export const options: TelescopeInput = {
 
     pinia: {
       enabled: false
-    },
-
+    }
   }
 };
 
