@@ -3,8 +3,6 @@ import telescope from '@cosmology/telescope';
 import { join } from 'path';
 import { rimrafSync as rimraf } from 'rimraf';
 
-import { AMINO_MAP } from './aminos';
-
 const protoDirs: string[] = [join(__dirname, '/../proto')];
 const outPath: string = join(__dirname, '../src');
 rimraf(outPath);
@@ -15,7 +13,7 @@ export const options: TelescopeInput = {
   options: {
     interfaces: {
       enabled: true,
-      useUnionTypes: true
+      useUnionTypes: false
     },
     prototypes: {
       includePackageVar: false,
