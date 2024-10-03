@@ -1,11 +1,11 @@
 //@ts-nocheck
-import { Timestamp } from "../../google/protobuf/timestamp";
+import { Timestamp, TimestampSDKType } from "../../google/protobuf/timestamp";
 import { Header, HeaderAmino, HeaderSDKType } from "../types/types";
 import { ProofOps, ProofOpsAmino, ProofOpsSDKType } from "../crypto/proof";
 import { EvidenceParams, EvidenceParamsAmino, EvidenceParamsSDKType, ValidatorParams, ValidatorParamsAmino, ValidatorParamsSDKType, VersionParams, VersionParamsAmino, VersionParamsSDKType } from "../types/params";
 import { PublicKey, PublicKeyAmino, PublicKeySDKType } from "../crypto/keys";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { toTimestamp, fromTimestamp, bytesFromBase64, base64FromBytes } from "../../helpers";
+import { bytesFromBase64, base64FromBytes } from "../../helpers";
 export enum CheckTxType {
   NEW = 0,
   RECHECK = 1,
@@ -334,7 +334,7 @@ export interface RequestSetOptionSDKType {
   value: string;
 }
 export interface RequestInitChain {
-  time: Date;
+  time: Timestamp;
   chainId: string;
   consensusParams?: ConsensusParams;
   validators: ValidatorUpdate[];
@@ -358,7 +358,7 @@ export interface RequestInitChainAminoMsg {
   value: RequestInitChainAmino;
 }
 export interface RequestInitChainSDKType {
-  time: Date;
+  time: TimestampSDKType;
   chain_id: string;
   consensus_params?: ConsensusParamsSDKType;
   validators: ValidatorUpdateSDKType[];
@@ -1303,7 +1303,7 @@ export interface Evidence {
   /** The height when the offense occurred */
   height: bigint;
   /** The corresponding time where the offense occurred */
-  time: Date;
+  time: Timestamp;
   /**
    * Total voting power of the validator set in case the ABCI application does
    * not store historical validators.
@@ -1338,7 +1338,7 @@ export interface EvidenceSDKType {
   type: EvidenceType;
   validator: ValidatorSDKType;
   height: bigint;
-  time: Date;
+  time: TimestampSDKType;
   total_voting_power: bigint;
 }
 export interface Snapshot {
@@ -1888,7 +1888,7 @@ export const RequestSetOption = {
 };
 function createBaseRequestInitChain(): RequestInitChain {
   return {
-    time: new Date(),
+    time: Timestamp.fromPartial({}),
     chainId: "",
     consensusParams: undefined,
     validators: [],
@@ -1900,7 +1900,7 @@ export const RequestInitChain = {
   typeUrl: "/tendermint.abci.RequestInitChain",
   encode(message: RequestInitChain, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.time !== undefined) {
-      Timestamp.encode(toTimestamp(message.time), writer.uint32(10).fork()).ldelim();
+      Timestamp.encode(message.time, writer.uint32(10).fork()).ldelim();
     }
     if (message.chainId !== "") {
       writer.uint32(18).string(message.chainId);
@@ -1927,7 +1927,7 @@ export const RequestInitChain = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.time = Timestamp.decode(reader, reader.uint32());
           break;
         case 2:
           message.chainId = reader.string();
@@ -1953,7 +1953,7 @@ export const RequestInitChain = {
   },
   fromPartial(object: Partial<RequestInitChain>): RequestInitChain {
     const message = createBaseRequestInitChain();
-    message.time = object.time ?? undefined;
+    message.time = object.time !== undefined && object.time !== null ? Timestamp.fromPartial(object.time) : undefined;
     message.chainId = object.chainId ?? "";
     message.consensusParams = object.consensusParams !== undefined && object.consensusParams !== null ? ConsensusParams.fromPartial(object.consensusParams) : undefined;
     message.validators = object.validators?.map(e => ValidatorUpdate.fromPartial(e)) || [];
@@ -1964,7 +1964,7 @@ export const RequestInitChain = {
   fromAmino(object: RequestInitChainAmino): RequestInitChain {
     const message = createBaseRequestInitChain();
     if (object.time !== undefined && object.time !== null) {
-      message.time = fromTimestamp(Timestamp.fromAmino(object.time));
+      message.time = Timestamp.fromAmino(object.time);
     }
     if (object.chain_id !== undefined && object.chain_id !== null) {
       message.chainId = object.chain_id;
@@ -1983,7 +1983,7 @@ export const RequestInitChain = {
   },
   toAmino(message: RequestInitChain): RequestInitChainAmino {
     const obj: any = {};
-    obj.time = message.time ? Timestamp.toAmino(toTimestamp(message.time)) : undefined;
+    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
     obj.chain_id = message.chainId === "" ? undefined : message.chainId;
     obj.consensus_params = message.consensusParams ? ConsensusParams.toAmino(message.consensusParams) : undefined;
     if (message.validators) {
@@ -5190,7 +5190,7 @@ function createBaseEvidence(): Evidence {
     type: 0,
     validator: Validator.fromPartial({}),
     height: BigInt(0),
-    time: new Date(),
+    time: Timestamp.fromPartial({}),
     totalVotingPower: BigInt(0)
   };
 }
@@ -5207,7 +5207,7 @@ export const Evidence = {
       writer.uint32(24).int64(message.height);
     }
     if (message.time !== undefined) {
-      Timestamp.encode(toTimestamp(message.time), writer.uint32(34).fork()).ldelim();
+      Timestamp.encode(message.time, writer.uint32(34).fork()).ldelim();
     }
     if (message.totalVotingPower !== BigInt(0)) {
       writer.uint32(40).int64(message.totalVotingPower);
@@ -5231,7 +5231,7 @@ export const Evidence = {
           message.height = reader.int64();
           break;
         case 4:
-          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.time = Timestamp.decode(reader, reader.uint32());
           break;
         case 5:
           message.totalVotingPower = reader.int64();
@@ -5248,7 +5248,7 @@ export const Evidence = {
     message.type = object.type ?? 0;
     message.validator = object.validator !== undefined && object.validator !== null ? Validator.fromPartial(object.validator) : undefined;
     message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
-    message.time = object.time ?? undefined;
+    message.time = object.time !== undefined && object.time !== null ? Timestamp.fromPartial(object.time) : undefined;
     message.totalVotingPower = object.totalVotingPower !== undefined && object.totalVotingPower !== null ? BigInt(object.totalVotingPower.toString()) : BigInt(0);
     return message;
   },
@@ -5264,7 +5264,7 @@ export const Evidence = {
       message.height = BigInt(object.height);
     }
     if (object.time !== undefined && object.time !== null) {
-      message.time = fromTimestamp(Timestamp.fromAmino(object.time));
+      message.time = Timestamp.fromAmino(object.time);
     }
     if (object.total_voting_power !== undefined && object.total_voting_power !== null) {
       message.totalVotingPower = BigInt(object.total_voting_power);
@@ -5276,7 +5276,7 @@ export const Evidence = {
     obj.type = message.type === 0 ? undefined : message.type;
     obj.validator = message.validator ? Validator.toAmino(message.validator) : undefined;
     obj.height = message.height !== BigInt(0) ? (message.height?.toString)() : undefined;
-    obj.time = message.time ? Timestamp.toAmino(toTimestamp(message.time)) : undefined;
+    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
     obj.total_voting_power = message.totalVotingPower !== BigInt(0) ? (message.totalVotingPower?.toString)() : undefined;
     return obj;
   },

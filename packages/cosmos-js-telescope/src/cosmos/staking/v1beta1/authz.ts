@@ -3,7 +3,7 @@ import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 /**
  * AuthorizationType defines the type of staking module authorization type
- *
+ * 
  * Since: cosmos-sdk 0.43
  */
 export enum AuthorizationType {
@@ -56,7 +56,7 @@ export function authorizationTypeToJSON(object: AuthorizationType): string {
 }
 /**
  * StakeAuthorization defines authorization for delegate/undelegate/redelegate.
- *
+ * 
  * Since: cosmos-sdk 0.43
  */
 export interface StakeAuthorization {
@@ -82,7 +82,7 @@ export interface StakeAuthorizationProtoMsg {
 }
 /**
  * StakeAuthorization defines authorization for delegate/undelegate/redelegate.
- *
+ * 
  * Since: cosmos-sdk 0.43
  */
 export interface StakeAuthorizationAmino {
@@ -107,7 +107,7 @@ export interface StakeAuthorizationAminoMsg {
 }
 /**
  * StakeAuthorization defines authorization for delegate/undelegate/redelegate.
- *
+ * 
  * Since: cosmos-sdk 0.43
  */
 export interface StakeAuthorizationSDKType {
@@ -216,10 +216,8 @@ export const StakeAuthorization = {
   toAmino(message: StakeAuthorization): StakeAuthorizationAmino {
     const obj: any = {};
     obj.max_tokens = message.maxTokens ? Coin.toAmino(message.maxTokens) : undefined;
-    // obj.allow_list = message.allowList ? StakeAuthorization_Validators.toAmino(message.allowList) : undefined;
-    // obj.deny_list = message.denyList ? StakeAuthorization_Validators.toAmino(message.denyList) : undefined;
-    // Hot fix to make it working
-    obj.Validators = message.allowList ? StakeAuthorization_Validators.toAmino(message.allowList) : undefined;
+    obj.allow_list = message.allowList ? StakeAuthorization_Validators.toAmino(message.allowList) : undefined;
+    obj.deny_list = message.denyList ? StakeAuthorization_Validators.toAmino(message.denyList) : undefined;
     obj.authorization_type = message.authorizationType === 0 ? undefined : message.authorizationType;
     return obj;
   },
@@ -287,13 +285,10 @@ export const StakeAuthorization_Validators = {
   },
   toAmino(message: StakeAuthorization_Validators): StakeAuthorization_ValidatorsAmino {
     const obj: any = {};
-    obj.type = "cosmos-sdk/StakeAuthorization/AllowList";
-    obj.value = {};
-    obj.value.allow_list = {};
     if (message.address) {
-      obj.value.allow_list.address = message.address.map(e => e);
+      obj.address = message.address.map(e => e);
     } else {
-      obj.value.allow_list.address = message.address;
+      obj.address = message.address;
     }
     return obj;
   },

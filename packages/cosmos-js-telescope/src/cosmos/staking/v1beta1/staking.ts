@@ -1,12 +1,11 @@
 //@ts-nocheck
 import { Header, HeaderAmino, HeaderSDKType } from "../../../tendermint/types/types";
-import { Timestamp } from "../../../google/protobuf/timestamp";
+import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { toTimestamp, fromTimestamp } from "../../../helpers";
 import { encodePubkey, decodePubkey } from "@cosmjs/proto-signing";
 import { Pubkey } from "@cosmjs/amino";
 /** BondStatus is the status of a validator. */
@@ -142,7 +141,7 @@ export interface Commission {
   /** commission_rates defines the initial commission rates to be used for creating a validator. */
   commissionRates: CommissionRates;
   /** update_time is the last time the commission rate was changed. */
-  updateTime: Date;
+  updateTime: Timestamp;
 }
 export interface CommissionProtoMsg {
   typeUrl: "/cosmos.staking.v1beta1.Commission";
@@ -162,7 +161,7 @@ export interface CommissionAminoMsg {
 /** Commission defines commission parameters for a given validator. */
 export interface CommissionSDKType {
   commission_rates: CommissionRatesSDKType;
-  update_time: Date;
+  update_time: TimestampSDKType;
 }
 /** Description defines a validator description. */
 export interface Description {
@@ -234,7 +233,7 @@ export interface Validator {
   /** unbonding_height defines, if unbonding, the height at which this validator has begun unbonding. */
   unbondingHeight: bigint;
   /** unbonding_time defines, if unbonding, the min time for the validator to complete unbonding. */
-  unbondingTime: Date;
+  unbondingTime: Timestamp;
   /** commission defines the commission parameters. */
   commission: Commission;
   /** min_self_delegation is the validator's self declared minimum self delegation. */
@@ -304,7 +303,7 @@ export interface ValidatorSDKType {
   delegator_shares: string;
   description: DescriptionSDKType;
   unbonding_height: bigint;
-  unbonding_time: Date;
+  unbonding_time: TimestampSDKType;
   commission: CommissionSDKType;
   min_self_delegation: string;
 }
@@ -534,7 +533,7 @@ export interface UnbondingDelegationEntry {
   /** creation_height is the height which the unbonding took place. */
   creationHeight: bigint;
   /** completion_time is the unix time for unbonding completion. */
-  completionTime: Date;
+  completionTime: Timestamp;
   /** initial_balance defines the tokens initially scheduled to receive at completion. */
   initialBalance: string;
   /** balance defines the tokens to receive at completion. */
@@ -562,7 +561,7 @@ export interface UnbondingDelegationEntryAminoMsg {
 /** UnbondingDelegationEntry defines an unbonding object with relevant metadata. */
 export interface UnbondingDelegationEntrySDKType {
   creation_height: bigint;
-  completion_time: Date;
+  completion_time: TimestampSDKType;
   initial_balance: string;
   balance: string;
 }
@@ -571,7 +570,7 @@ export interface RedelegationEntry {
   /** creation_height  defines the height which the redelegation took place. */
   creationHeight: bigint;
   /** completion_time defines the unix time for redelegation completion. */
-  completionTime: Date;
+  completionTime: Timestamp;
   /** initial_balance defines the initial balance when redelegation started. */
   initialBalance: string;
   /** shares_dst is the amount of destination-validator shares created by redelegation. */
@@ -599,7 +598,7 @@ export interface RedelegationEntryAminoMsg {
 /** RedelegationEntry defines a redelegation object with relevant metadata. */
 export interface RedelegationEntrySDKType {
   creation_height: bigint;
-  completion_time: Date;
+  completion_time: TimestampSDKType;
   initial_balance: string;
   shares_dst: string;
 }
@@ -1009,7 +1008,7 @@ export const CommissionRates = {
 function createBaseCommission(): Commission {
   return {
     commissionRates: CommissionRates.fromPartial({}),
-    updateTime: new Date()
+    updateTime: Timestamp.fromPartial({})
   };
 }
 export const Commission = {
@@ -1019,7 +1018,7 @@ export const Commission = {
       CommissionRates.encode(message.commissionRates, writer.uint32(10).fork()).ldelim();
     }
     if (message.updateTime !== undefined) {
-      Timestamp.encode(toTimestamp(message.updateTime), writer.uint32(18).fork()).ldelim();
+      Timestamp.encode(message.updateTime, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -1034,7 +1033,7 @@ export const Commission = {
           message.commissionRates = CommissionRates.decode(reader, reader.uint32());
           break;
         case 2:
-          message.updateTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.updateTime = Timestamp.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1046,7 +1045,7 @@ export const Commission = {
   fromPartial(object: Partial<Commission>): Commission {
     const message = createBaseCommission();
     message.commissionRates = object.commissionRates !== undefined && object.commissionRates !== null ? CommissionRates.fromPartial(object.commissionRates) : undefined;
-    message.updateTime = object.updateTime ?? undefined;
+    message.updateTime = object.updateTime !== undefined && object.updateTime !== null ? Timestamp.fromPartial(object.updateTime) : undefined;
     return message;
   },
   fromAmino(object: CommissionAmino): Commission {
@@ -1055,14 +1054,14 @@ export const Commission = {
       message.commissionRates = CommissionRates.fromAmino(object.commission_rates);
     }
     if (object.update_time !== undefined && object.update_time !== null) {
-      message.updateTime = fromTimestamp(Timestamp.fromAmino(object.update_time));
+      message.updateTime = Timestamp.fromAmino(object.update_time);
     }
     return message;
   },
   toAmino(message: Commission): CommissionAmino {
     const obj: any = {};
     obj.commission_rates = message.commissionRates ? CommissionRates.toAmino(message.commissionRates) : undefined;
-    obj.update_time = message.updateTime ? Timestamp.toAmino(toTimestamp(message.updateTime)) : undefined;
+    obj.update_time = message.updateTime ? Timestamp.toAmino(message.updateTime) : undefined;
     return obj;
   },
   fromAminoMsg(object: CommissionAminoMsg): Commission {
@@ -1214,7 +1213,7 @@ function createBaseValidator(): Validator {
     delegatorShares: "",
     description: Description.fromPartial({}),
     unbondingHeight: BigInt(0),
-    unbondingTime: new Date(),
+    unbondingTime: Timestamp.fromPartial({}),
     commission: Commission.fromPartial({}),
     minSelfDelegation: ""
   };
@@ -1247,7 +1246,7 @@ export const Validator = {
       writer.uint32(64).int64(message.unbondingHeight);
     }
     if (message.unbondingTime !== undefined) {
-      Timestamp.encode(toTimestamp(message.unbondingTime), writer.uint32(74).fork()).ldelim();
+      Timestamp.encode(message.unbondingTime, writer.uint32(74).fork()).ldelim();
     }
     if (message.commission !== undefined) {
       Commission.encode(message.commission, writer.uint32(82).fork()).ldelim();
@@ -1289,7 +1288,7 @@ export const Validator = {
           message.unbondingHeight = reader.int64();
           break;
         case 9:
-          message.unbondingTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.unbondingTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 10:
           message.commission = Commission.decode(reader, reader.uint32());
@@ -1314,7 +1313,7 @@ export const Validator = {
     message.delegatorShares = object.delegatorShares ?? "";
     message.description = object.description !== undefined && object.description !== null ? Description.fromPartial(object.description) : undefined;
     message.unbondingHeight = object.unbondingHeight !== undefined && object.unbondingHeight !== null ? BigInt(object.unbondingHeight.toString()) : BigInt(0);
-    message.unbondingTime = object.unbondingTime ?? undefined;
+    message.unbondingTime = object.unbondingTime !== undefined && object.unbondingTime !== null ? Timestamp.fromPartial(object.unbondingTime) : undefined;
     message.commission = object.commission !== undefined && object.commission !== null ? Commission.fromPartial(object.commission) : undefined;
     message.minSelfDelegation = object.minSelfDelegation ?? "";
     return message;
@@ -1346,7 +1345,7 @@ export const Validator = {
       message.unbondingHeight = BigInt(object.unbonding_height);
     }
     if (object.unbonding_time !== undefined && object.unbonding_time !== null) {
-      message.unbondingTime = fromTimestamp(Timestamp.fromAmino(object.unbonding_time));
+      message.unbondingTime = Timestamp.fromAmino(object.unbonding_time);
     }
     if (object.commission !== undefined && object.commission !== null) {
       message.commission = Commission.fromAmino(object.commission);
@@ -1366,7 +1365,7 @@ export const Validator = {
     obj.delegator_shares = message.delegatorShares === "" ? undefined : message.delegatorShares;
     obj.description = message.description ? Description.toAmino(message.description) : undefined;
     obj.unbonding_height = message.unbondingHeight !== BigInt(0) ? (message.unbondingHeight?.toString)() : undefined;
-    obj.unbonding_time = message.unbondingTime ? Timestamp.toAmino(toTimestamp(message.unbondingTime)) : undefined;
+    obj.unbonding_time = message.unbondingTime ? Timestamp.toAmino(message.unbondingTime) : undefined;
     obj.commission = message.commission ? Commission.toAmino(message.commission) : undefined;
     obj.min_self_delegation = message.minSelfDelegation === "" ? undefined : message.minSelfDelegation;
     return obj;
@@ -1971,7 +1970,7 @@ export const UnbondingDelegation = {
 function createBaseUnbondingDelegationEntry(): UnbondingDelegationEntry {
   return {
     creationHeight: BigInt(0),
-    completionTime: new Date(),
+    completionTime: Timestamp.fromPartial({}),
     initialBalance: "",
     balance: ""
   };
@@ -1983,7 +1982,7 @@ export const UnbondingDelegationEntry = {
       writer.uint32(8).int64(message.creationHeight);
     }
     if (message.completionTime !== undefined) {
-      Timestamp.encode(toTimestamp(message.completionTime), writer.uint32(18).fork()).ldelim();
+      Timestamp.encode(message.completionTime, writer.uint32(18).fork()).ldelim();
     }
     if (message.initialBalance !== "") {
       writer.uint32(26).string(message.initialBalance);
@@ -2004,7 +2003,7 @@ export const UnbondingDelegationEntry = {
           message.creationHeight = reader.int64();
           break;
         case 2:
-          message.completionTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.completionTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 3:
           message.initialBalance = reader.string();
@@ -2022,7 +2021,7 @@ export const UnbondingDelegationEntry = {
   fromPartial(object: Partial<UnbondingDelegationEntry>): UnbondingDelegationEntry {
     const message = createBaseUnbondingDelegationEntry();
     message.creationHeight = object.creationHeight !== undefined && object.creationHeight !== null ? BigInt(object.creationHeight.toString()) : BigInt(0);
-    message.completionTime = object.completionTime ?? undefined;
+    message.completionTime = object.completionTime !== undefined && object.completionTime !== null ? Timestamp.fromPartial(object.completionTime) : undefined;
     message.initialBalance = object.initialBalance ?? "";
     message.balance = object.balance ?? "";
     return message;
@@ -2033,7 +2032,7 @@ export const UnbondingDelegationEntry = {
       message.creationHeight = BigInt(object.creation_height);
     }
     if (object.completion_time !== undefined && object.completion_time !== null) {
-      message.completionTime = fromTimestamp(Timestamp.fromAmino(object.completion_time));
+      message.completionTime = Timestamp.fromAmino(object.completion_time);
     }
     if (object.initial_balance !== undefined && object.initial_balance !== null) {
       message.initialBalance = object.initial_balance;
@@ -2046,7 +2045,7 @@ export const UnbondingDelegationEntry = {
   toAmino(message: UnbondingDelegationEntry): UnbondingDelegationEntryAmino {
     const obj: any = {};
     obj.creation_height = message.creationHeight !== BigInt(0) ? (message.creationHeight?.toString)() : undefined;
-    obj.completion_time = message.completionTime ? Timestamp.toAmino(toTimestamp(message.completionTime)) : undefined;
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime) : undefined;
     obj.initial_balance = message.initialBalance === "" ? undefined : message.initialBalance;
     obj.balance = message.balance === "" ? undefined : message.balance;
     return obj;
@@ -2076,7 +2075,7 @@ export const UnbondingDelegationEntry = {
 function createBaseRedelegationEntry(): RedelegationEntry {
   return {
     creationHeight: BigInt(0),
-    completionTime: new Date(),
+    completionTime: Timestamp.fromPartial({}),
     initialBalance: "",
     sharesDst: ""
   };
@@ -2088,7 +2087,7 @@ export const RedelegationEntry = {
       writer.uint32(8).int64(message.creationHeight);
     }
     if (message.completionTime !== undefined) {
-      Timestamp.encode(toTimestamp(message.completionTime), writer.uint32(18).fork()).ldelim();
+      Timestamp.encode(message.completionTime, writer.uint32(18).fork()).ldelim();
     }
     if (message.initialBalance !== "") {
       writer.uint32(26).string(message.initialBalance);
@@ -2109,7 +2108,7 @@ export const RedelegationEntry = {
           message.creationHeight = reader.int64();
           break;
         case 2:
-          message.completionTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+          message.completionTime = Timestamp.decode(reader, reader.uint32());
           break;
         case 3:
           message.initialBalance = reader.string();
@@ -2127,7 +2126,7 @@ export const RedelegationEntry = {
   fromPartial(object: Partial<RedelegationEntry>): RedelegationEntry {
     const message = createBaseRedelegationEntry();
     message.creationHeight = object.creationHeight !== undefined && object.creationHeight !== null ? BigInt(object.creationHeight.toString()) : BigInt(0);
-    message.completionTime = object.completionTime ?? undefined;
+    message.completionTime = object.completionTime !== undefined && object.completionTime !== null ? Timestamp.fromPartial(object.completionTime) : undefined;
     message.initialBalance = object.initialBalance ?? "";
     message.sharesDst = object.sharesDst ?? "";
     return message;
@@ -2138,7 +2137,7 @@ export const RedelegationEntry = {
       message.creationHeight = BigInt(object.creation_height);
     }
     if (object.completion_time !== undefined && object.completion_time !== null) {
-      message.completionTime = fromTimestamp(Timestamp.fromAmino(object.completion_time));
+      message.completionTime = Timestamp.fromAmino(object.completion_time);
     }
     if (object.initial_balance !== undefined && object.initial_balance !== null) {
       message.initialBalance = object.initial_balance;
@@ -2151,7 +2150,7 @@ export const RedelegationEntry = {
   toAmino(message: RedelegationEntry): RedelegationEntryAmino {
     const obj: any = {};
     obj.creation_height = message.creationHeight !== BigInt(0) ? (message.creationHeight?.toString)() : undefined;
-    obj.completion_time = message.completionTime ? Timestamp.toAmino(toTimestamp(message.completionTime)) : undefined;
+    obj.completion_time = message.completionTime ? Timestamp.toAmino(message.completionTime) : undefined;
     obj.initial_balance = message.initialBalance === "" ? undefined : message.initialBalance;
     obj.shares_dst = message.sharesDst === "" ? undefined : message.sharesDst;
     return obj;

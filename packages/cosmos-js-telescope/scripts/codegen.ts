@@ -16,10 +16,21 @@ export const options: TelescopeInput = {
     interfaces: {
       enabled: true,
       useUnionTypes: true
-
     },
     prototypes: {
-      enabled: true,
+      includePackageVar: false,
+      typingsFormat: {
+        duration: 'duration',
+        timestamp: 'timestamp',
+        useExact: false,
+        useDeepPartial: false,
+        num64: 'bigint',
+        // useTelescopeGeneratedType: true,
+        toJsonUnknown: false,
+        customTypes: {
+          useCosmosSDKDec: true
+        }
+      },
       excluded: {
         packages: [
           'ibc.applications.fee.v1', // issue with parsing protos (LCD routes with nested objects in params)
@@ -52,9 +63,12 @@ export const options: TelescopeInput = {
     },
 
     tsDisable: {
-      files: [],
-      patterns: [],
-      disableAll: true
+      disableAll: true, // FIXME types aren't resolving correctly
+      files: [
+        'cosmos/authz/v1beta1/tx.amino.ts',
+        'cosmos/staking/v1beta1/tx.amino.ts'
+      ],
+      patterns: ['**/*amino.ts', '**/*registry.ts']
     },
 
     eslintDisable: {
@@ -62,20 +76,8 @@ export const options: TelescopeInput = {
       patterns: [],
       disableAll: false
     },
-
-    stargateClients: {
-      enabled: true,
-      includeCosmosDefaultTypes: true
-    },
-
     aminoEncoding: {
       enabled: true,
-      customTypes: {
-        useCosmosSDKDec: false
-      },
-      exceptions: {
-        ...AMINO_MAP
-      },
     },
     lcdClients: {
       enabled: false
