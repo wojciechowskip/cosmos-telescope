@@ -11,7 +11,7 @@ import { BinaryReader, BinaryWriter } from "../../../binary";
  * proposal Content.
  */
 export interface MsgSubmitProposal {
-  content?: CommunityPoolSpendProposal & CommunityPoolSpendProposalWithDeposit & TextProposal & ParameterChangeProposal & SoftwareUpgradeProposal & CancelSoftwareUpgradeProposal & Any | undefined;
+  content?: CommunityPoolSpendProposal | CommunityPoolSpendProposalWithDeposit | TextProposal | ParameterChangeProposal | SoftwareUpgradeProposal | CancelSoftwareUpgradeProposal | Any | undefined;
   initialDeposit: Coin[];
   proposer: string;
 }

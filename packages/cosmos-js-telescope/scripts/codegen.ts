@@ -13,22 +13,9 @@ export const options: TelescopeInput = {
   options: {
     interfaces: {
       enabled: true,
-      useUnionTypes: false
+      useUnionTypes: true
     },
     prototypes: {
-      includePackageVar: false,
-      typingsFormat: {
-        duration: 'duration',
-        timestamp: 'timestamp',
-        useExact: false,
-        useDeepPartial: false,
-        num64: 'bigint',
-        // useTelescopeGeneratedType: true,
-        toJsonUnknown: false,
-        customTypes: {
-          useCosmosSDKDec: true
-        }
-      },
       excluded: {
         packages: [
           'ibc.applications.fee.v1', // issue with parsing protos (LCD routes with nested objects in params)

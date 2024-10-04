@@ -1,8 +1,9 @@
 //@ts-nocheck
-import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
+import { Timestamp } from "../../../google/protobuf/timestamp";
 import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { toTimestamp, fromTimestamp } from "../../../helpers";
 /** VoteOption enumerates the valid vote options for a given proposal. */
 export enum VoteOption {
   /** VOTE_OPTION_UNSPECIFIED - VOTE_OPTION_UNSPECIFIED defines a no-op vote option. */
@@ -228,7 +229,7 @@ export interface Member {
   /** metadata is any arbitrary metadata to attached to the member. */
   metadata: string;
   /** added_at is a timestamp specifying when a member was added. */
-  addedAt: Timestamp;
+  addedAt: Date;
 }
 export interface MemberProtoMsg {
   typeUrl: "/cosmos.group.v1.Member";
@@ -260,7 +261,7 @@ export interface MemberSDKType {
   address: string;
   weight: string;
   metadata: string;
-  added_at: TimestampSDKType;
+  added_at: Date;
 }
 /** Members defines a repeated slice of Member objects. */
 export interface Members {
@@ -417,7 +418,7 @@ export interface GroupInfo {
   /** total_weight is the sum of the group members' weights. */
   totalWeight: string;
   /** created_at is a timestamp specifying when a group was created. */
-  createdAt: Timestamp;
+  createdAt: Date;
 }
 export interface GroupInfoProtoMsg {
   typeUrl: "/cosmos.group.v1.GroupInfo";
@@ -454,7 +455,7 @@ export interface GroupInfoSDKType {
   metadata: string;
   version: bigint;
   total_weight: string;
-  created_at: TimestampSDKType;
+  created_at: Date;
 }
 /** GroupMember represents the relationship between a group and a member. */
 export interface GroupMember {
@@ -499,9 +500,9 @@ export interface GroupPolicyInfo {
    */
   version: bigint;
   /** decision_policy specifies the group policy's decision policy. */
-  decisionPolicy?: ThresholdDecisionPolicy & PercentageDecisionPolicy & Any | undefined;
+  decisionPolicy?: ThresholdDecisionPolicy | PercentageDecisionPolicy | Any | undefined;
   /** created_at is a timestamp specifying when a group policy was created. */
-  createdAt: Timestamp;
+  createdAt: Date;
 }
 export interface GroupPolicyInfoProtoMsg {
   typeUrl: "/cosmos.group.v1.GroupPolicyInfo";
@@ -542,7 +543,7 @@ export interface GroupPolicyInfoSDKType {
   metadata: string;
   version: bigint;
   decision_policy?: ThresholdDecisionPolicySDKType | PercentageDecisionPolicySDKType | AnySDKType | undefined;
-  created_at: TimestampSDKType;
+  created_at: Date;
 }
 /**
  * Proposal defines a group proposal. Any member of a group can submit a proposal
@@ -560,7 +561,7 @@ export interface Proposal {
   /** proposers are the account addresses of the proposers. */
   proposers: string[];
   /** submit_time is a timestamp specifying when a proposal was submitted. */
-  submitTime: Timestamp;
+  submitTime: Date;
   /**
    * group_version tracks the version of the group that this proposal corresponds to.
    * When group membership is changed, existing proposals from previous group versions will become invalid.
@@ -592,7 +593,7 @@ export interface Proposal {
    * at this point, and the `final_tally_result`, as well
    * as `status` and `result` fields will be accordingly updated.
    */
-  votingPeriodEnd: Timestamp;
+  votingPeriodEnd: Date;
   /** executor_result is the final result based on the votes and election rule. Initial value is NotRun. */
   executorResult: ProposalExecutorResult;
   /** messages is a list of Msgs that will be executed if the proposal passes. */
@@ -671,13 +672,13 @@ export interface ProposalSDKType {
   address: string;
   metadata: string;
   proposers: string[];
-  submit_time: TimestampSDKType;
+  submit_time: Date;
   group_version: bigint;
   group_policy_version: bigint;
   status: ProposalStatus;
   result: ProposalResult;
   final_tally_result: TallyResultSDKType;
-  voting_period_end: TimestampSDKType;
+  voting_period_end: Date;
   executor_result: ProposalExecutorResult;
   messages: AnySDKType[];
 }
@@ -729,7 +730,7 @@ export interface Vote {
   /** metadata is any arbitrary metadata to attached to the vote. */
   metadata: string;
   /** submit_time is the timestamp when the vote was submitted. */
-  submitTime: Timestamp;
+  submitTime: Date;
 }
 export interface VoteProtoMsg {
   typeUrl: "/cosmos.group.v1.Vote";
@@ -758,14 +759,14 @@ export interface VoteSDKType {
   voter: string;
   option: VoteOption;
   metadata: string;
-  submit_time: TimestampSDKType;
+  submit_time: Date;
 }
 function createBaseMember(): Member {
   return {
     address: "",
     weight: "",
     metadata: "",
-    addedAt: Timestamp.fromPartial({})
+    addedAt: new Date()
   };
 }
 export const Member = {
@@ -781,7 +782,7 @@ export const Member = {
       writer.uint32(26).string(message.metadata);
     }
     if (message.addedAt !== undefined) {
-      Timestamp.encode(message.addedAt, writer.uint32(34).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.addedAt), writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -802,7 +803,7 @@ export const Member = {
           message.metadata = reader.string();
           break;
         case 4:
-          message.addedAt = Timestamp.decode(reader, reader.uint32());
+          message.addedAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -816,7 +817,7 @@ export const Member = {
     message.address = object.address ?? "";
     message.weight = object.weight ?? "";
     message.metadata = object.metadata ?? "";
-    message.addedAt = object.addedAt !== undefined && object.addedAt !== null ? Timestamp.fromPartial(object.addedAt) : undefined;
+    message.addedAt = object.addedAt ?? undefined;
     return message;
   },
   fromAmino(object: MemberAmino): Member {
@@ -831,7 +832,7 @@ export const Member = {
       message.metadata = object.metadata;
     }
     if (object.added_at !== undefined && object.added_at !== null) {
-      message.addedAt = Timestamp.fromAmino(object.added_at);
+      message.addedAt = fromTimestamp(Timestamp.fromAmino(object.added_at));
     }
     return message;
   },
@@ -840,7 +841,7 @@ export const Member = {
     obj.address = message.address === "" ? undefined : message.address;
     obj.weight = message.weight === "" ? undefined : message.weight;
     obj.metadata = message.metadata === "" ? undefined : message.metadata;
-    obj.added_at = message.addedAt ? Timestamp.toAmino(message.addedAt) : undefined;
+    obj.added_at = message.addedAt ? Timestamp.toAmino(toTimestamp(message.addedAt)) : undefined;
     return obj;
   },
   fromAminoMsg(object: MemberAminoMsg): Member {
@@ -1188,7 +1189,7 @@ function createBaseGroupInfo(): GroupInfo {
     metadata: "",
     version: BigInt(0),
     totalWeight: "",
-    createdAt: Timestamp.fromPartial({})
+    createdAt: new Date()
   };
 }
 export const GroupInfo = {
@@ -1210,7 +1211,7 @@ export const GroupInfo = {
       writer.uint32(42).string(message.totalWeight);
     }
     if (message.createdAt !== undefined) {
-      Timestamp.encode(message.createdAt, writer.uint32(50).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.createdAt), writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -1237,7 +1238,7 @@ export const GroupInfo = {
           message.totalWeight = reader.string();
           break;
         case 6:
-          message.createdAt = Timestamp.decode(reader, reader.uint32());
+          message.createdAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1253,7 +1254,7 @@ export const GroupInfo = {
     message.metadata = object.metadata ?? "";
     message.version = object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);
     message.totalWeight = object.totalWeight ?? "";
-    message.createdAt = object.createdAt !== undefined && object.createdAt !== null ? Timestamp.fromPartial(object.createdAt) : undefined;
+    message.createdAt = object.createdAt ?? undefined;
     return message;
   },
   fromAmino(object: GroupInfoAmino): GroupInfo {
@@ -1274,7 +1275,7 @@ export const GroupInfo = {
       message.totalWeight = object.total_weight;
     }
     if (object.created_at !== undefined && object.created_at !== null) {
-      message.createdAt = Timestamp.fromAmino(object.created_at);
+      message.createdAt = fromTimestamp(Timestamp.fromAmino(object.created_at));
     }
     return message;
   },
@@ -1285,7 +1286,7 @@ export const GroupInfo = {
     obj.metadata = message.metadata === "" ? undefined : message.metadata;
     obj.version = message.version !== BigInt(0) ? (message.version?.toString)() : undefined;
     obj.total_weight = message.totalWeight === "" ? undefined : message.totalWeight;
-    obj.created_at = message.createdAt ? Timestamp.toAmino(message.createdAt) : undefined;
+    obj.created_at = message.createdAt ? Timestamp.toAmino(toTimestamp(message.createdAt)) : undefined;
     return obj;
   },
   fromAminoMsg(object: GroupInfoAminoMsg): GroupInfo {
@@ -1399,7 +1400,7 @@ function createBaseGroupPolicyInfo(): GroupPolicyInfo {
     metadata: "",
     version: BigInt(0),
     decisionPolicy: undefined,
-    createdAt: Timestamp.fromPartial({})
+    createdAt: new Date()
   };
 }
 export const GroupPolicyInfo = {
@@ -1424,7 +1425,7 @@ export const GroupPolicyInfo = {
       Any.encode(message.decisionPolicy as Any, writer.uint32(50).fork()).ldelim();
     }
     if (message.createdAt !== undefined) {
-      Timestamp.encode(message.createdAt, writer.uint32(58).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.createdAt), writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -1454,7 +1455,7 @@ export const GroupPolicyInfo = {
           message.decisionPolicy = Cosmos_groupDecisionPolicy_InterfaceDecoder(reader) as Any;
           break;
         case 7:
-          message.createdAt = Timestamp.decode(reader, reader.uint32());
+          message.createdAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1471,7 +1472,7 @@ export const GroupPolicyInfo = {
     message.metadata = object.metadata ?? "";
     message.version = object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);
     message.decisionPolicy = object.decisionPolicy !== undefined && object.decisionPolicy !== null ? Any.fromPartial(object.decisionPolicy) : undefined;
-    message.createdAt = object.createdAt !== undefined && object.createdAt !== null ? Timestamp.fromPartial(object.createdAt) : undefined;
+    message.createdAt = object.createdAt ?? undefined;
     return message;
   },
   fromAmino(object: GroupPolicyInfoAmino): GroupPolicyInfo {
@@ -1495,7 +1496,7 @@ export const GroupPolicyInfo = {
       message.decisionPolicy = Cosmos_groupDecisionPolicy_FromAmino(object.decision_policy);
     }
     if (object.created_at !== undefined && object.created_at !== null) {
-      message.createdAt = Timestamp.fromAmino(object.created_at);
+      message.createdAt = fromTimestamp(Timestamp.fromAmino(object.created_at));
     }
     return message;
   },
@@ -1507,7 +1508,7 @@ export const GroupPolicyInfo = {
     obj.metadata = message.metadata === "" ? undefined : message.metadata;
     obj.version = message.version !== BigInt(0) ? (message.version?.toString)() : undefined;
     obj.decision_policy = message.decisionPolicy ? Cosmos_groupDecisionPolicy_ToAmino(message.decisionPolicy as Any) : undefined;
-    obj.created_at = message.createdAt ? Timestamp.toAmino(message.createdAt) : undefined;
+    obj.created_at = message.createdAt ? Timestamp.toAmino(toTimestamp(message.createdAt)) : undefined;
     return obj;
   },
   fromAminoMsg(object: GroupPolicyInfoAminoMsg): GroupPolicyInfo {
@@ -1538,13 +1539,13 @@ function createBaseProposal(): Proposal {
     address: "",
     metadata: "",
     proposers: [],
-    submitTime: Timestamp.fromPartial({}),
+    submitTime: new Date(),
     groupVersion: BigInt(0),
     groupPolicyVersion: BigInt(0),
     status: 0,
     result: 0,
     finalTallyResult: TallyResult.fromPartial({}),
-    votingPeriodEnd: Timestamp.fromPartial({}),
+    votingPeriodEnd: new Date(),
     executorResult: 0,
     messages: []
   };
@@ -1565,7 +1566,7 @@ export const Proposal = {
       writer.uint32(34).string(v!);
     }
     if (message.submitTime !== undefined) {
-      Timestamp.encode(message.submitTime, writer.uint32(42).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.submitTime), writer.uint32(42).fork()).ldelim();
     }
     if (message.groupVersion !== BigInt(0)) {
       writer.uint32(48).uint64(message.groupVersion);
@@ -1583,7 +1584,7 @@ export const Proposal = {
       TallyResult.encode(message.finalTallyResult, writer.uint32(82).fork()).ldelim();
     }
     if (message.votingPeriodEnd !== undefined) {
-      Timestamp.encode(message.votingPeriodEnd, writer.uint32(90).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.votingPeriodEnd), writer.uint32(90).fork()).ldelim();
     }
     if (message.executorResult !== 0) {
       writer.uint32(96).int32(message.executorResult);
@@ -1613,7 +1614,7 @@ export const Proposal = {
           message.proposers.push(reader.string());
           break;
         case 5:
-          message.submitTime = Timestamp.decode(reader, reader.uint32());
+          message.submitTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         case 6:
           message.groupVersion = reader.uint64();
@@ -1631,7 +1632,7 @@ export const Proposal = {
           message.finalTallyResult = TallyResult.decode(reader, reader.uint32());
           break;
         case 11:
-          message.votingPeriodEnd = Timestamp.decode(reader, reader.uint32());
+          message.votingPeriodEnd = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         case 12:
           message.executorResult = reader.int32() as any;
@@ -1652,13 +1653,13 @@ export const Proposal = {
     message.address = object.address ?? "";
     message.metadata = object.metadata ?? "";
     message.proposers = object.proposers?.map(e => e) || [];
-    message.submitTime = object.submitTime !== undefined && object.submitTime !== null ? Timestamp.fromPartial(object.submitTime) : undefined;
+    message.submitTime = object.submitTime ?? undefined;
     message.groupVersion = object.groupVersion !== undefined && object.groupVersion !== null ? BigInt(object.groupVersion.toString()) : BigInt(0);
     message.groupPolicyVersion = object.groupPolicyVersion !== undefined && object.groupPolicyVersion !== null ? BigInt(object.groupPolicyVersion.toString()) : BigInt(0);
     message.status = object.status ?? 0;
     message.result = object.result ?? 0;
     message.finalTallyResult = object.finalTallyResult !== undefined && object.finalTallyResult !== null ? TallyResult.fromPartial(object.finalTallyResult) : undefined;
-    message.votingPeriodEnd = object.votingPeriodEnd !== undefined && object.votingPeriodEnd !== null ? Timestamp.fromPartial(object.votingPeriodEnd) : undefined;
+    message.votingPeriodEnd = object.votingPeriodEnd ?? undefined;
     message.executorResult = object.executorResult ?? 0;
     message.messages = object.messages?.map(e => Any.fromPartial(e)) || [];
     return message;
@@ -1676,7 +1677,7 @@ export const Proposal = {
     }
     message.proposers = object.proposers?.map(e => e) || [];
     if (object.submit_time !== undefined && object.submit_time !== null) {
-      message.submitTime = Timestamp.fromAmino(object.submit_time);
+      message.submitTime = fromTimestamp(Timestamp.fromAmino(object.submit_time));
     }
     if (object.group_version !== undefined && object.group_version !== null) {
       message.groupVersion = BigInt(object.group_version);
@@ -1694,7 +1695,7 @@ export const Proposal = {
       message.finalTallyResult = TallyResult.fromAmino(object.final_tally_result);
     }
     if (object.voting_period_end !== undefined && object.voting_period_end !== null) {
-      message.votingPeriodEnd = Timestamp.fromAmino(object.voting_period_end);
+      message.votingPeriodEnd = fromTimestamp(Timestamp.fromAmino(object.voting_period_end));
     }
     if (object.executor_result !== undefined && object.executor_result !== null) {
       message.executorResult = object.executor_result;
@@ -1712,13 +1713,13 @@ export const Proposal = {
     } else {
       obj.proposers = message.proposers;
     }
-    obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime) : undefined;
+    obj.submit_time = message.submitTime ? Timestamp.toAmino(toTimestamp(message.submitTime)) : undefined;
     obj.group_version = message.groupVersion !== BigInt(0) ? (message.groupVersion?.toString)() : undefined;
     obj.group_policy_version = message.groupPolicyVersion !== BigInt(0) ? (message.groupPolicyVersion?.toString)() : undefined;
     obj.status = message.status === 0 ? undefined : message.status;
     obj.result = message.result === 0 ? undefined : message.result;
     obj.final_tally_result = message.finalTallyResult ? TallyResult.toAmino(message.finalTallyResult) : undefined;
-    obj.voting_period_end = message.votingPeriodEnd ? Timestamp.toAmino(message.votingPeriodEnd) : undefined;
+    obj.voting_period_end = message.votingPeriodEnd ? Timestamp.toAmino(toTimestamp(message.votingPeriodEnd)) : undefined;
     obj.executor_result = message.executorResult === 0 ? undefined : message.executorResult;
     if (message.messages) {
       obj.messages = message.messages.map(e => e ? Any.toAmino(e) : undefined);
@@ -1860,7 +1861,7 @@ function createBaseVote(): Vote {
     voter: "",
     option: 0,
     metadata: "",
-    submitTime: Timestamp.fromPartial({})
+    submitTime: new Date()
   };
 }
 export const Vote = {
@@ -1879,7 +1880,7 @@ export const Vote = {
       writer.uint32(34).string(message.metadata);
     }
     if (message.submitTime !== undefined) {
-      Timestamp.encode(message.submitTime, writer.uint32(42).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.submitTime), writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -1903,7 +1904,7 @@ export const Vote = {
           message.metadata = reader.string();
           break;
         case 5:
-          message.submitTime = Timestamp.decode(reader, reader.uint32());
+          message.submitTime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1918,7 +1919,7 @@ export const Vote = {
     message.voter = object.voter ?? "";
     message.option = object.option ?? 0;
     message.metadata = object.metadata ?? "";
-    message.submitTime = object.submitTime !== undefined && object.submitTime !== null ? Timestamp.fromPartial(object.submitTime) : undefined;
+    message.submitTime = object.submitTime ?? undefined;
     return message;
   },
   fromAmino(object: VoteAmino): Vote {
@@ -1936,7 +1937,7 @@ export const Vote = {
       message.metadata = object.metadata;
     }
     if (object.submit_time !== undefined && object.submit_time !== null) {
-      message.submitTime = Timestamp.fromAmino(object.submit_time);
+      message.submitTime = fromTimestamp(Timestamp.fromAmino(object.submit_time));
     }
     return message;
   },
@@ -1946,7 +1947,7 @@ export const Vote = {
     obj.voter = message.voter === "" ? undefined : message.voter;
     obj.option = message.option === 0 ? undefined : message.option;
     obj.metadata = message.metadata === "" ? undefined : message.metadata;
-    obj.submit_time = message.submitTime ? Timestamp.toAmino(message.submitTime) : undefined;
+    obj.submit_time = message.submitTime ? Timestamp.toAmino(toTimestamp(message.submitTime)) : undefined;
     return obj;
   },
   fromAminoMsg(object: VoteAminoMsg): Vote {

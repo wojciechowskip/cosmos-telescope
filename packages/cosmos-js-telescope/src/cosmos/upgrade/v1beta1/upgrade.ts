@@ -1,7 +1,8 @@
 //@ts-nocheck
-import { Timestamp, TimestampSDKType } from "../../../google/protobuf/timestamp";
+import { Timestamp } from "../../../google/protobuf/timestamp";
 import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { toTimestamp, fromTimestamp } from "../../../helpers";
 /** Plan specifies information about a planned upgrade and when it should occur. */
 export interface Plan {
   /**
@@ -20,7 +21,7 @@ export interface Plan {
    * If this field is not empty, an error will be thrown.
    */
   /** @deprecated */
-  time: Timestamp;
+  time: Date;
   /**
    * The height at which the upgrade must be performed.
    * Only used if Time is not set.
@@ -88,7 +89,7 @@ export interface PlanAminoMsg {
 export interface PlanSDKType {
   name: string;
   /** @deprecated */
-  time: TimestampSDKType;
+  time: Date;
   height: bigint;
   info: string;
   /** @deprecated */
@@ -225,7 +226,7 @@ export interface ModuleVersionSDKType {
 function createBasePlan(): Plan {
   return {
     name: "",
-    time: Timestamp.fromPartial({}),
+    time: new Date(),
     height: BigInt(0),
     info: "",
     upgradedClientState: undefined
@@ -238,7 +239,7 @@ export const Plan = {
       writer.uint32(10).string(message.name);
     }
     if (message.time !== undefined) {
-      Timestamp.encode(message.time, writer.uint32(18).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.time), writer.uint32(18).fork()).ldelim();
     }
     if (message.height !== BigInt(0)) {
       writer.uint32(24).int64(message.height);
@@ -262,7 +263,7 @@ export const Plan = {
           message.name = reader.string();
           break;
         case 2:
-          message.time = Timestamp.decode(reader, reader.uint32());
+          message.time = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         case 3:
           message.height = reader.int64();
@@ -283,7 +284,7 @@ export const Plan = {
   fromPartial(object: Partial<Plan>): Plan {
     const message = createBasePlan();
     message.name = object.name ?? "";
-    message.time = object.time !== undefined && object.time !== null ? Timestamp.fromPartial(object.time) : undefined;
+    message.time = object.time ?? undefined;
     message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     message.info = object.info ?? "";
     message.upgradedClientState = object.upgradedClientState !== undefined && object.upgradedClientState !== null ? Any.fromPartial(object.upgradedClientState) : undefined;
@@ -295,7 +296,7 @@ export const Plan = {
       message.name = object.name;
     }
     if (object.time !== undefined && object.time !== null) {
-      message.time = Timestamp.fromAmino(object.time);
+      message.time = fromTimestamp(Timestamp.fromAmino(object.time));
     }
     if (object.height !== undefined && object.height !== null) {
       message.height = BigInt(object.height);
@@ -311,7 +312,7 @@ export const Plan = {
   toAmino(message: Plan): PlanAmino {
     const obj: any = {};
     obj.name = message.name === "" ? undefined : message.name;
-    obj.time = message.time ? Timestamp.toAmino(message.time) : undefined;
+    obj.time = message.time ? Timestamp.toAmino(toTimestamp(message.time)) : undefined;
     obj.height = message.height !== BigInt(0) ? (message.height?.toString)() : undefined;
     obj.info = message.info === "" ? undefined : message.info;
     obj.upgraded_client_state = message.upgradedClientState ? Any.toAmino(message.upgradedClientState) : undefined;
