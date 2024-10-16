@@ -1,29 +1,38 @@
 //@ts-nocheck
-import { Rpc } from "../../../helpers";
+import { Coin, CoinSDKType } from "../../base/v1beta1/coin";
+import { Input, InputSDKType, Output, OutputSDKType } from "./bank";
+import { DeliverTxResponse, StdFee, TxRpc } from "../../../types";
 import { BinaryReader } from "../../../binary";
-import { MsgSend, MsgSendResponse, MsgMultiSend, MsgMultiSendResponse } from "./tx";
+import { MsgSend, MsgSendSDKType, MsgSendResponse, MsgSendResponseSDKType, MsgMultiSend, MsgMultiSendSDKType, MsgMultiSendResponse, MsgMultiSendResponseSDKType } from "./tx";
 /** Msg defines the bank Msg service. */
 export interface Msg {
   /** Send defines a method for sending coins from one account to another account. */
-  send(request: MsgSend): Promise<MsgSendResponse>;
+  send(signerAddress: string, message: MsgSend, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
   /** MultiSend defines a method for sending coins from some accounts to other accounts. */
-  multiSend(request: MsgMultiSend): Promise<MsgMultiSendResponse>;
+  multiSend(signerAddress: string, message: MsgMultiSend, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
 }
 export class MsgClientImpl implements Msg {
-  private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly rpc: TxRpc;
+  constructor(rpc: TxRpc) {
     this.rpc = rpc;
-    this.send = this.send.bind(this);
-    this.multiSend = this.multiSend.bind(this);
   }
-  send(request: MsgSend): Promise<MsgSendResponse> {
-    const data = MsgSend.encode(request).finish();
-    const promise = this.rpc.request("cosmos.bank.v1beta1.Msg", "Send", data);
-    return promise.then(data => MsgSendResponse.decode(new BinaryReader(data)));
-  }
-  multiSend(request: MsgMultiSend): Promise<MsgMultiSendResponse> {
-    const data = MsgMultiSend.encode(request).finish();
-    const promise = this.rpc.request("cosmos.bank.v1beta1.Msg", "MultiSend", data);
-    return promise.then(data => MsgMultiSendResponse.decode(new BinaryReader(data)));
-  }
+  /* Send defines a method for sending coins from one account to another account. */
+  send = async (signerAddress: string, message: MsgSend, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
+    const data = [{
+      typeUrl: MsgSend.typeUrl,
+      value: message
+    }];
+    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  };
+  /* MultiSend defines a method for sending coins from some accounts to other accounts. */
+  multiSend = async (signerAddress: string, message: MsgMultiSend, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
+    const data = [{
+      typeUrl: MsgMultiSend.typeUrl,
+      value: message
+    }];
+    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  };
 }
+export const createClientImpl = (rpc: TxRpc) => {
+  return new MsgClientImpl(rpc);
+};

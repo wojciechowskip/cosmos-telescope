@@ -1,7 +1,10 @@
 //@ts-nocheck
 import { Params, ParamsAmino, ParamsSDKType } from "./mint";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { DeepPartial, isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
+export const protobufPackage = "cosmos.mint.v1beta1";
 /** QueryParamsRequest is the request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 export interface QueryParamsRequestProtoMsg {
@@ -142,6 +145,16 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 }
 export const QueryParamsRequest = {
   typeUrl: "/cosmos.mint.v1beta1.QueryParamsRequest",
+  aminoType: "cosmos-sdk/QueryParamsRequest",
+  is(o: any): o is QueryParamsRequest {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryParamsRequestSDKType {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryParamsRequestAmino {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
   encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -159,9 +172,24 @@ export const QueryParamsRequest = {
     }
     return message;
   },
-  fromPartial(_: Partial<QueryParamsRequest>): QueryParamsRequest {
+  fromJSON(_: any): QueryParamsRequest {
+    const obj = createBaseQueryParamsRequest();
+    return obj;
+  },
+  toJSON(_: QueryParamsRequest): JsonSafe<QueryParamsRequest> {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: DeepPartial<QueryParamsRequest>): QueryParamsRequest {
     const message = createBaseQueryParamsRequest();
     return message;
+  },
+  fromSDK(_: QueryParamsRequestSDKType): QueryParamsRequest {
+    return {};
+  },
+  toSDK(_: QueryParamsRequest): QueryParamsRequestSDKType {
+    const obj: any = {};
+    return obj;
   },
   fromAmino(_: QueryParamsRequestAmino): QueryParamsRequest {
     const message = createBaseQueryParamsRequest();
@@ -193,6 +221,8 @@ export const QueryParamsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsRequest.typeUrl, QueryParamsRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryParamsRequest.aminoType, QueryParamsRequest.typeUrl);
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
     params: Params.fromPartial({})
@@ -200,6 +230,16 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 }
 export const QueryParamsResponse = {
   typeUrl: "/cosmos.mint.v1beta1.QueryParamsResponse",
+  aminoType: "cosmos-sdk/QueryParamsResponse",
+  is(o: any): o is QueryParamsResponse {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is QueryParamsResponseSDKType {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is QueryParamsResponseAmino {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -223,10 +263,32 @@ export const QueryParamsResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryParamsResponse>): QueryParamsResponse {
+  fromJSON(object: any): QueryParamsResponse {
+    const obj = createBaseQueryParamsResponse();
+    if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
+    return obj;
+  },
+  toJSON(message: QueryParamsResponse): JsonSafe<QueryParamsResponse> {
+    const obj: any = {};
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<QueryParamsResponse>): QueryParamsResponse {
     const message = createBaseQueryParamsResponse();
-    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromPartial(object.params);
+    }
     return message;
+  },
+  fromSDK(object: QueryParamsResponseSDKType): QueryParamsResponse {
+    return {
+      params: object.params ? Params.fromSDK(object.params) : undefined
+    };
+  },
+  toSDK(message: QueryParamsResponse): QueryParamsResponseSDKType {
+    const obj: any = {};
+    message.params !== undefined && (obj.params = message.params ? Params.toSDK(message.params) : undefined);
+    return obj;
   },
   fromAmino(object: QueryParamsResponseAmino): QueryParamsResponse {
     const message = createBaseQueryParamsResponse();
@@ -262,11 +324,23 @@ export const QueryParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsResponse.typeUrl, QueryParamsResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryParamsResponse.aminoType, QueryParamsResponse.typeUrl);
 function createBaseQueryInflationRequest(): QueryInflationRequest {
   return {};
 }
 export const QueryInflationRequest = {
   typeUrl: "/cosmos.mint.v1beta1.QueryInflationRequest",
+  aminoType: "cosmos-sdk/QueryInflationRequest",
+  is(o: any): o is QueryInflationRequest {
+    return o && o.$typeUrl === QueryInflationRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryInflationRequestSDKType {
+    return o && o.$typeUrl === QueryInflationRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryInflationRequestAmino {
+    return o && o.$typeUrl === QueryInflationRequest.typeUrl;
+  },
   encode(_: QueryInflationRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -284,9 +358,24 @@ export const QueryInflationRequest = {
     }
     return message;
   },
-  fromPartial(_: Partial<QueryInflationRequest>): QueryInflationRequest {
+  fromJSON(_: any): QueryInflationRequest {
+    const obj = createBaseQueryInflationRequest();
+    return obj;
+  },
+  toJSON(_: QueryInflationRequest): JsonSafe<QueryInflationRequest> {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: DeepPartial<QueryInflationRequest>): QueryInflationRequest {
     const message = createBaseQueryInflationRequest();
     return message;
+  },
+  fromSDK(_: QueryInflationRequestSDKType): QueryInflationRequest {
+    return {};
+  },
+  toSDK(_: QueryInflationRequest): QueryInflationRequestSDKType {
+    const obj: any = {};
+    return obj;
   },
   fromAmino(_: QueryInflationRequestAmino): QueryInflationRequest {
     const message = createBaseQueryInflationRequest();
@@ -318,6 +407,8 @@ export const QueryInflationRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryInflationRequest.typeUrl, QueryInflationRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryInflationRequest.aminoType, QueryInflationRequest.typeUrl);
 function createBaseQueryInflationResponse(): QueryInflationResponse {
   return {
     inflation: new Uint8Array()
@@ -325,6 +416,16 @@ function createBaseQueryInflationResponse(): QueryInflationResponse {
 }
 export const QueryInflationResponse = {
   typeUrl: "/cosmos.mint.v1beta1.QueryInflationResponse",
+  aminoType: "cosmos-sdk/QueryInflationResponse",
+  is(o: any): o is QueryInflationResponse {
+    return o && (o.$typeUrl === QueryInflationResponse.typeUrl || o.inflation instanceof Uint8Array || typeof o.inflation === "string");
+  },
+  isSDK(o: any): o is QueryInflationResponseSDKType {
+    return o && (o.$typeUrl === QueryInflationResponse.typeUrl || o.inflation instanceof Uint8Array || typeof o.inflation === "string");
+  },
+  isAmino(o: any): o is QueryInflationResponseAmino {
+    return o && (o.$typeUrl === QueryInflationResponse.typeUrl || o.inflation instanceof Uint8Array || typeof o.inflation === "string");
+  },
   encode(message: QueryInflationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.inflation.length !== 0) {
       writer.uint32(10).bytes(message.inflation);
@@ -348,10 +449,30 @@ export const QueryInflationResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryInflationResponse>): QueryInflationResponse {
+  fromJSON(object: any): QueryInflationResponse {
+    const obj = createBaseQueryInflationResponse();
+    if (isSet(object.inflation)) obj.inflation = bytesFromBase64(object.inflation);
+    return obj;
+  },
+  toJSON(message: QueryInflationResponse): JsonSafe<QueryInflationResponse> {
+    const obj: any = {};
+    message.inflation !== undefined && (obj.inflation = base64FromBytes(message.inflation !== undefined ? message.inflation : new Uint8Array()));
+    return obj;
+  },
+  fromPartial(object: DeepPartial<QueryInflationResponse>): QueryInflationResponse {
     const message = createBaseQueryInflationResponse();
     message.inflation = object.inflation ?? new Uint8Array();
     return message;
+  },
+  fromSDK(object: QueryInflationResponseSDKType): QueryInflationResponse {
+    return {
+      inflation: object?.inflation
+    };
+  },
+  toSDK(message: QueryInflationResponse): QueryInflationResponseSDKType {
+    const obj: any = {};
+    obj.inflation = message.inflation;
+    return obj;
   },
   fromAmino(object: QueryInflationResponseAmino): QueryInflationResponse {
     const message = createBaseQueryInflationResponse();
@@ -387,11 +508,23 @@ export const QueryInflationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryInflationResponse.typeUrl, QueryInflationResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryInflationResponse.aminoType, QueryInflationResponse.typeUrl);
 function createBaseQueryAnnualProvisionsRequest(): QueryAnnualProvisionsRequest {
   return {};
 }
 export const QueryAnnualProvisionsRequest = {
   typeUrl: "/cosmos.mint.v1beta1.QueryAnnualProvisionsRequest",
+  aminoType: "cosmos-sdk/QueryAnnualProvisionsRequest",
+  is(o: any): o is QueryAnnualProvisionsRequest {
+    return o && o.$typeUrl === QueryAnnualProvisionsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAnnualProvisionsRequestSDKType {
+    return o && o.$typeUrl === QueryAnnualProvisionsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAnnualProvisionsRequestAmino {
+    return o && o.$typeUrl === QueryAnnualProvisionsRequest.typeUrl;
+  },
   encode(_: QueryAnnualProvisionsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -409,9 +542,24 @@ export const QueryAnnualProvisionsRequest = {
     }
     return message;
   },
-  fromPartial(_: Partial<QueryAnnualProvisionsRequest>): QueryAnnualProvisionsRequest {
+  fromJSON(_: any): QueryAnnualProvisionsRequest {
+    const obj = createBaseQueryAnnualProvisionsRequest();
+    return obj;
+  },
+  toJSON(_: QueryAnnualProvisionsRequest): JsonSafe<QueryAnnualProvisionsRequest> {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: DeepPartial<QueryAnnualProvisionsRequest>): QueryAnnualProvisionsRequest {
     const message = createBaseQueryAnnualProvisionsRequest();
     return message;
+  },
+  fromSDK(_: QueryAnnualProvisionsRequestSDKType): QueryAnnualProvisionsRequest {
+    return {};
+  },
+  toSDK(_: QueryAnnualProvisionsRequest): QueryAnnualProvisionsRequestSDKType {
+    const obj: any = {};
+    return obj;
   },
   fromAmino(_: QueryAnnualProvisionsRequestAmino): QueryAnnualProvisionsRequest {
     const message = createBaseQueryAnnualProvisionsRequest();
@@ -443,6 +591,8 @@ export const QueryAnnualProvisionsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAnnualProvisionsRequest.typeUrl, QueryAnnualProvisionsRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAnnualProvisionsRequest.aminoType, QueryAnnualProvisionsRequest.typeUrl);
 function createBaseQueryAnnualProvisionsResponse(): QueryAnnualProvisionsResponse {
   return {
     annualProvisions: new Uint8Array()
@@ -450,6 +600,16 @@ function createBaseQueryAnnualProvisionsResponse(): QueryAnnualProvisionsRespons
 }
 export const QueryAnnualProvisionsResponse = {
   typeUrl: "/cosmos.mint.v1beta1.QueryAnnualProvisionsResponse",
+  aminoType: "cosmos-sdk/QueryAnnualProvisionsResponse",
+  is(o: any): o is QueryAnnualProvisionsResponse {
+    return o && (o.$typeUrl === QueryAnnualProvisionsResponse.typeUrl || o.annualProvisions instanceof Uint8Array || typeof o.annualProvisions === "string");
+  },
+  isSDK(o: any): o is QueryAnnualProvisionsResponseSDKType {
+    return o && (o.$typeUrl === QueryAnnualProvisionsResponse.typeUrl || o.annual_provisions instanceof Uint8Array || typeof o.annual_provisions === "string");
+  },
+  isAmino(o: any): o is QueryAnnualProvisionsResponseAmino {
+    return o && (o.$typeUrl === QueryAnnualProvisionsResponse.typeUrl || o.annual_provisions instanceof Uint8Array || typeof o.annual_provisions === "string");
+  },
   encode(message: QueryAnnualProvisionsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.annualProvisions.length !== 0) {
       writer.uint32(10).bytes(message.annualProvisions);
@@ -473,10 +633,30 @@ export const QueryAnnualProvisionsResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryAnnualProvisionsResponse>): QueryAnnualProvisionsResponse {
+  fromJSON(object: any): QueryAnnualProvisionsResponse {
+    const obj = createBaseQueryAnnualProvisionsResponse();
+    if (isSet(object.annualProvisions)) obj.annualProvisions = bytesFromBase64(object.annualProvisions);
+    return obj;
+  },
+  toJSON(message: QueryAnnualProvisionsResponse): JsonSafe<QueryAnnualProvisionsResponse> {
+    const obj: any = {};
+    message.annualProvisions !== undefined && (obj.annualProvisions = base64FromBytes(message.annualProvisions !== undefined ? message.annualProvisions : new Uint8Array()));
+    return obj;
+  },
+  fromPartial(object: DeepPartial<QueryAnnualProvisionsResponse>): QueryAnnualProvisionsResponse {
     const message = createBaseQueryAnnualProvisionsResponse();
     message.annualProvisions = object.annualProvisions ?? new Uint8Array();
     return message;
+  },
+  fromSDK(object: QueryAnnualProvisionsResponseSDKType): QueryAnnualProvisionsResponse {
+    return {
+      annualProvisions: object?.annual_provisions
+    };
+  },
+  toSDK(message: QueryAnnualProvisionsResponse): QueryAnnualProvisionsResponseSDKType {
+    const obj: any = {};
+    obj.annual_provisions = message.annualProvisions;
+    return obj;
   },
   fromAmino(object: QueryAnnualProvisionsResponseAmino): QueryAnnualProvisionsResponse {
     const message = createBaseQueryAnnualProvisionsResponse();
@@ -512,3 +692,5 @@ export const QueryAnnualProvisionsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAnnualProvisionsResponse.typeUrl, QueryAnnualProvisionsResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAnnualProvisionsResponse.aminoType, QueryAnnualProvisionsResponse.typeUrl);

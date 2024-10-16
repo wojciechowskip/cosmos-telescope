@@ -1,5 +1,9 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, DeepPartial } from "../../helpers";
+import { JsonSafe } from "../../json-safe";
+import { GlobalDecoderRegistry } from "../../registry";
+export const protobufPackage = "google.api";
 /**
  * Defines the HTTP configuration for an API service. It contains a list of
  * [HttpRule][google.api.HttpRule], each specifying the mapping of an RPC method
@@ -1033,11 +1037,20 @@ function createBaseHttp(): Http {
 }
 export const Http = {
   typeUrl: "/google.api.Http",
+  is(o: any): o is Http {
+    return o && (o.$typeUrl === Http.typeUrl || Array.isArray(o.rules) && (!o.rules.length || HttpRule.is(o.rules[0])) && typeof o.fullyDecodeReservedExpansion === "boolean");
+  },
+  isSDK(o: any): o is HttpSDKType {
+    return o && (o.$typeUrl === Http.typeUrl || Array.isArray(o.rules) && (!o.rules.length || HttpRule.isSDK(o.rules[0])) && typeof o.fully_decode_reserved_expansion === "boolean");
+  },
+  isAmino(o: any): o is HttpAmino {
+    return o && (o.$typeUrl === Http.typeUrl || Array.isArray(o.rules) && (!o.rules.length || HttpRule.isAmino(o.rules[0])) && typeof o.fully_decode_reserved_expansion === "boolean");
+  },
   encode(message: Http, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.rules) {
       HttpRule.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.fullyDecodeReservedExpansion === true) {
+    if (message.fullyDecodeReservedExpansion !== undefined) {
       writer.uint32(16).bool(message.fullyDecodeReservedExpansion);
     }
     return writer;
@@ -1062,11 +1075,43 @@ export const Http = {
     }
     return message;
   },
-  fromPartial(object: Partial<Http>): Http {
+  fromJSON(object: any): Http {
+    const obj = createBaseHttp();
+    if (Array.isArray(object?.rules)) obj.rules = object.rules.map((e: any) => HttpRule.fromJSON(e));
+    if (isSet(object.fullyDecodeReservedExpansion)) obj.fullyDecodeReservedExpansion = Boolean(object.fullyDecodeReservedExpansion);
+    return obj;
+  },
+  toJSON(message: Http): JsonSafe<Http> {
+    const obj: any = {};
+    if (message.rules) {
+      obj.rules = message.rules.map(e => e ? HttpRule.toJSON(e) : undefined);
+    } else {
+      obj.rules = [];
+    }
+    message.fullyDecodeReservedExpansion !== undefined && (obj.fullyDecodeReservedExpansion = message.fullyDecodeReservedExpansion);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<Http>): Http {
     const message = createBaseHttp();
     message.rules = object.rules?.map(e => HttpRule.fromPartial(e)) || [];
     message.fullyDecodeReservedExpansion = object.fullyDecodeReservedExpansion ?? false;
     return message;
+  },
+  fromSDK(object: HttpSDKType): Http {
+    return {
+      rules: Array.isArray(object?.rules) ? object.rules.map((e: any) => HttpRule.fromSDK(e)) : [],
+      fullyDecodeReservedExpansion: object?.fully_decode_reserved_expansion
+    };
+  },
+  toSDK(message: Http): HttpSDKType {
+    const obj: any = {};
+    if (message.rules) {
+      obj.rules = message.rules.map(e => e ? HttpRule.toSDK(e) : undefined);
+    } else {
+      obj.rules = [];
+    }
+    obj.fully_decode_reserved_expansion = message.fullyDecodeReservedExpansion;
+    return obj;
   },
   fromAmino(object: HttpAmino): Http {
     const message = createBaseHttp();
@@ -1102,6 +1147,7 @@ export const Http = {
     };
   }
 };
+GlobalDecoderRegistry.register(Http.typeUrl, Http);
 function createBaseHttpRule(): HttpRule {
   return {
     selector: "",
@@ -1118,8 +1164,17 @@ function createBaseHttpRule(): HttpRule {
 }
 export const HttpRule = {
   typeUrl: "/google.api.HttpRule",
+  is(o: any): o is HttpRule {
+    return o && (o.$typeUrl === HttpRule.typeUrl || typeof o.selector === "string" && typeof o.body === "string" && typeof o.responseBody === "string" && Array.isArray(o.additionalBindings) && (!o.additionalBindings.length || HttpRule.is(o.additionalBindings[0])));
+  },
+  isSDK(o: any): o is HttpRuleSDKType {
+    return o && (o.$typeUrl === HttpRule.typeUrl || typeof o.selector === "string" && typeof o.body === "string" && typeof o.response_body === "string" && Array.isArray(o.additional_bindings) && (!o.additional_bindings.length || HttpRule.isSDK(o.additional_bindings[0])));
+  },
+  isAmino(o: any): o is HttpRuleAmino {
+    return o && (o.$typeUrl === HttpRule.typeUrl || typeof o.selector === "string" && typeof o.body === "string" && typeof o.response_body === "string" && Array.isArray(o.additional_bindings) && (!o.additional_bindings.length || HttpRule.isAmino(o.additional_bindings[0])));
+  },
   encode(message: HttpRule, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.selector !== "") {
+    if (message.selector !== undefined) {
       writer.uint32(10).string(message.selector);
     }
     if (message.get !== undefined) {
@@ -1140,10 +1195,10 @@ export const HttpRule = {
     if (message.custom !== undefined) {
       CustomHttpPattern.encode(message.custom, writer.uint32(66).fork()).ldelim();
     }
-    if (message.body !== "") {
+    if (message.body !== undefined) {
       writer.uint32(58).string(message.body);
     }
-    if (message.responseBody !== "") {
+    if (message.responseBody !== undefined) {
       writer.uint32(98).string(message.responseBody);
     }
     for (const v of message.additionalBindings) {
@@ -1195,7 +1250,39 @@ export const HttpRule = {
     }
     return message;
   },
-  fromPartial(object: Partial<HttpRule>): HttpRule {
+  fromJSON(object: any): HttpRule {
+    const obj = createBaseHttpRule();
+    if (isSet(object.selector)) obj.selector = String(object.selector);
+    if (isSet(object.get)) obj.get = String(object.get);
+    if (isSet(object.put)) obj.put = String(object.put);
+    if (isSet(object.post)) obj.post = String(object.post);
+    if (isSet(object.delete)) obj.delete = String(object.delete);
+    if (isSet(object.patch)) obj.patch = String(object.patch);
+    if (isSet(object.custom)) obj.custom = CustomHttpPattern.fromJSON(object.custom);
+    if (isSet(object.body)) obj.body = String(object.body);
+    if (isSet(object.responseBody)) obj.responseBody = String(object.responseBody);
+    if (Array.isArray(object?.additionalBindings)) obj.additionalBindings = object.additionalBindings.map((e: any) => HttpRule.fromJSON(e));
+    return obj;
+  },
+  toJSON(message: HttpRule): JsonSafe<HttpRule> {
+    const obj: any = {};
+    message.selector !== undefined && (obj.selector = message.selector);
+    message.get !== undefined && (obj.get = message.get);
+    message.put !== undefined && (obj.put = message.put);
+    message.post !== undefined && (obj.post = message.post);
+    message.delete !== undefined && (obj.delete = message.delete);
+    message.patch !== undefined && (obj.patch = message.patch);
+    message.custom !== undefined && (obj.custom = message.custom ? CustomHttpPattern.toJSON(message.custom) : undefined);
+    message.body !== undefined && (obj.body = message.body);
+    message.responseBody !== undefined && (obj.responseBody = message.responseBody);
+    if (message.additionalBindings) {
+      obj.additionalBindings = message.additionalBindings.map(e => e ? HttpRule.toJSON(e) : undefined);
+    } else {
+      obj.additionalBindings = [];
+    }
+    return obj;
+  },
+  fromPartial(object: DeepPartial<HttpRule>): HttpRule {
     const message = createBaseHttpRule();
     message.selector = object.selector ?? "";
     message.get = object.get ?? undefined;
@@ -1203,11 +1290,45 @@ export const HttpRule = {
     message.post = object.post ?? undefined;
     message.delete = object.delete ?? undefined;
     message.patch = object.patch ?? undefined;
-    message.custom = object.custom !== undefined && object.custom !== null ? CustomHttpPattern.fromPartial(object.custom) : undefined;
+    if (object.custom !== undefined && object.custom !== null) {
+      message.custom = CustomHttpPattern.fromPartial(object.custom);
+    }
     message.body = object.body ?? "";
     message.responseBody = object.responseBody ?? "";
     message.additionalBindings = object.additionalBindings?.map(e => HttpRule.fromPartial(e)) || [];
     return message;
+  },
+  fromSDK(object: HttpRuleSDKType): HttpRule {
+    return {
+      selector: object?.selector,
+      get: object?.get,
+      put: object?.put,
+      post: object?.post,
+      delete: object?.delete,
+      patch: object?.patch,
+      custom: object.custom ? CustomHttpPattern.fromSDK(object.custom) : undefined,
+      body: object?.body,
+      responseBody: object?.response_body,
+      additionalBindings: Array.isArray(object?.additional_bindings) ? object.additional_bindings.map((e: any) => HttpRule.fromSDK(e)) : []
+    };
+  },
+  toSDK(message: HttpRule): HttpRuleSDKType {
+    const obj: any = {};
+    obj.selector = message.selector;
+    obj.get = message.get;
+    obj.put = message.put;
+    obj.post = message.post;
+    obj.delete = message.delete;
+    obj.patch = message.patch;
+    message.custom !== undefined && (obj.custom = message.custom ? CustomHttpPattern.toSDK(message.custom) : undefined);
+    obj.body = message.body;
+    obj.response_body = message.responseBody;
+    if (message.additionalBindings) {
+      obj.additional_bindings = message.additionalBindings.map(e => e ? HttpRule.toSDK(e) : undefined);
+    } else {
+      obj.additional_bindings = [];
+    }
+    return obj;
   },
   fromAmino(object: HttpRuleAmino): HttpRule {
     const message = createBaseHttpRule();
@@ -1275,6 +1396,7 @@ export const HttpRule = {
     };
   }
 };
+GlobalDecoderRegistry.register(HttpRule.typeUrl, HttpRule);
 function createBaseCustomHttpPattern(): CustomHttpPattern {
   return {
     kind: "",
@@ -1283,11 +1405,20 @@ function createBaseCustomHttpPattern(): CustomHttpPattern {
 }
 export const CustomHttpPattern = {
   typeUrl: "/google.api.CustomHttpPattern",
+  is(o: any): o is CustomHttpPattern {
+    return o && (o.$typeUrl === CustomHttpPattern.typeUrl || typeof o.kind === "string" && typeof o.path === "string");
+  },
+  isSDK(o: any): o is CustomHttpPatternSDKType {
+    return o && (o.$typeUrl === CustomHttpPattern.typeUrl || typeof o.kind === "string" && typeof o.path === "string");
+  },
+  isAmino(o: any): o is CustomHttpPatternAmino {
+    return o && (o.$typeUrl === CustomHttpPattern.typeUrl || typeof o.kind === "string" && typeof o.path === "string");
+  },
   encode(message: CustomHttpPattern, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.kind !== "") {
+    if (message.kind !== undefined) {
       writer.uint32(10).string(message.kind);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined) {
       writer.uint32(18).string(message.path);
     }
     return writer;
@@ -1312,11 +1443,35 @@ export const CustomHttpPattern = {
     }
     return message;
   },
-  fromPartial(object: Partial<CustomHttpPattern>): CustomHttpPattern {
+  fromJSON(object: any): CustomHttpPattern {
+    const obj = createBaseCustomHttpPattern();
+    if (isSet(object.kind)) obj.kind = String(object.kind);
+    if (isSet(object.path)) obj.path = String(object.path);
+    return obj;
+  },
+  toJSON(message: CustomHttpPattern): JsonSafe<CustomHttpPattern> {
+    const obj: any = {};
+    message.kind !== undefined && (obj.kind = message.kind);
+    message.path !== undefined && (obj.path = message.path);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<CustomHttpPattern>): CustomHttpPattern {
     const message = createBaseCustomHttpPattern();
     message.kind = object.kind ?? "";
     message.path = object.path ?? "";
     return message;
+  },
+  fromSDK(object: CustomHttpPatternSDKType): CustomHttpPattern {
+    return {
+      kind: object?.kind,
+      path: object?.path
+    };
+  },
+  toSDK(message: CustomHttpPattern): CustomHttpPatternSDKType {
+    const obj: any = {};
+    obj.kind = message.kind;
+    obj.path = message.path;
+    return obj;
   },
   fromAmino(object: CustomHttpPatternAmino): CustomHttpPattern {
     const message = createBaseCustomHttpPattern();
@@ -1350,3 +1505,4 @@ export const CustomHttpPattern = {
     };
   }
 };
+GlobalDecoderRegistry.register(CustomHttpPattern.typeUrl, CustomHttpPattern);

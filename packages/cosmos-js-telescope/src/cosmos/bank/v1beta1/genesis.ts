@@ -2,6 +2,10 @@
 import { Params, ParamsAmino, ParamsSDKType, Metadata, MetadataAmino, MetadataSDKType } from "./bank";
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { isSet, DeepPartial } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
+export const protobufPackage = "cosmos.bank.v1beta1";
 /** GenesisState defines the bank module's genesis state. */
 export interface GenesisState {
   /** params defines all the paramaters of the module. */
@@ -91,6 +95,16 @@ function createBaseGenesisState(): GenesisState {
 }
 export const GenesisState = {
   typeUrl: "/cosmos.bank.v1beta1.GenesisState",
+  aminoType: "cosmos-sdk/GenesisState",
+  is(o: any): o is GenesisState {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.is(o.params) && Array.isArray(o.balances) && (!o.balances.length || Balance.is(o.balances[0])) && Array.isArray(o.supply) && (!o.supply.length || Coin.is(o.supply[0])) && Array.isArray(o.denomMetadata) && (!o.denomMetadata.length || Metadata.is(o.denomMetadata[0])));
+  },
+  isSDK(o: any): o is GenesisStateSDKType {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isSDK(o.params) && Array.isArray(o.balances) && (!o.balances.length || Balance.isSDK(o.balances[0])) && Array.isArray(o.supply) && (!o.supply.length || Coin.isSDK(o.supply[0])) && Array.isArray(o.denom_metadata) && (!o.denom_metadata.length || Metadata.isSDK(o.denom_metadata[0])));
+  },
+  isAmino(o: any): o is GenesisStateAmino {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isAmino(o.params) && Array.isArray(o.balances) && (!o.balances.length || Balance.isAmino(o.balances[0])) && Array.isArray(o.supply) && (!o.supply.length || Coin.isAmino(o.supply[0])) && Array.isArray(o.denom_metadata) && (!o.denom_metadata.length || Metadata.isAmino(o.denom_metadata[0])));
+  },
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -132,13 +146,71 @@ export const GenesisState = {
     }
     return message;
   },
-  fromPartial(object: Partial<GenesisState>): GenesisState {
+  fromJSON(object: any): GenesisState {
+    const obj = createBaseGenesisState();
+    if (isSet(object.params)) obj.params = Params.fromJSON(object.params);
+    if (Array.isArray(object?.balances)) obj.balances = object.balances.map((e: any) => Balance.fromJSON(e));
+    if (Array.isArray(object?.supply)) obj.supply = object.supply.map((e: any) => Coin.fromJSON(e));
+    if (Array.isArray(object?.denomMetadata)) obj.denomMetadata = object.denomMetadata.map((e: any) => Metadata.fromJSON(e));
+    return obj;
+  },
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
+    const obj: any = {};
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    if (message.balances) {
+      obj.balances = message.balances.map(e => e ? Balance.toJSON(e) : undefined);
+    } else {
+      obj.balances = [];
+    }
+    if (message.supply) {
+      obj.supply = message.supply.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.supply = [];
+    }
+    if (message.denomMetadata) {
+      obj.denomMetadata = message.denomMetadata.map(e => e ? Metadata.toJSON(e) : undefined);
+    } else {
+      obj.denomMetadata = [];
+    }
+    return obj;
+  },
+  fromPartial(object: DeepPartial<GenesisState>): GenesisState {
     const message = createBaseGenesisState();
-    message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromPartial(object.params);
+    }
     message.balances = object.balances?.map(e => Balance.fromPartial(e)) || [];
     message.supply = object.supply?.map(e => Coin.fromPartial(e)) || [];
     message.denomMetadata = object.denomMetadata?.map(e => Metadata.fromPartial(e)) || [];
     return message;
+  },
+  fromSDK(object: GenesisStateSDKType): GenesisState {
+    return {
+      params: object.params ? Params.fromSDK(object.params) : undefined,
+      balances: Array.isArray(object?.balances) ? object.balances.map((e: any) => Balance.fromSDK(e)) : [],
+      supply: Array.isArray(object?.supply) ? object.supply.map((e: any) => Coin.fromSDK(e)) : [],
+      denomMetadata: Array.isArray(object?.denom_metadata) ? object.denom_metadata.map((e: any) => Metadata.fromSDK(e)) : []
+    };
+  },
+  toSDK(message: GenesisState): GenesisStateSDKType {
+    const obj: any = {};
+    message.params !== undefined && (obj.params = message.params ? Params.toSDK(message.params) : undefined);
+    if (message.balances) {
+      obj.balances = message.balances.map(e => e ? Balance.toSDK(e) : undefined);
+    } else {
+      obj.balances = [];
+    }
+    if (message.supply) {
+      obj.supply = message.supply.map(e => e ? Coin.toSDK(e) : undefined);
+    } else {
+      obj.supply = [];
+    }
+    if (message.denomMetadata) {
+      obj.denom_metadata = message.denomMetadata.map(e => e ? Metadata.toSDK(e) : undefined);
+    } else {
+      obj.denom_metadata = [];
+    }
+    return obj;
   },
   fromAmino(object: GenesisStateAmino): GenesisState {
     const message = createBaseGenesisState();
@@ -192,6 +264,8 @@ export const GenesisState = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisState.typeUrl, GenesisState);
+GlobalDecoderRegistry.registerAminoProtoMapping(GenesisState.aminoType, GenesisState.typeUrl);
 function createBaseBalance(): Balance {
   return {
     address: "",
@@ -200,8 +274,18 @@ function createBaseBalance(): Balance {
 }
 export const Balance = {
   typeUrl: "/cosmos.bank.v1beta1.Balance",
+  aminoType: "cosmos-sdk/Balance",
+  is(o: any): o is Balance {
+    return o && (o.$typeUrl === Balance.typeUrl || typeof o.address === "string" && Array.isArray(o.coins) && (!o.coins.length || Coin.is(o.coins[0])));
+  },
+  isSDK(o: any): o is BalanceSDKType {
+    return o && (o.$typeUrl === Balance.typeUrl || typeof o.address === "string" && Array.isArray(o.coins) && (!o.coins.length || Coin.isSDK(o.coins[0])));
+  },
+  isAmino(o: any): o is BalanceAmino {
+    return o && (o.$typeUrl === Balance.typeUrl || typeof o.address === "string" && Array.isArray(o.coins) && (!o.coins.length || Coin.isAmino(o.coins[0])));
+  },
   encode(message: Balance, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.address !== "") {
+    if (message.address !== undefined) {
       writer.uint32(10).string(message.address);
     }
     for (const v of message.coins) {
@@ -229,11 +313,43 @@ export const Balance = {
     }
     return message;
   },
-  fromPartial(object: Partial<Balance>): Balance {
+  fromJSON(object: any): Balance {
+    const obj = createBaseBalance();
+    if (isSet(object.address)) obj.address = String(object.address);
+    if (Array.isArray(object?.coins)) obj.coins = object.coins.map((e: any) => Coin.fromJSON(e));
+    return obj;
+  },
+  toJSON(message: Balance): JsonSafe<Balance> {
+    const obj: any = {};
+    message.address !== undefined && (obj.address = message.address);
+    if (message.coins) {
+      obj.coins = message.coins.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.coins = [];
+    }
+    return obj;
+  },
+  fromPartial(object: DeepPartial<Balance>): Balance {
     const message = createBaseBalance();
     message.address = object.address ?? "";
     message.coins = object.coins?.map(e => Coin.fromPartial(e)) || [];
     return message;
+  },
+  fromSDK(object: BalanceSDKType): Balance {
+    return {
+      address: object?.address,
+      coins: Array.isArray(object?.coins) ? object.coins.map((e: any) => Coin.fromSDK(e)) : []
+    };
+  },
+  toSDK(message: Balance): BalanceSDKType {
+    const obj: any = {};
+    obj.address = message.address;
+    if (message.coins) {
+      obj.coins = message.coins.map(e => e ? Coin.toSDK(e) : undefined);
+    } else {
+      obj.coins = [];
+    }
+    return obj;
   },
   fromAmino(object: BalanceAmino): Balance {
     const message = createBaseBalance();
@@ -275,3 +391,5 @@ export const Balance = {
     };
   }
 };
+GlobalDecoderRegistry.register(Balance.typeUrl, Balance);
+GlobalDecoderRegistry.registerAminoProtoMapping(Balance.aminoType, Balance.typeUrl);

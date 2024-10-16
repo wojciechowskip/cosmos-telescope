@@ -4,8 +4,11 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { TxResponse, TxResponseAmino, TxResponseSDKType, GasInfo, GasInfoAmino, GasInfoSDKType, Result, ResultAmino, ResultSDKType } from "../../base/abci/v1beta1/abci";
 import { BlockID, BlockIDAmino, BlockIDSDKType } from "../../../tendermint/types/types";
 import { Block, BlockAmino, BlockSDKType } from "../../../tendermint/types/block";
+import { isSet, DeepPartial, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
+export const protobufPackage = "cosmos.tx.v1beta1";
 /** OrderBy defines the sorting order */
 export enum OrderBy {
   /** ORDER_BY_UNSPECIFIED - ORDER_BY_UNSPECIFIED specifies an unknown sorting order. OrderBy defaults to ASC in this case. */
@@ -494,6 +497,16 @@ function createBaseGetTxsEventRequest(): GetTxsEventRequest {
 }
 export const GetTxsEventRequest = {
   typeUrl: "/cosmos.tx.v1beta1.GetTxsEventRequest",
+  aminoType: "cosmos-sdk/GetTxsEventRequest",
+  is(o: any): o is GetTxsEventRequest {
+    return o && (o.$typeUrl === GetTxsEventRequest.typeUrl || Array.isArray(o.events) && (!o.events.length || typeof o.events[0] === "string") && isSet(o.orderBy));
+  },
+  isSDK(o: any): o is GetTxsEventRequestSDKType {
+    return o && (o.$typeUrl === GetTxsEventRequest.typeUrl || Array.isArray(o.events) && (!o.events.length || typeof o.events[0] === "string") && isSet(o.order_by));
+  },
+  isAmino(o: any): o is GetTxsEventRequestAmino {
+    return o && (o.$typeUrl === GetTxsEventRequest.typeUrl || Array.isArray(o.events) && (!o.events.length || typeof o.events[0] === "string") && isSet(o.order_by));
+  },
   encode(message: GetTxsEventRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.events) {
       writer.uint32(10).string(v!);
@@ -520,7 +533,7 @@ export const GetTxsEventRequest = {
           message.pagination = PageRequest.decode(reader, reader.uint32());
           break;
         case 3:
-          message.orderBy = reader.int32() as any;
+          message.orderBy = (reader.int32() as any);
           break;
         default:
           reader.skipType(tag & 7);
@@ -529,12 +542,50 @@ export const GetTxsEventRequest = {
     }
     return message;
   },
-  fromPartial(object: Partial<GetTxsEventRequest>): GetTxsEventRequest {
+  fromJSON(object: any): GetTxsEventRequest {
+    const obj = createBaseGetTxsEventRequest();
+    if (Array.isArray(object?.events)) obj.events = object.events.map((e: any) => String(e));
+    if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
+    if (isSet(object.orderBy)) obj.orderBy = orderByFromJSON(object.orderBy);
+    return obj;
+  },
+  toJSON(message: GetTxsEventRequest): JsonSafe<GetTxsEventRequest> {
+    const obj: any = {};
+    if (message.events) {
+      obj.events = message.events.map(e => e);
+    } else {
+      obj.events = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    message.orderBy !== undefined && (obj.orderBy = orderByToJSON(message.orderBy));
+    return obj;
+  },
+  fromPartial(object: DeepPartial<GetTxsEventRequest>): GetTxsEventRequest {
     const message = createBaseGetTxsEventRequest();
     message.events = object.events?.map(e => e) || [];
-    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    }
     message.orderBy = object.orderBy ?? 0;
     return message;
+  },
+  fromSDK(object: GetTxsEventRequestSDKType): GetTxsEventRequest {
+    return {
+      events: Array.isArray(object?.events) ? object.events.map((e: any) => e) : [],
+      pagination: object.pagination ? PageRequest.fromSDK(object.pagination) : undefined,
+      orderBy: isSet(object.order_by) ? orderByFromJSON(object.order_by) : -1
+    };
+  },
+  toSDK(message: GetTxsEventRequest): GetTxsEventRequestSDKType {
+    const obj: any = {};
+    if (message.events) {
+      obj.events = message.events.map(e => e);
+    } else {
+      obj.events = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toSDK(message.pagination) : undefined);
+    message.orderBy !== undefined && (obj.order_by = orderByToJSON(message.orderBy));
+    return obj;
   },
   fromAmino(object: GetTxsEventRequestAmino): GetTxsEventRequest {
     const message = createBaseGetTxsEventRequest();
@@ -580,6 +631,8 @@ export const GetTxsEventRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetTxsEventRequest.typeUrl, GetTxsEventRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetTxsEventRequest.aminoType, GetTxsEventRequest.typeUrl);
 function createBaseGetTxsEventResponse(): GetTxsEventResponse {
   return {
     txs: [],
@@ -589,6 +642,16 @@ function createBaseGetTxsEventResponse(): GetTxsEventResponse {
 }
 export const GetTxsEventResponse = {
   typeUrl: "/cosmos.tx.v1beta1.GetTxsEventResponse",
+  aminoType: "cosmos-sdk/GetTxsEventResponse",
+  is(o: any): o is GetTxsEventResponse {
+    return o && (o.$typeUrl === GetTxsEventResponse.typeUrl || Array.isArray(o.txs) && (!o.txs.length || Tx.is(o.txs[0])) && Array.isArray(o.txResponses) && (!o.txResponses.length || TxResponse.is(o.txResponses[0])));
+  },
+  isSDK(o: any): o is GetTxsEventResponseSDKType {
+    return o && (o.$typeUrl === GetTxsEventResponse.typeUrl || Array.isArray(o.txs) && (!o.txs.length || Tx.isSDK(o.txs[0])) && Array.isArray(o.tx_responses) && (!o.tx_responses.length || TxResponse.isSDK(o.tx_responses[0])));
+  },
+  isAmino(o: any): o is GetTxsEventResponseAmino {
+    return o && (o.$typeUrl === GetTxsEventResponse.typeUrl || Array.isArray(o.txs) && (!o.txs.length || Tx.isAmino(o.txs[0])) && Array.isArray(o.tx_responses) && (!o.tx_responses.length || TxResponse.isAmino(o.tx_responses[0])));
+  },
   encode(message: GetTxsEventResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.txs) {
       Tx.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -624,12 +687,58 @@ export const GetTxsEventResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<GetTxsEventResponse>): GetTxsEventResponse {
+  fromJSON(object: any): GetTxsEventResponse {
+    const obj = createBaseGetTxsEventResponse();
+    if (Array.isArray(object?.txs)) obj.txs = object.txs.map((e: any) => Tx.fromJSON(e));
+    if (Array.isArray(object?.txResponses)) obj.txResponses = object.txResponses.map((e: any) => TxResponse.fromJSON(e));
+    if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
+    return obj;
+  },
+  toJSON(message: GetTxsEventResponse): JsonSafe<GetTxsEventResponse> {
+    const obj: any = {};
+    if (message.txs) {
+      obj.txs = message.txs.map(e => e ? Tx.toJSON(e) : undefined);
+    } else {
+      obj.txs = [];
+    }
+    if (message.txResponses) {
+      obj.txResponses = message.txResponses.map(e => e ? TxResponse.toJSON(e) : undefined);
+    } else {
+      obj.txResponses = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<GetTxsEventResponse>): GetTxsEventResponse {
     const message = createBaseGetTxsEventResponse();
     message.txs = object.txs?.map(e => Tx.fromPartial(e)) || [];
     message.txResponses = object.txResponses?.map(e => TxResponse.fromPartial(e)) || [];
-    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    }
     return message;
+  },
+  fromSDK(object: GetTxsEventResponseSDKType): GetTxsEventResponse {
+    return {
+      txs: Array.isArray(object?.txs) ? object.txs.map((e: any) => Tx.fromSDK(e)) : [],
+      txResponses: Array.isArray(object?.tx_responses) ? object.tx_responses.map((e: any) => TxResponse.fromSDK(e)) : [],
+      pagination: object.pagination ? PageResponse.fromSDK(object.pagination) : undefined
+    };
+  },
+  toSDK(message: GetTxsEventResponse): GetTxsEventResponseSDKType {
+    const obj: any = {};
+    if (message.txs) {
+      obj.txs = message.txs.map(e => e ? Tx.toSDK(e) : undefined);
+    } else {
+      obj.txs = [];
+    }
+    if (message.txResponses) {
+      obj.tx_responses = message.txResponses.map(e => e ? TxResponse.toSDK(e) : undefined);
+    } else {
+      obj.tx_responses = [];
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toSDK(message.pagination) : undefined);
+    return obj;
   },
   fromAmino(object: GetTxsEventResponseAmino): GetTxsEventResponse {
     const message = createBaseGetTxsEventResponse();
@@ -677,6 +786,8 @@ export const GetTxsEventResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetTxsEventResponse.typeUrl, GetTxsEventResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetTxsEventResponse.aminoType, GetTxsEventResponse.typeUrl);
 function createBaseBroadcastTxRequest(): BroadcastTxRequest {
   return {
     txBytes: new Uint8Array(),
@@ -685,6 +796,16 @@ function createBaseBroadcastTxRequest(): BroadcastTxRequest {
 }
 export const BroadcastTxRequest = {
   typeUrl: "/cosmos.tx.v1beta1.BroadcastTxRequest",
+  aminoType: "cosmos-sdk/BroadcastTxRequest",
+  is(o: any): o is BroadcastTxRequest {
+    return o && (o.$typeUrl === BroadcastTxRequest.typeUrl || (o.txBytes instanceof Uint8Array || typeof o.txBytes === "string") && isSet(o.mode));
+  },
+  isSDK(o: any): o is BroadcastTxRequestSDKType {
+    return o && (o.$typeUrl === BroadcastTxRequest.typeUrl || (o.tx_bytes instanceof Uint8Array || typeof o.tx_bytes === "string") && isSet(o.mode));
+  },
+  isAmino(o: any): o is BroadcastTxRequestAmino {
+    return o && (o.$typeUrl === BroadcastTxRequest.typeUrl || (o.tx_bytes instanceof Uint8Array || typeof o.tx_bytes === "string") && isSet(o.mode));
+  },
   encode(message: BroadcastTxRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.txBytes.length !== 0) {
       writer.uint32(10).bytes(message.txBytes);
@@ -705,7 +826,7 @@ export const BroadcastTxRequest = {
           message.txBytes = reader.bytes();
           break;
         case 2:
-          message.mode = reader.int32() as any;
+          message.mode = (reader.int32() as any);
           break;
         default:
           reader.skipType(tag & 7);
@@ -714,11 +835,35 @@ export const BroadcastTxRequest = {
     }
     return message;
   },
-  fromPartial(object: Partial<BroadcastTxRequest>): BroadcastTxRequest {
+  fromJSON(object: any): BroadcastTxRequest {
+    const obj = createBaseBroadcastTxRequest();
+    if (isSet(object.txBytes)) obj.txBytes = bytesFromBase64(object.txBytes);
+    if (isSet(object.mode)) obj.mode = broadcastModeFromJSON(object.mode);
+    return obj;
+  },
+  toJSON(message: BroadcastTxRequest): JsonSafe<BroadcastTxRequest> {
+    const obj: any = {};
+    message.txBytes !== undefined && (obj.txBytes = base64FromBytes(message.txBytes !== undefined ? message.txBytes : new Uint8Array()));
+    message.mode !== undefined && (obj.mode = broadcastModeToJSON(message.mode));
+    return obj;
+  },
+  fromPartial(object: DeepPartial<BroadcastTxRequest>): BroadcastTxRequest {
     const message = createBaseBroadcastTxRequest();
     message.txBytes = object.txBytes ?? new Uint8Array();
     message.mode = object.mode ?? 0;
     return message;
+  },
+  fromSDK(object: BroadcastTxRequestSDKType): BroadcastTxRequest {
+    return {
+      txBytes: object?.tx_bytes,
+      mode: isSet(object.mode) ? broadcastModeFromJSON(object.mode) : -1
+    };
+  },
+  toSDK(message: BroadcastTxRequest): BroadcastTxRequestSDKType {
+    const obj: any = {};
+    obj.tx_bytes = message.txBytes;
+    message.mode !== undefined && (obj.mode = broadcastModeToJSON(message.mode));
+    return obj;
   },
   fromAmino(object: BroadcastTxRequestAmino): BroadcastTxRequest {
     const message = createBaseBroadcastTxRequest();
@@ -758,6 +903,8 @@ export const BroadcastTxRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(BroadcastTxRequest.typeUrl, BroadcastTxRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(BroadcastTxRequest.aminoType, BroadcastTxRequest.typeUrl);
 function createBaseBroadcastTxResponse(): BroadcastTxResponse {
   return {
     txResponse: undefined
@@ -765,6 +912,16 @@ function createBaseBroadcastTxResponse(): BroadcastTxResponse {
 }
 export const BroadcastTxResponse = {
   typeUrl: "/cosmos.tx.v1beta1.BroadcastTxResponse",
+  aminoType: "cosmos-sdk/BroadcastTxResponse",
+  is(o: any): o is BroadcastTxResponse {
+    return o && o.$typeUrl === BroadcastTxResponse.typeUrl;
+  },
+  isSDK(o: any): o is BroadcastTxResponseSDKType {
+    return o && o.$typeUrl === BroadcastTxResponse.typeUrl;
+  },
+  isAmino(o: any): o is BroadcastTxResponseAmino {
+    return o && o.$typeUrl === BroadcastTxResponse.typeUrl;
+  },
   encode(message: BroadcastTxResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.txResponse !== undefined) {
       TxResponse.encode(message.txResponse, writer.uint32(10).fork()).ldelim();
@@ -788,10 +945,32 @@ export const BroadcastTxResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<BroadcastTxResponse>): BroadcastTxResponse {
+  fromJSON(object: any): BroadcastTxResponse {
+    const obj = createBaseBroadcastTxResponse();
+    if (isSet(object.txResponse)) obj.txResponse = TxResponse.fromJSON(object.txResponse);
+    return obj;
+  },
+  toJSON(message: BroadcastTxResponse): JsonSafe<BroadcastTxResponse> {
+    const obj: any = {};
+    message.txResponse !== undefined && (obj.txResponse = message.txResponse ? TxResponse.toJSON(message.txResponse) : undefined);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<BroadcastTxResponse>): BroadcastTxResponse {
     const message = createBaseBroadcastTxResponse();
-    message.txResponse = object.txResponse !== undefined && object.txResponse !== null ? TxResponse.fromPartial(object.txResponse) : undefined;
+    if (object.txResponse !== undefined && object.txResponse !== null) {
+      message.txResponse = TxResponse.fromPartial(object.txResponse);
+    }
     return message;
+  },
+  fromSDK(object: BroadcastTxResponseSDKType): BroadcastTxResponse {
+    return {
+      txResponse: object.tx_response ? TxResponse.fromSDK(object.tx_response) : undefined
+    };
+  },
+  toSDK(message: BroadcastTxResponse): BroadcastTxResponseSDKType {
+    const obj: any = {};
+    message.txResponse !== undefined && (obj.tx_response = message.txResponse ? TxResponse.toSDK(message.txResponse) : undefined);
+    return obj;
   },
   fromAmino(object: BroadcastTxResponseAmino): BroadcastTxResponse {
     const message = createBaseBroadcastTxResponse();
@@ -827,6 +1006,8 @@ export const BroadcastTxResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(BroadcastTxResponse.typeUrl, BroadcastTxResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(BroadcastTxResponse.aminoType, BroadcastTxResponse.typeUrl);
 function createBaseSimulateRequest(): SimulateRequest {
   return {
     tx: undefined,
@@ -835,6 +1016,16 @@ function createBaseSimulateRequest(): SimulateRequest {
 }
 export const SimulateRequest = {
   typeUrl: "/cosmos.tx.v1beta1.SimulateRequest",
+  aminoType: "cosmos-sdk/SimulateRequest",
+  is(o: any): o is SimulateRequest {
+    return o && (o.$typeUrl === SimulateRequest.typeUrl || o.txBytes instanceof Uint8Array || typeof o.txBytes === "string");
+  },
+  isSDK(o: any): o is SimulateRequestSDKType {
+    return o && (o.$typeUrl === SimulateRequest.typeUrl || o.tx_bytes instanceof Uint8Array || typeof o.tx_bytes === "string");
+  },
+  isAmino(o: any): o is SimulateRequestAmino {
+    return o && (o.$typeUrl === SimulateRequest.typeUrl || o.tx_bytes instanceof Uint8Array || typeof o.tx_bytes === "string");
+  },
   encode(message: SimulateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tx !== undefined) {
       Tx.encode(message.tx, writer.uint32(10).fork()).ldelim();
@@ -864,11 +1055,37 @@ export const SimulateRequest = {
     }
     return message;
   },
-  fromPartial(object: Partial<SimulateRequest>): SimulateRequest {
+  fromJSON(object: any): SimulateRequest {
+    const obj = createBaseSimulateRequest();
+    if (isSet(object.tx)) obj.tx = Tx.fromJSON(object.tx);
+    if (isSet(object.txBytes)) obj.txBytes = bytesFromBase64(object.txBytes);
+    return obj;
+  },
+  toJSON(message: SimulateRequest): JsonSafe<SimulateRequest> {
+    const obj: any = {};
+    message.tx !== undefined && (obj.tx = message.tx ? Tx.toJSON(message.tx) : undefined);
+    message.txBytes !== undefined && (obj.txBytes = base64FromBytes(message.txBytes !== undefined ? message.txBytes : new Uint8Array()));
+    return obj;
+  },
+  fromPartial(object: DeepPartial<SimulateRequest>): SimulateRequest {
     const message = createBaseSimulateRequest();
-    message.tx = object.tx !== undefined && object.tx !== null ? Tx.fromPartial(object.tx) : undefined;
+    if (object.tx !== undefined && object.tx !== null) {
+      message.tx = Tx.fromPartial(object.tx);
+    }
     message.txBytes = object.txBytes ?? new Uint8Array();
     return message;
+  },
+  fromSDK(object: SimulateRequestSDKType): SimulateRequest {
+    return {
+      tx: object.tx ? Tx.fromSDK(object.tx) : undefined,
+      txBytes: object?.tx_bytes
+    };
+  },
+  toSDK(message: SimulateRequest): SimulateRequestSDKType {
+    const obj: any = {};
+    message.tx !== undefined && (obj.tx = message.tx ? Tx.toSDK(message.tx) : undefined);
+    obj.tx_bytes = message.txBytes;
+    return obj;
   },
   fromAmino(object: SimulateRequestAmino): SimulateRequest {
     const message = createBaseSimulateRequest();
@@ -908,6 +1125,8 @@ export const SimulateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(SimulateRequest.typeUrl, SimulateRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(SimulateRequest.aminoType, SimulateRequest.typeUrl);
 function createBaseSimulateResponse(): SimulateResponse {
   return {
     gasInfo: undefined,
@@ -916,6 +1135,16 @@ function createBaseSimulateResponse(): SimulateResponse {
 }
 export const SimulateResponse = {
   typeUrl: "/cosmos.tx.v1beta1.SimulateResponse",
+  aminoType: "cosmos-sdk/SimulateResponse",
+  is(o: any): o is SimulateResponse {
+    return o && o.$typeUrl === SimulateResponse.typeUrl;
+  },
+  isSDK(o: any): o is SimulateResponseSDKType {
+    return o && o.$typeUrl === SimulateResponse.typeUrl;
+  },
+  isAmino(o: any): o is SimulateResponseAmino {
+    return o && o.$typeUrl === SimulateResponse.typeUrl;
+  },
   encode(message: SimulateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.gasInfo !== undefined) {
       GasInfo.encode(message.gasInfo, writer.uint32(10).fork()).ldelim();
@@ -945,11 +1174,39 @@ export const SimulateResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<SimulateResponse>): SimulateResponse {
+  fromJSON(object: any): SimulateResponse {
+    const obj = createBaseSimulateResponse();
+    if (isSet(object.gasInfo)) obj.gasInfo = GasInfo.fromJSON(object.gasInfo);
+    if (isSet(object.result)) obj.result = Result.fromJSON(object.result);
+    return obj;
+  },
+  toJSON(message: SimulateResponse): JsonSafe<SimulateResponse> {
+    const obj: any = {};
+    message.gasInfo !== undefined && (obj.gasInfo = message.gasInfo ? GasInfo.toJSON(message.gasInfo) : undefined);
+    message.result !== undefined && (obj.result = message.result ? Result.toJSON(message.result) : undefined);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<SimulateResponse>): SimulateResponse {
     const message = createBaseSimulateResponse();
-    message.gasInfo = object.gasInfo !== undefined && object.gasInfo !== null ? GasInfo.fromPartial(object.gasInfo) : undefined;
-    message.result = object.result !== undefined && object.result !== null ? Result.fromPartial(object.result) : undefined;
+    if (object.gasInfo !== undefined && object.gasInfo !== null) {
+      message.gasInfo = GasInfo.fromPartial(object.gasInfo);
+    }
+    if (object.result !== undefined && object.result !== null) {
+      message.result = Result.fromPartial(object.result);
+    }
     return message;
+  },
+  fromSDK(object: SimulateResponseSDKType): SimulateResponse {
+    return {
+      gasInfo: object.gas_info ? GasInfo.fromSDK(object.gas_info) : undefined,
+      result: object.result ? Result.fromSDK(object.result) : undefined
+    };
+  },
+  toSDK(message: SimulateResponse): SimulateResponseSDKType {
+    const obj: any = {};
+    message.gasInfo !== undefined && (obj.gas_info = message.gasInfo ? GasInfo.toSDK(message.gasInfo) : undefined);
+    message.result !== undefined && (obj.result = message.result ? Result.toSDK(message.result) : undefined);
+    return obj;
   },
   fromAmino(object: SimulateResponseAmino): SimulateResponse {
     const message = createBaseSimulateResponse();
@@ -989,6 +1246,8 @@ export const SimulateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(SimulateResponse.typeUrl, SimulateResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(SimulateResponse.aminoType, SimulateResponse.typeUrl);
 function createBaseGetTxRequest(): GetTxRequest {
   return {
     hash: ""
@@ -996,8 +1255,18 @@ function createBaseGetTxRequest(): GetTxRequest {
 }
 export const GetTxRequest = {
   typeUrl: "/cosmos.tx.v1beta1.GetTxRequest",
+  aminoType: "cosmos-sdk/GetTxRequest",
+  is(o: any): o is GetTxRequest {
+    return o && (o.$typeUrl === GetTxRequest.typeUrl || typeof o.hash === "string");
+  },
+  isSDK(o: any): o is GetTxRequestSDKType {
+    return o && (o.$typeUrl === GetTxRequest.typeUrl || typeof o.hash === "string");
+  },
+  isAmino(o: any): o is GetTxRequestAmino {
+    return o && (o.$typeUrl === GetTxRequest.typeUrl || typeof o.hash === "string");
+  },
   encode(message: GetTxRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.hash !== "") {
+    if (message.hash !== undefined) {
       writer.uint32(10).string(message.hash);
     }
     return writer;
@@ -1019,10 +1288,30 @@ export const GetTxRequest = {
     }
     return message;
   },
-  fromPartial(object: Partial<GetTxRequest>): GetTxRequest {
+  fromJSON(object: any): GetTxRequest {
+    const obj = createBaseGetTxRequest();
+    if (isSet(object.hash)) obj.hash = String(object.hash);
+    return obj;
+  },
+  toJSON(message: GetTxRequest): JsonSafe<GetTxRequest> {
+    const obj: any = {};
+    message.hash !== undefined && (obj.hash = message.hash);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<GetTxRequest>): GetTxRequest {
     const message = createBaseGetTxRequest();
     message.hash = object.hash ?? "";
     return message;
+  },
+  fromSDK(object: GetTxRequestSDKType): GetTxRequest {
+    return {
+      hash: object?.hash
+    };
+  },
+  toSDK(message: GetTxRequest): GetTxRequestSDKType {
+    const obj: any = {};
+    obj.hash = message.hash;
+    return obj;
   },
   fromAmino(object: GetTxRequestAmino): GetTxRequest {
     const message = createBaseGetTxRequest();
@@ -1058,6 +1347,8 @@ export const GetTxRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetTxRequest.typeUrl, GetTxRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetTxRequest.aminoType, GetTxRequest.typeUrl);
 function createBaseGetTxResponse(): GetTxResponse {
   return {
     tx: undefined,
@@ -1066,6 +1357,16 @@ function createBaseGetTxResponse(): GetTxResponse {
 }
 export const GetTxResponse = {
   typeUrl: "/cosmos.tx.v1beta1.GetTxResponse",
+  aminoType: "cosmos-sdk/GetTxResponse",
+  is(o: any): o is GetTxResponse {
+    return o && o.$typeUrl === GetTxResponse.typeUrl;
+  },
+  isSDK(o: any): o is GetTxResponseSDKType {
+    return o && o.$typeUrl === GetTxResponse.typeUrl;
+  },
+  isAmino(o: any): o is GetTxResponseAmino {
+    return o && o.$typeUrl === GetTxResponse.typeUrl;
+  },
   encode(message: GetTxResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.tx !== undefined) {
       Tx.encode(message.tx, writer.uint32(10).fork()).ldelim();
@@ -1095,11 +1396,39 @@ export const GetTxResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<GetTxResponse>): GetTxResponse {
+  fromJSON(object: any): GetTxResponse {
+    const obj = createBaseGetTxResponse();
+    if (isSet(object.tx)) obj.tx = Tx.fromJSON(object.tx);
+    if (isSet(object.txResponse)) obj.txResponse = TxResponse.fromJSON(object.txResponse);
+    return obj;
+  },
+  toJSON(message: GetTxResponse): JsonSafe<GetTxResponse> {
+    const obj: any = {};
+    message.tx !== undefined && (obj.tx = message.tx ? Tx.toJSON(message.tx) : undefined);
+    message.txResponse !== undefined && (obj.txResponse = message.txResponse ? TxResponse.toJSON(message.txResponse) : undefined);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<GetTxResponse>): GetTxResponse {
     const message = createBaseGetTxResponse();
-    message.tx = object.tx !== undefined && object.tx !== null ? Tx.fromPartial(object.tx) : undefined;
-    message.txResponse = object.txResponse !== undefined && object.txResponse !== null ? TxResponse.fromPartial(object.txResponse) : undefined;
+    if (object.tx !== undefined && object.tx !== null) {
+      message.tx = Tx.fromPartial(object.tx);
+    }
+    if (object.txResponse !== undefined && object.txResponse !== null) {
+      message.txResponse = TxResponse.fromPartial(object.txResponse);
+    }
     return message;
+  },
+  fromSDK(object: GetTxResponseSDKType): GetTxResponse {
+    return {
+      tx: object.tx ? Tx.fromSDK(object.tx) : undefined,
+      txResponse: object.tx_response ? TxResponse.fromSDK(object.tx_response) : undefined
+    };
+  },
+  toSDK(message: GetTxResponse): GetTxResponseSDKType {
+    const obj: any = {};
+    message.tx !== undefined && (obj.tx = message.tx ? Tx.toSDK(message.tx) : undefined);
+    message.txResponse !== undefined && (obj.tx_response = message.txResponse ? TxResponse.toSDK(message.txResponse) : undefined);
+    return obj;
   },
   fromAmino(object: GetTxResponseAmino): GetTxResponse {
     const message = createBaseGetTxResponse();
@@ -1139,6 +1468,8 @@ export const GetTxResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetTxResponse.typeUrl, GetTxResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetTxResponse.aminoType, GetTxResponse.typeUrl);
 function createBaseGetBlockWithTxsRequest(): GetBlockWithTxsRequest {
   return {
     height: BigInt(0),
@@ -1147,8 +1478,18 @@ function createBaseGetBlockWithTxsRequest(): GetBlockWithTxsRequest {
 }
 export const GetBlockWithTxsRequest = {
   typeUrl: "/cosmos.tx.v1beta1.GetBlockWithTxsRequest",
+  aminoType: "cosmos-sdk/GetBlockWithTxsRequest",
+  is(o: any): o is GetBlockWithTxsRequest {
+    return o && (o.$typeUrl === GetBlockWithTxsRequest.typeUrl || typeof o.height === "bigint");
+  },
+  isSDK(o: any): o is GetBlockWithTxsRequestSDKType {
+    return o && (o.$typeUrl === GetBlockWithTxsRequest.typeUrl || typeof o.height === "bigint");
+  },
+  isAmino(o: any): o is GetBlockWithTxsRequestAmino {
+    return o && (o.$typeUrl === GetBlockWithTxsRequest.typeUrl || typeof o.height === "bigint");
+  },
   encode(message: GetBlockWithTxsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.height !== BigInt(0)) {
+    if (message.height !== undefined) {
       writer.uint32(8).int64(message.height);
     }
     if (message.pagination !== undefined) {
@@ -1176,11 +1517,39 @@ export const GetBlockWithTxsRequest = {
     }
     return message;
   },
-  fromPartial(object: Partial<GetBlockWithTxsRequest>): GetBlockWithTxsRequest {
+  fromJSON(object: any): GetBlockWithTxsRequest {
+    const obj = createBaseGetBlockWithTxsRequest();
+    if (isSet(object.height)) obj.height = BigInt(object.height.toString());
+    if (isSet(object.pagination)) obj.pagination = PageRequest.fromJSON(object.pagination);
+    return obj;
+  },
+  toJSON(message: GetBlockWithTxsRequest): JsonSafe<GetBlockWithTxsRequest> {
+    const obj: any = {};
+    message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<GetBlockWithTxsRequest>): GetBlockWithTxsRequest {
     const message = createBaseGetBlockWithTxsRequest();
-    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
-    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
+    if (object.height !== undefined && object.height !== null) {
+      message.height = BigInt(object.height.toString());
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination);
+    }
     return message;
+  },
+  fromSDK(object: GetBlockWithTxsRequestSDKType): GetBlockWithTxsRequest {
+    return {
+      height: object?.height,
+      pagination: object.pagination ? PageRequest.fromSDK(object.pagination) : undefined
+    };
+  },
+  toSDK(message: GetBlockWithTxsRequest): GetBlockWithTxsRequestSDKType {
+    const obj: any = {};
+    obj.height = message.height;
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toSDK(message.pagination) : undefined);
+    return obj;
   },
   fromAmino(object: GetBlockWithTxsRequestAmino): GetBlockWithTxsRequest {
     const message = createBaseGetBlockWithTxsRequest();
@@ -1194,7 +1563,7 @@ export const GetBlockWithTxsRequest = {
   },
   toAmino(message: GetBlockWithTxsRequest): GetBlockWithTxsRequestAmino {
     const obj: any = {};
-    obj.height = message.height !== BigInt(0) ? (message.height?.toString)() : undefined;
+    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
     obj.pagination = message.pagination ? PageRequest.toAmino(message.pagination) : undefined;
     return obj;
   },
@@ -1220,6 +1589,8 @@ export const GetBlockWithTxsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetBlockWithTxsRequest.typeUrl, GetBlockWithTxsRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetBlockWithTxsRequest.aminoType, GetBlockWithTxsRequest.typeUrl);
 function createBaseGetBlockWithTxsResponse(): GetBlockWithTxsResponse {
   return {
     txs: [],
@@ -1230,6 +1601,16 @@ function createBaseGetBlockWithTxsResponse(): GetBlockWithTxsResponse {
 }
 export const GetBlockWithTxsResponse = {
   typeUrl: "/cosmos.tx.v1beta1.GetBlockWithTxsResponse",
+  aminoType: "cosmos-sdk/GetBlockWithTxsResponse",
+  is(o: any): o is GetBlockWithTxsResponse {
+    return o && (o.$typeUrl === GetBlockWithTxsResponse.typeUrl || Array.isArray(o.txs) && (!o.txs.length || Tx.is(o.txs[0])));
+  },
+  isSDK(o: any): o is GetBlockWithTxsResponseSDKType {
+    return o && (o.$typeUrl === GetBlockWithTxsResponse.typeUrl || Array.isArray(o.txs) && (!o.txs.length || Tx.isSDK(o.txs[0])));
+  },
+  isAmino(o: any): o is GetBlockWithTxsResponseAmino {
+    return o && (o.$typeUrl === GetBlockWithTxsResponse.typeUrl || Array.isArray(o.txs) && (!o.txs.length || Tx.isAmino(o.txs[0])));
+  },
   encode(message: GetBlockWithTxsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.txs) {
       Tx.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1271,13 +1652,59 @@ export const GetBlockWithTxsResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<GetBlockWithTxsResponse>): GetBlockWithTxsResponse {
+  fromJSON(object: any): GetBlockWithTxsResponse {
+    const obj = createBaseGetBlockWithTxsResponse();
+    if (Array.isArray(object?.txs)) obj.txs = object.txs.map((e: any) => Tx.fromJSON(e));
+    if (isSet(object.blockId)) obj.blockId = BlockID.fromJSON(object.blockId);
+    if (isSet(object.block)) obj.block = Block.fromJSON(object.block);
+    if (isSet(object.pagination)) obj.pagination = PageResponse.fromJSON(object.pagination);
+    return obj;
+  },
+  toJSON(message: GetBlockWithTxsResponse): JsonSafe<GetBlockWithTxsResponse> {
+    const obj: any = {};
+    if (message.txs) {
+      obj.txs = message.txs.map(e => e ? Tx.toJSON(e) : undefined);
+    } else {
+      obj.txs = [];
+    }
+    message.blockId !== undefined && (obj.blockId = message.blockId ? BlockID.toJSON(message.blockId) : undefined);
+    message.block !== undefined && (obj.block = message.block ? Block.toJSON(message.block) : undefined);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<GetBlockWithTxsResponse>): GetBlockWithTxsResponse {
     const message = createBaseGetBlockWithTxsResponse();
     message.txs = object.txs?.map(e => Tx.fromPartial(e)) || [];
-    message.blockId = object.blockId !== undefined && object.blockId !== null ? BlockID.fromPartial(object.blockId) : undefined;
-    message.block = object.block !== undefined && object.block !== null ? Block.fromPartial(object.block) : undefined;
-    message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
+    if (object.blockId !== undefined && object.blockId !== null) {
+      message.blockId = BlockID.fromPartial(object.blockId);
+    }
+    if (object.block !== undefined && object.block !== null) {
+      message.block = Block.fromPartial(object.block);
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination);
+    }
     return message;
+  },
+  fromSDK(object: GetBlockWithTxsResponseSDKType): GetBlockWithTxsResponse {
+    return {
+      txs: Array.isArray(object?.txs) ? object.txs.map((e: any) => Tx.fromSDK(e)) : [],
+      blockId: object.block_id ? BlockID.fromSDK(object.block_id) : undefined,
+      block: object.block ? Block.fromSDK(object.block) : undefined,
+      pagination: object.pagination ? PageResponse.fromSDK(object.pagination) : undefined
+    };
+  },
+  toSDK(message: GetBlockWithTxsResponse): GetBlockWithTxsResponseSDKType {
+    const obj: any = {};
+    if (message.txs) {
+      obj.txs = message.txs.map(e => e ? Tx.toSDK(e) : undefined);
+    } else {
+      obj.txs = [];
+    }
+    message.blockId !== undefined && (obj.block_id = message.blockId ? BlockID.toSDK(message.blockId) : undefined);
+    message.block !== undefined && (obj.block = message.block ? Block.toSDK(message.block) : undefined);
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toSDK(message.pagination) : undefined);
+    return obj;
   },
   fromAmino(object: GetBlockWithTxsResponseAmino): GetBlockWithTxsResponse {
     const message = createBaseGetBlockWithTxsResponse();
@@ -1327,3 +1754,5 @@ export const GetBlockWithTxsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(GetBlockWithTxsResponse.typeUrl, GetBlockWithTxsResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(GetBlockWithTxsResponse.aminoType, GetBlockWithTxsResponse.typeUrl);

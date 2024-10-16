@@ -1,5 +1,9 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { isSet, DeepPartial } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
+export const protobufPackage = "cosmos.base.v1beta1";
 /**
  * Coin defines a token with a denomination and an amount.
  * 
@@ -124,11 +128,21 @@ function createBaseCoin(): Coin {
 }
 export const Coin = {
   typeUrl: "/cosmos.base.v1beta1.Coin",
+  aminoType: "cosmos-sdk/Coin",
+  is(o: any): o is Coin {
+    return o && (o.$typeUrl === Coin.typeUrl || typeof o.denom === "string" && typeof o.amount === "string");
+  },
+  isSDK(o: any): o is CoinSDKType {
+    return o && (o.$typeUrl === Coin.typeUrl || typeof o.denom === "string" && typeof o.amount === "string");
+  },
+  isAmino(o: any): o is CoinAmino {
+    return o && (o.$typeUrl === Coin.typeUrl || typeof o.denom === "string" && typeof o.amount === "string");
+  },
   encode(message: Coin, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.denom !== "") {
+    if (message.denom !== undefined) {
       writer.uint32(10).string(message.denom);
     }
-    if (message.amount !== "") {
+    if (message.amount !== undefined) {
       writer.uint32(18).string(message.amount);
     }
     return writer;
@@ -153,11 +167,35 @@ export const Coin = {
     }
     return message;
   },
-  fromPartial(object: Partial<Coin>): Coin {
+  fromJSON(object: any): Coin {
+    const obj = createBaseCoin();
+    if (isSet(object.denom)) obj.denom = String(object.denom);
+    if (isSet(object.amount)) obj.amount = String(object.amount);
+    return obj;
+  },
+  toJSON(message: Coin): JsonSafe<Coin> {
+    const obj: any = {};
+    message.denom !== undefined && (obj.denom = message.denom);
+    message.amount !== undefined && (obj.amount = message.amount);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<Coin>): Coin {
     const message = createBaseCoin();
     message.denom = object.denom ?? "";
     message.amount = object.amount ?? "";
     return message;
+  },
+  fromSDK(object: CoinSDKType): Coin {
+    return {
+      denom: object?.denom,
+      amount: object?.amount
+    };
+  },
+  toSDK(message: Coin): CoinSDKType {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.amount = message.amount;
+    return obj;
   },
   fromAmino(object: CoinAmino): Coin {
     const message = createBaseCoin();
@@ -197,6 +235,8 @@ export const Coin = {
     };
   }
 };
+GlobalDecoderRegistry.register(Coin.typeUrl, Coin);
+GlobalDecoderRegistry.registerAminoProtoMapping(Coin.aminoType, Coin.typeUrl);
 function createBaseDecCoin(): DecCoin {
   return {
     denom: "",
@@ -205,11 +245,21 @@ function createBaseDecCoin(): DecCoin {
 }
 export const DecCoin = {
   typeUrl: "/cosmos.base.v1beta1.DecCoin",
+  aminoType: "cosmos-sdk/DecCoin",
+  is(o: any): o is DecCoin {
+    return o && (o.$typeUrl === DecCoin.typeUrl || typeof o.denom === "string" && typeof o.amount === "string");
+  },
+  isSDK(o: any): o is DecCoinSDKType {
+    return o && (o.$typeUrl === DecCoin.typeUrl || typeof o.denom === "string" && typeof o.amount === "string");
+  },
+  isAmino(o: any): o is DecCoinAmino {
+    return o && (o.$typeUrl === DecCoin.typeUrl || typeof o.denom === "string" && typeof o.amount === "string");
+  },
   encode(message: DecCoin, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.denom !== "") {
+    if (message.denom !== undefined) {
       writer.uint32(10).string(message.denom);
     }
-    if (message.amount !== "") {
+    if (message.amount !== undefined) {
       writer.uint32(18).string(message.amount);
     }
     return writer;
@@ -234,11 +284,35 @@ export const DecCoin = {
     }
     return message;
   },
-  fromPartial(object: Partial<DecCoin>): DecCoin {
+  fromJSON(object: any): DecCoin {
+    const obj = createBaseDecCoin();
+    if (isSet(object.denom)) obj.denom = String(object.denom);
+    if (isSet(object.amount)) obj.amount = String(object.amount);
+    return obj;
+  },
+  toJSON(message: DecCoin): JsonSafe<DecCoin> {
+    const obj: any = {};
+    message.denom !== undefined && (obj.denom = message.denom);
+    message.amount !== undefined && (obj.amount = message.amount);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<DecCoin>): DecCoin {
     const message = createBaseDecCoin();
     message.denom = object.denom ?? "";
     message.amount = object.amount ?? "";
     return message;
+  },
+  fromSDK(object: DecCoinSDKType): DecCoin {
+    return {
+      denom: object?.denom,
+      amount: object?.amount
+    };
+  },
+  toSDK(message: DecCoin): DecCoinSDKType {
+    const obj: any = {};
+    obj.denom = message.denom;
+    obj.amount = message.amount;
+    return obj;
   },
   fromAmino(object: DecCoinAmino): DecCoin {
     const message = createBaseDecCoin();
@@ -278,6 +352,8 @@ export const DecCoin = {
     };
   }
 };
+GlobalDecoderRegistry.register(DecCoin.typeUrl, DecCoin);
+GlobalDecoderRegistry.registerAminoProtoMapping(DecCoin.aminoType, DecCoin.typeUrl);
 function createBaseIntProto(): IntProto {
   return {
     int: ""
@@ -285,8 +361,18 @@ function createBaseIntProto(): IntProto {
 }
 export const IntProto = {
   typeUrl: "/cosmos.base.v1beta1.IntProto",
+  aminoType: "cosmos-sdk/IntProto",
+  is(o: any): o is IntProto {
+    return o && (o.$typeUrl === IntProto.typeUrl || typeof o.int === "string");
+  },
+  isSDK(o: any): o is IntProtoSDKType {
+    return o && (o.$typeUrl === IntProto.typeUrl || typeof o.int === "string");
+  },
+  isAmino(o: any): o is IntProtoAmino {
+    return o && (o.$typeUrl === IntProto.typeUrl || typeof o.int === "string");
+  },
   encode(message: IntProto, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.int !== "") {
+    if (message.int !== undefined) {
       writer.uint32(10).string(message.int);
     }
     return writer;
@@ -308,10 +394,30 @@ export const IntProto = {
     }
     return message;
   },
-  fromPartial(object: Partial<IntProto>): IntProto {
+  fromJSON(object: any): IntProto {
+    const obj = createBaseIntProto();
+    if (isSet(object.int)) obj.int = String(object.int);
+    return obj;
+  },
+  toJSON(message: IntProto): JsonSafe<IntProto> {
+    const obj: any = {};
+    message.int !== undefined && (obj.int = message.int);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<IntProto>): IntProto {
     const message = createBaseIntProto();
     message.int = object.int ?? "";
     return message;
+  },
+  fromSDK(object: IntProtoSDKType): IntProto {
+    return {
+      int: object?.int
+    };
+  },
+  toSDK(message: IntProto): IntProtoSDKType {
+    const obj: any = {};
+    obj.int = message.int;
+    return obj;
   },
   fromAmino(object: IntProtoAmino): IntProto {
     const message = createBaseIntProto();
@@ -347,6 +453,8 @@ export const IntProto = {
     };
   }
 };
+GlobalDecoderRegistry.register(IntProto.typeUrl, IntProto);
+GlobalDecoderRegistry.registerAminoProtoMapping(IntProto.aminoType, IntProto.typeUrl);
 function createBaseDecProto(): DecProto {
   return {
     dec: ""
@@ -354,8 +462,18 @@ function createBaseDecProto(): DecProto {
 }
 export const DecProto = {
   typeUrl: "/cosmos.base.v1beta1.DecProto",
+  aminoType: "cosmos-sdk/DecProto",
+  is(o: any): o is DecProto {
+    return o && (o.$typeUrl === DecProto.typeUrl || typeof o.dec === "string");
+  },
+  isSDK(o: any): o is DecProtoSDKType {
+    return o && (o.$typeUrl === DecProto.typeUrl || typeof o.dec === "string");
+  },
+  isAmino(o: any): o is DecProtoAmino {
+    return o && (o.$typeUrl === DecProto.typeUrl || typeof o.dec === "string");
+  },
   encode(message: DecProto, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.dec !== "") {
+    if (message.dec !== undefined) {
       writer.uint32(10).string(message.dec);
     }
     return writer;
@@ -377,10 +495,30 @@ export const DecProto = {
     }
     return message;
   },
-  fromPartial(object: Partial<DecProto>): DecProto {
+  fromJSON(object: any): DecProto {
+    const obj = createBaseDecProto();
+    if (isSet(object.dec)) obj.dec = String(object.dec);
+    return obj;
+  },
+  toJSON(message: DecProto): JsonSafe<DecProto> {
+    const obj: any = {};
+    message.dec !== undefined && (obj.dec = message.dec);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<DecProto>): DecProto {
     const message = createBaseDecProto();
     message.dec = object.dec ?? "";
     return message;
+  },
+  fromSDK(object: DecProtoSDKType): DecProto {
+    return {
+      dec: object?.dec
+    };
+  },
+  toSDK(message: DecProto): DecProtoSDKType {
+    const obj: any = {};
+    obj.dec = message.dec;
+    return obj;
   },
   fromAmino(object: DecProtoAmino): DecProto {
     const message = createBaseDecProto();
@@ -416,3 +554,5 @@ export const DecProto = {
     };
   }
 };
+GlobalDecoderRegistry.register(DecProto.typeUrl, DecProto);
+GlobalDecoderRegistry.registerAminoProtoMapping(DecProto.aminoType, DecProto.typeUrl);

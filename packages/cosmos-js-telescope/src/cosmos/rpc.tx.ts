@@ -1,5 +1,8 @@
 //@ts-nocheck
+import { getSigningCosmosTxRpc } from "./client";
 import { Rpc } from "../helpers";
+import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
+import { OfflineSigner } from "@cosmjs/proto-signing";
 export const createRPCMsgClient = async ({
   rpc
 }: {
@@ -12,8 +15,14 @@ export const createRPCMsgClient = async ({
     bank: {
       v1beta1: new (await import("./bank/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
     },
+    crisis: {
+      v1beta1: new (await import("./crisis/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
+    },
     distribution: {
       v1beta1: new (await import("./distribution/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
+    },
+    evidence: {
+      v1beta1: new (await import("./evidence/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
     },
     feegrant: {
       v1beta1: new (await import("./feegrant/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
@@ -24,6 +33,12 @@ export const createRPCMsgClient = async ({
     },
     group: {
       v1: new (await import("./group/v1/tx.rpc.msg")).MsgClientImpl(rpc)
+    },
+    nft: {
+      v1beta1: new (await import("./nft/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
+    },
+    slashing: {
+      v1beta1: new (await import("./slashing/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
     },
     staking: {
       v1beta1: new (await import("./staking/v1beta1/tx.rpc.msg")).MsgClientImpl(rpc)
@@ -36,3 +51,18 @@ export const createRPCMsgClient = async ({
     }
   }
 });
+export const createRPCMsgExtensions = async ({
+  rpcEndpoint,
+  signer
+}: {
+  rpcEndpoint: string | HttpEndpoint;
+  signer: OfflineSigner;
+}) => {
+  const rpc = await getSigningCosmosTxRpc({
+    rpcEndpoint,
+    signer
+  });
+  return await createRPCMsgClient({
+    rpc
+  });
+};

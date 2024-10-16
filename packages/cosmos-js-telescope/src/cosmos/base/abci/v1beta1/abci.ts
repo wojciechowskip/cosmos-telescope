@@ -1,8 +1,11 @@
 //@ts-nocheck
-import { Any, AnyAmino, AnySDKType } from "../../../../google/protobuf/any";
+import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../../google/protobuf/any";
 import { Event, EventAmino, EventSDKType } from "../../../../tendermint/abci/types";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
-import { bytesFromBase64, base64FromBytes } from "../../../../helpers";
+import { isSet, DeepPartial, bytesFromBase64, base64FromBytes } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../../registry";
+export const protobufPackage = "cosmos.base.abci.v1beta1";
 /**
  * TxResponse defines a structure containing relevant tx data and metadata. The
  * tags are stringified and the log is JSON decoded.
@@ -491,41 +494,51 @@ function createBaseTxResponse(): TxResponse {
 }
 export const TxResponse = {
   typeUrl: "/cosmos.base.abci.v1beta1.TxResponse",
+  aminoType: "cosmos-sdk/TxResponse",
+  is(o: any): o is TxResponse {
+    return o && (o.$typeUrl === TxResponse.typeUrl || typeof o.height === "bigint" && typeof o.txhash === "string" && typeof o.codespace === "string" && typeof o.code === "number" && typeof o.data === "string" && typeof o.rawLog === "string" && Array.isArray(o.logs) && (!o.logs.length || ABCIMessageLog.is(o.logs[0])) && typeof o.info === "string" && typeof o.gasWanted === "bigint" && typeof o.gasUsed === "bigint" && typeof o.timestamp === "string" && Array.isArray(o.events) && (!o.events.length || Event.is(o.events[0])));
+  },
+  isSDK(o: any): o is TxResponseSDKType {
+    return o && (o.$typeUrl === TxResponse.typeUrl || typeof o.height === "bigint" && typeof o.txhash === "string" && typeof o.codespace === "string" && typeof o.code === "number" && typeof o.data === "string" && typeof o.raw_log === "string" && Array.isArray(o.logs) && (!o.logs.length || ABCIMessageLog.isSDK(o.logs[0])) && typeof o.info === "string" && typeof o.gas_wanted === "bigint" && typeof o.gas_used === "bigint" && typeof o.timestamp === "string" && Array.isArray(o.events) && (!o.events.length || Event.isSDK(o.events[0])));
+  },
+  isAmino(o: any): o is TxResponseAmino {
+    return o && (o.$typeUrl === TxResponse.typeUrl || typeof o.height === "bigint" && typeof o.txhash === "string" && typeof o.codespace === "string" && typeof o.code === "number" && typeof o.data === "string" && typeof o.raw_log === "string" && Array.isArray(o.logs) && (!o.logs.length || ABCIMessageLog.isAmino(o.logs[0])) && typeof o.info === "string" && typeof o.gas_wanted === "bigint" && typeof o.gas_used === "bigint" && typeof o.timestamp === "string" && Array.isArray(o.events) && (!o.events.length || Event.isAmino(o.events[0])));
+  },
   encode(message: TxResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.height !== BigInt(0)) {
+    if (message.height !== undefined) {
       writer.uint32(8).int64(message.height);
     }
-    if (message.txhash !== "") {
+    if (message.txhash !== undefined) {
       writer.uint32(18).string(message.txhash);
     }
-    if (message.codespace !== "") {
+    if (message.codespace !== undefined) {
       writer.uint32(26).string(message.codespace);
     }
-    if (message.code !== 0) {
+    if (message.code !== undefined) {
       writer.uint32(32).uint32(message.code);
     }
-    if (message.data !== "") {
+    if (message.data !== undefined) {
       writer.uint32(42).string(message.data);
     }
-    if (message.rawLog !== "") {
+    if (message.rawLog !== undefined) {
       writer.uint32(50).string(message.rawLog);
     }
     for (const v of message.logs) {
       ABCIMessageLog.encode(v!, writer.uint32(58).fork()).ldelim();
     }
-    if (message.info !== "") {
+    if (message.info !== undefined) {
       writer.uint32(66).string(message.info);
     }
-    if (message.gasWanted !== BigInt(0)) {
+    if (message.gasWanted !== undefined) {
       writer.uint32(72).int64(message.gasWanted);
     }
-    if (message.gasUsed !== BigInt(0)) {
+    if (message.gasUsed !== undefined) {
       writer.uint32(80).int64(message.gasUsed);
     }
     if (message.tx !== undefined) {
       Any.encode(message.tx, writer.uint32(90).fork()).ldelim();
     }
-    if (message.timestamp !== "") {
+    if (message.timestamp !== undefined) {
       writer.uint32(98).string(message.timestamp);
     }
     for (const v of message.events) {
@@ -586,9 +599,53 @@ export const TxResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<TxResponse>): TxResponse {
+  fromJSON(object: any): TxResponse {
+    const obj = createBaseTxResponse();
+    if (isSet(object.height)) obj.height = BigInt(object.height.toString());
+    if (isSet(object.txhash)) obj.txhash = String(object.txhash);
+    if (isSet(object.codespace)) obj.codespace = String(object.codespace);
+    if (isSet(object.code)) obj.code = Number(object.code);
+    if (isSet(object.data)) obj.data = String(object.data);
+    if (isSet(object.rawLog)) obj.rawLog = String(object.rawLog);
+    if (Array.isArray(object?.logs)) obj.logs = object.logs.map((e: any) => ABCIMessageLog.fromJSON(e));
+    if (isSet(object.info)) obj.info = String(object.info);
+    if (isSet(object.gasWanted)) obj.gasWanted = BigInt(object.gasWanted.toString());
+    if (isSet(object.gasUsed)) obj.gasUsed = BigInt(object.gasUsed.toString());
+    if (isSet(object.tx)) obj.tx = Any.fromJSON(object.tx);
+    if (isSet(object.timestamp)) obj.timestamp = String(object.timestamp);
+    if (Array.isArray(object?.events)) obj.events = object.events.map((e: any) => Event.fromJSON(e));
+    return obj;
+  },
+  toJSON(message: TxResponse): JsonSafe<TxResponse> {
+    const obj: any = {};
+    message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
+    message.txhash !== undefined && (obj.txhash = message.txhash);
+    message.codespace !== undefined && (obj.codespace = message.codespace);
+    message.code !== undefined && (obj.code = Math.round(message.code));
+    message.data !== undefined && (obj.data = message.data);
+    message.rawLog !== undefined && (obj.rawLog = message.rawLog);
+    if (message.logs) {
+      obj.logs = message.logs.map(e => e ? ABCIMessageLog.toJSON(e) : undefined);
+    } else {
+      obj.logs = [];
+    }
+    message.info !== undefined && (obj.info = message.info);
+    message.gasWanted !== undefined && (obj.gasWanted = (message.gasWanted || BigInt(0)).toString());
+    message.gasUsed !== undefined && (obj.gasUsed = (message.gasUsed || BigInt(0)).toString());
+    message.tx !== undefined && (obj.tx = message.tx ? Any.toJSON(message.tx) : undefined);
+    message.timestamp !== undefined && (obj.timestamp = message.timestamp);
+    if (message.events) {
+      obj.events = message.events.map(e => e ? Event.toJSON(e) : undefined);
+    } else {
+      obj.events = [];
+    }
+    return obj;
+  },
+  fromPartial(object: DeepPartial<TxResponse>): TxResponse {
     const message = createBaseTxResponse();
-    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
+    if (object.height !== undefined && object.height !== null) {
+      message.height = BigInt(object.height.toString());
+    }
     message.txhash = object.txhash ?? "";
     message.codespace = object.codespace ?? "";
     message.code = object.code ?? 0;
@@ -596,12 +653,60 @@ export const TxResponse = {
     message.rawLog = object.rawLog ?? "";
     message.logs = object.logs?.map(e => ABCIMessageLog.fromPartial(e)) || [];
     message.info = object.info ?? "";
-    message.gasWanted = object.gasWanted !== undefined && object.gasWanted !== null ? BigInt(object.gasWanted.toString()) : BigInt(0);
-    message.gasUsed = object.gasUsed !== undefined && object.gasUsed !== null ? BigInt(object.gasUsed.toString()) : BigInt(0);
-    message.tx = object.tx !== undefined && object.tx !== null ? Any.fromPartial(object.tx) : undefined;
+    if (object.gasWanted !== undefined && object.gasWanted !== null) {
+      message.gasWanted = BigInt(object.gasWanted.toString());
+    }
+    if (object.gasUsed !== undefined && object.gasUsed !== null) {
+      message.gasUsed = BigInt(object.gasUsed.toString());
+    }
+    if (object.tx !== undefined && object.tx !== null) {
+      message.tx = Any.fromPartial(object.tx);
+    }
     message.timestamp = object.timestamp ?? "";
     message.events = object.events?.map(e => Event.fromPartial(e)) || [];
     return message;
+  },
+  fromSDK(object: TxResponseSDKType): TxResponse {
+    return {
+      height: object?.height,
+      txhash: object?.txhash,
+      codespace: object?.codespace,
+      code: object?.code,
+      data: object?.data,
+      rawLog: object?.raw_log,
+      logs: Array.isArray(object?.logs) ? object.logs.map((e: any) => ABCIMessageLog.fromSDK(e)) : [],
+      info: object?.info,
+      gasWanted: object?.gas_wanted,
+      gasUsed: object?.gas_used,
+      tx: object.tx ? Any.fromSDK(object.tx) : undefined,
+      timestamp: object?.timestamp,
+      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromSDK(e)) : []
+    };
+  },
+  toSDK(message: TxResponse): TxResponseSDKType {
+    const obj: any = {};
+    obj.height = message.height;
+    obj.txhash = message.txhash;
+    obj.codespace = message.codespace;
+    obj.code = message.code;
+    obj.data = message.data;
+    obj.raw_log = message.rawLog;
+    if (message.logs) {
+      obj.logs = message.logs.map(e => e ? ABCIMessageLog.toSDK(e) : undefined);
+    } else {
+      obj.logs = [];
+    }
+    obj.info = message.info;
+    obj.gas_wanted = message.gasWanted;
+    obj.gas_used = message.gasUsed;
+    message.tx !== undefined && (obj.tx = message.tx ? Any.toSDK(message.tx) : undefined);
+    obj.timestamp = message.timestamp;
+    if (message.events) {
+      obj.events = message.events.map(e => e ? Event.toSDK(e) : undefined);
+    } else {
+      obj.events = [];
+    }
+    return obj;
   },
   fromAmino(object: TxResponseAmino): TxResponse {
     const message = createBaseTxResponse();
@@ -644,7 +749,7 @@ export const TxResponse = {
   },
   toAmino(message: TxResponse): TxResponseAmino {
     const obj: any = {};
-    obj.height = message.height !== BigInt(0) ? (message.height?.toString)() : undefined;
+    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
     obj.txhash = message.txhash === "" ? undefined : message.txhash;
     obj.codespace = message.codespace === "" ? undefined : message.codespace;
     obj.code = message.code === 0 ? undefined : message.code;
@@ -656,8 +761,8 @@ export const TxResponse = {
       obj.logs = message.logs;
     }
     obj.info = message.info === "" ? undefined : message.info;
-    obj.gas_wanted = message.gasWanted !== BigInt(0) ? (message.gasWanted?.toString)() : undefined;
-    obj.gas_used = message.gasUsed !== BigInt(0) ? (message.gasUsed?.toString)() : undefined;
+    obj.gas_wanted = message.gasWanted !== BigInt(0) ? message.gasWanted.toString() : undefined;
+    obj.gas_used = message.gasUsed !== BigInt(0) ? message.gasUsed.toString() : undefined;
     obj.tx = message.tx ? Any.toAmino(message.tx) : undefined;
     obj.timestamp = message.timestamp === "" ? undefined : message.timestamp;
     if (message.events) {
@@ -689,6 +794,8 @@ export const TxResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(TxResponse.typeUrl, TxResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(TxResponse.aminoType, TxResponse.typeUrl);
 function createBaseABCIMessageLog(): ABCIMessageLog {
   return {
     msgIndex: 0,
@@ -698,11 +805,21 @@ function createBaseABCIMessageLog(): ABCIMessageLog {
 }
 export const ABCIMessageLog = {
   typeUrl: "/cosmos.base.abci.v1beta1.ABCIMessageLog",
+  aminoType: "cosmos-sdk/ABCIMessageLog",
+  is(o: any): o is ABCIMessageLog {
+    return o && (o.$typeUrl === ABCIMessageLog.typeUrl || typeof o.msgIndex === "number" && typeof o.log === "string" && Array.isArray(o.events) && (!o.events.length || StringEvent.is(o.events[0])));
+  },
+  isSDK(o: any): o is ABCIMessageLogSDKType {
+    return o && (o.$typeUrl === ABCIMessageLog.typeUrl || typeof o.msg_index === "number" && typeof o.log === "string" && Array.isArray(o.events) && (!o.events.length || StringEvent.isSDK(o.events[0])));
+  },
+  isAmino(o: any): o is ABCIMessageLogAmino {
+    return o && (o.$typeUrl === ABCIMessageLog.typeUrl || typeof o.msg_index === "number" && typeof o.log === "string" && Array.isArray(o.events) && (!o.events.length || StringEvent.isAmino(o.events[0])));
+  },
   encode(message: ABCIMessageLog, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.msgIndex !== 0) {
+    if (message.msgIndex !== undefined) {
       writer.uint32(8).uint32(message.msgIndex);
     }
-    if (message.log !== "") {
+    if (message.log !== undefined) {
       writer.uint32(18).string(message.log);
     }
     for (const v of message.events) {
@@ -733,12 +850,48 @@ export const ABCIMessageLog = {
     }
     return message;
   },
-  fromPartial(object: Partial<ABCIMessageLog>): ABCIMessageLog {
+  fromJSON(object: any): ABCIMessageLog {
+    const obj = createBaseABCIMessageLog();
+    if (isSet(object.msgIndex)) obj.msgIndex = Number(object.msgIndex);
+    if (isSet(object.log)) obj.log = String(object.log);
+    if (Array.isArray(object?.events)) obj.events = object.events.map((e: any) => StringEvent.fromJSON(e));
+    return obj;
+  },
+  toJSON(message: ABCIMessageLog): JsonSafe<ABCIMessageLog> {
+    const obj: any = {};
+    message.msgIndex !== undefined && (obj.msgIndex = Math.round(message.msgIndex));
+    message.log !== undefined && (obj.log = message.log);
+    if (message.events) {
+      obj.events = message.events.map(e => e ? StringEvent.toJSON(e) : undefined);
+    } else {
+      obj.events = [];
+    }
+    return obj;
+  },
+  fromPartial(object: DeepPartial<ABCIMessageLog>): ABCIMessageLog {
     const message = createBaseABCIMessageLog();
     message.msgIndex = object.msgIndex ?? 0;
     message.log = object.log ?? "";
     message.events = object.events?.map(e => StringEvent.fromPartial(e)) || [];
     return message;
+  },
+  fromSDK(object: ABCIMessageLogSDKType): ABCIMessageLog {
+    return {
+      msgIndex: object?.msg_index,
+      log: object?.log,
+      events: Array.isArray(object?.events) ? object.events.map((e: any) => StringEvent.fromSDK(e)) : []
+    };
+  },
+  toSDK(message: ABCIMessageLog): ABCIMessageLogSDKType {
+    const obj: any = {};
+    obj.msg_index = message.msgIndex;
+    obj.log = message.log;
+    if (message.events) {
+      obj.events = message.events.map(e => e ? StringEvent.toSDK(e) : undefined);
+    } else {
+      obj.events = [];
+    }
+    return obj;
   },
   fromAmino(object: ABCIMessageLogAmino): ABCIMessageLog {
     const message = createBaseABCIMessageLog();
@@ -784,6 +937,8 @@ export const ABCIMessageLog = {
     };
   }
 };
+GlobalDecoderRegistry.register(ABCIMessageLog.typeUrl, ABCIMessageLog);
+GlobalDecoderRegistry.registerAminoProtoMapping(ABCIMessageLog.aminoType, ABCIMessageLog.typeUrl);
 function createBaseStringEvent(): StringEvent {
   return {
     type: "",
@@ -792,8 +947,18 @@ function createBaseStringEvent(): StringEvent {
 }
 export const StringEvent = {
   typeUrl: "/cosmos.base.abci.v1beta1.StringEvent",
+  aminoType: "cosmos-sdk/StringEvent",
+  is(o: any): o is StringEvent {
+    return o && (o.$typeUrl === StringEvent.typeUrl || typeof o.type === "string" && Array.isArray(o.attributes) && (!o.attributes.length || Attribute.is(o.attributes[0])));
+  },
+  isSDK(o: any): o is StringEventSDKType {
+    return o && (o.$typeUrl === StringEvent.typeUrl || typeof o.type === "string" && Array.isArray(o.attributes) && (!o.attributes.length || Attribute.isSDK(o.attributes[0])));
+  },
+  isAmino(o: any): o is StringEventAmino {
+    return o && (o.$typeUrl === StringEvent.typeUrl || typeof o.type === "string" && Array.isArray(o.attributes) && (!o.attributes.length || Attribute.isAmino(o.attributes[0])));
+  },
   encode(message: StringEvent, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.type !== "") {
+    if (message.type !== undefined) {
       writer.uint32(10).string(message.type);
     }
     for (const v of message.attributes) {
@@ -821,11 +986,43 @@ export const StringEvent = {
     }
     return message;
   },
-  fromPartial(object: Partial<StringEvent>): StringEvent {
+  fromJSON(object: any): StringEvent {
+    const obj = createBaseStringEvent();
+    if (isSet(object.type)) obj.type = String(object.type);
+    if (Array.isArray(object?.attributes)) obj.attributes = object.attributes.map((e: any) => Attribute.fromJSON(e));
+    return obj;
+  },
+  toJSON(message: StringEvent): JsonSafe<StringEvent> {
+    const obj: any = {};
+    message.type !== undefined && (obj.type = message.type);
+    if (message.attributes) {
+      obj.attributes = message.attributes.map(e => e ? Attribute.toJSON(e) : undefined);
+    } else {
+      obj.attributes = [];
+    }
+    return obj;
+  },
+  fromPartial(object: DeepPartial<StringEvent>): StringEvent {
     const message = createBaseStringEvent();
     message.type = object.type ?? "";
     message.attributes = object.attributes?.map(e => Attribute.fromPartial(e)) || [];
     return message;
+  },
+  fromSDK(object: StringEventSDKType): StringEvent {
+    return {
+      type: object?.type,
+      attributes: Array.isArray(object?.attributes) ? object.attributes.map((e: any) => Attribute.fromSDK(e)) : []
+    };
+  },
+  toSDK(message: StringEvent): StringEventSDKType {
+    const obj: any = {};
+    obj.type = message.type;
+    if (message.attributes) {
+      obj.attributes = message.attributes.map(e => e ? Attribute.toSDK(e) : undefined);
+    } else {
+      obj.attributes = [];
+    }
+    return obj;
   },
   fromAmino(object: StringEventAmino): StringEvent {
     const message = createBaseStringEvent();
@@ -867,6 +1064,8 @@ export const StringEvent = {
     };
   }
 };
+GlobalDecoderRegistry.register(StringEvent.typeUrl, StringEvent);
+GlobalDecoderRegistry.registerAminoProtoMapping(StringEvent.aminoType, StringEvent.typeUrl);
 function createBaseAttribute(): Attribute {
   return {
     key: "",
@@ -875,11 +1074,21 @@ function createBaseAttribute(): Attribute {
 }
 export const Attribute = {
   typeUrl: "/cosmos.base.abci.v1beta1.Attribute",
+  aminoType: "cosmos-sdk/Attribute",
+  is(o: any): o is Attribute {
+    return o && (o.$typeUrl === Attribute.typeUrl || typeof o.key === "string" && typeof o.value === "string");
+  },
+  isSDK(o: any): o is AttributeSDKType {
+    return o && (o.$typeUrl === Attribute.typeUrl || typeof o.key === "string" && typeof o.value === "string");
+  },
+  isAmino(o: any): o is AttributeAmino {
+    return o && (o.$typeUrl === Attribute.typeUrl || typeof o.key === "string" && typeof o.value === "string");
+  },
   encode(message: Attribute, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.key !== "") {
+    if (message.key !== undefined) {
       writer.uint32(10).string(message.key);
     }
-    if (message.value !== "") {
+    if (message.value !== undefined) {
       writer.uint32(18).string(message.value);
     }
     return writer;
@@ -904,11 +1113,35 @@ export const Attribute = {
     }
     return message;
   },
-  fromPartial(object: Partial<Attribute>): Attribute {
+  fromJSON(object: any): Attribute {
+    const obj = createBaseAttribute();
+    if (isSet(object.key)) obj.key = String(object.key);
+    if (isSet(object.value)) obj.value = String(object.value);
+    return obj;
+  },
+  toJSON(message: Attribute): JsonSafe<Attribute> {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = message.value);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<Attribute>): Attribute {
     const message = createBaseAttribute();
     message.key = object.key ?? "";
     message.value = object.value ?? "";
     return message;
+  },
+  fromSDK(object: AttributeSDKType): Attribute {
+    return {
+      key: object?.key,
+      value: object?.value
+    };
+  },
+  toSDK(message: Attribute): AttributeSDKType {
+    const obj: any = {};
+    obj.key = message.key;
+    obj.value = message.value;
+    return obj;
   },
   fromAmino(object: AttributeAmino): Attribute {
     const message = createBaseAttribute();
@@ -948,6 +1181,8 @@ export const Attribute = {
     };
   }
 };
+GlobalDecoderRegistry.register(Attribute.typeUrl, Attribute);
+GlobalDecoderRegistry.registerAminoProtoMapping(Attribute.aminoType, Attribute.typeUrl);
 function createBaseGasInfo(): GasInfo {
   return {
     gasWanted: BigInt(0),
@@ -956,11 +1191,21 @@ function createBaseGasInfo(): GasInfo {
 }
 export const GasInfo = {
   typeUrl: "/cosmos.base.abci.v1beta1.GasInfo",
+  aminoType: "cosmos-sdk/GasInfo",
+  is(o: any): o is GasInfo {
+    return o && (o.$typeUrl === GasInfo.typeUrl || typeof o.gasWanted === "bigint" && typeof o.gasUsed === "bigint");
+  },
+  isSDK(o: any): o is GasInfoSDKType {
+    return o && (o.$typeUrl === GasInfo.typeUrl || typeof o.gas_wanted === "bigint" && typeof o.gas_used === "bigint");
+  },
+  isAmino(o: any): o is GasInfoAmino {
+    return o && (o.$typeUrl === GasInfo.typeUrl || typeof o.gas_wanted === "bigint" && typeof o.gas_used === "bigint");
+  },
   encode(message: GasInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.gasWanted !== BigInt(0)) {
+    if (message.gasWanted !== undefined) {
       writer.uint32(8).uint64(message.gasWanted);
     }
-    if (message.gasUsed !== BigInt(0)) {
+    if (message.gasUsed !== undefined) {
       writer.uint32(16).uint64(message.gasUsed);
     }
     return writer;
@@ -985,11 +1230,39 @@ export const GasInfo = {
     }
     return message;
   },
-  fromPartial(object: Partial<GasInfo>): GasInfo {
+  fromJSON(object: any): GasInfo {
+    const obj = createBaseGasInfo();
+    if (isSet(object.gasWanted)) obj.gasWanted = BigInt(object.gasWanted.toString());
+    if (isSet(object.gasUsed)) obj.gasUsed = BigInt(object.gasUsed.toString());
+    return obj;
+  },
+  toJSON(message: GasInfo): JsonSafe<GasInfo> {
+    const obj: any = {};
+    message.gasWanted !== undefined && (obj.gasWanted = (message.gasWanted || BigInt(0)).toString());
+    message.gasUsed !== undefined && (obj.gasUsed = (message.gasUsed || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: DeepPartial<GasInfo>): GasInfo {
     const message = createBaseGasInfo();
-    message.gasWanted = object.gasWanted !== undefined && object.gasWanted !== null ? BigInt(object.gasWanted.toString()) : BigInt(0);
-    message.gasUsed = object.gasUsed !== undefined && object.gasUsed !== null ? BigInt(object.gasUsed.toString()) : BigInt(0);
+    if (object.gasWanted !== undefined && object.gasWanted !== null) {
+      message.gasWanted = BigInt(object.gasWanted.toString());
+    }
+    if (object.gasUsed !== undefined && object.gasUsed !== null) {
+      message.gasUsed = BigInt(object.gasUsed.toString());
+    }
     return message;
+  },
+  fromSDK(object: GasInfoSDKType): GasInfo {
+    return {
+      gasWanted: object?.gas_wanted,
+      gasUsed: object?.gas_used
+    };
+  },
+  toSDK(message: GasInfo): GasInfoSDKType {
+    const obj: any = {};
+    obj.gas_wanted = message.gasWanted;
+    obj.gas_used = message.gasUsed;
+    return obj;
   },
   fromAmino(object: GasInfoAmino): GasInfo {
     const message = createBaseGasInfo();
@@ -1003,8 +1276,8 @@ export const GasInfo = {
   },
   toAmino(message: GasInfo): GasInfoAmino {
     const obj: any = {};
-    obj.gas_wanted = message.gasWanted !== BigInt(0) ? (message.gasWanted?.toString)() : undefined;
-    obj.gas_used = message.gasUsed !== BigInt(0) ? (message.gasUsed?.toString)() : undefined;
+    obj.gas_wanted = message.gasWanted !== BigInt(0) ? message.gasWanted.toString() : undefined;
+    obj.gas_used = message.gasUsed !== BigInt(0) ? message.gasUsed.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: GasInfoAminoMsg): GasInfo {
@@ -1029,6 +1302,8 @@ export const GasInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(GasInfo.typeUrl, GasInfo);
+GlobalDecoderRegistry.registerAminoProtoMapping(GasInfo.aminoType, GasInfo.typeUrl);
 function createBaseResult(): Result {
   return {
     data: new Uint8Array(),
@@ -1039,11 +1314,21 @@ function createBaseResult(): Result {
 }
 export const Result = {
   typeUrl: "/cosmos.base.abci.v1beta1.Result",
+  aminoType: "cosmos-sdk/Result",
+  is(o: any): o is Result {
+    return o && (o.$typeUrl === Result.typeUrl || (o.data instanceof Uint8Array || typeof o.data === "string") && typeof o.log === "string" && Array.isArray(o.events) && (!o.events.length || Event.is(o.events[0])) && Array.isArray(o.msgResponses) && (!o.msgResponses.length || Any.is(o.msgResponses[0])));
+  },
+  isSDK(o: any): o is ResultSDKType {
+    return o && (o.$typeUrl === Result.typeUrl || (o.data instanceof Uint8Array || typeof o.data === "string") && typeof o.log === "string" && Array.isArray(o.events) && (!o.events.length || Event.isSDK(o.events[0])) && Array.isArray(o.msg_responses) && (!o.msg_responses.length || Any.isSDK(o.msg_responses[0])));
+  },
+  isAmino(o: any): o is ResultAmino {
+    return o && (o.$typeUrl === Result.typeUrl || (o.data instanceof Uint8Array || typeof o.data === "string") && typeof o.log === "string" && Array.isArray(o.events) && (!o.events.length || Event.isAmino(o.events[0])) && Array.isArray(o.msg_responses) && (!o.msg_responses.length || Any.isAmino(o.msg_responses[0])));
+  },
   encode(message: Result, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.data.length !== 0) {
       writer.uint32(10).bytes(message.data);
     }
-    if (message.log !== "") {
+    if (message.log !== undefined) {
       writer.uint32(18).string(message.log);
     }
     for (const v of message.events) {
@@ -1080,13 +1365,61 @@ export const Result = {
     }
     return message;
   },
-  fromPartial(object: Partial<Result>): Result {
+  fromJSON(object: any): Result {
+    const obj = createBaseResult();
+    if (isSet(object.data)) obj.data = bytesFromBase64(object.data);
+    if (isSet(object.log)) obj.log = String(object.log);
+    if (Array.isArray(object?.events)) obj.events = object.events.map((e: any) => Event.fromJSON(e));
+    if (Array.isArray(object?.msgResponses)) obj.msgResponses = object.msgResponses.map((e: any) => Any.fromJSON(e));
+    return obj;
+  },
+  toJSON(message: Result): JsonSafe<Result> {
+    const obj: any = {};
+    message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+    message.log !== undefined && (obj.log = message.log);
+    if (message.events) {
+      obj.events = message.events.map(e => e ? Event.toJSON(e) : undefined);
+    } else {
+      obj.events = [];
+    }
+    if (message.msgResponses) {
+      obj.msgResponses = message.msgResponses.map(e => e ? Any.toJSON(e) : undefined);
+    } else {
+      obj.msgResponses = [];
+    }
+    return obj;
+  },
+  fromPartial(object: DeepPartial<Result>): Result {
     const message = createBaseResult();
     message.data = object.data ?? new Uint8Array();
     message.log = object.log ?? "";
     message.events = object.events?.map(e => Event.fromPartial(e)) || [];
     message.msgResponses = object.msgResponses?.map(e => Any.fromPartial(e)) || [];
     return message;
+  },
+  fromSDK(object: ResultSDKType): Result {
+    return {
+      data: object?.data,
+      log: object?.log,
+      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromSDK(e)) : [],
+      msgResponses: Array.isArray(object?.msg_responses) ? object.msg_responses.map((e: any) => Any.fromSDK(e)) : []
+    };
+  },
+  toSDK(message: Result): ResultSDKType {
+    const obj: any = {};
+    obj.data = message.data;
+    obj.log = message.log;
+    if (message.events) {
+      obj.events = message.events.map(e => e ? Event.toSDK(e) : undefined);
+    } else {
+      obj.events = [];
+    }
+    if (message.msgResponses) {
+      obj.msg_responses = message.msgResponses.map(e => e ? Any.toSDK(e) : undefined);
+    } else {
+      obj.msg_responses = [];
+    }
+    return obj;
   },
   fromAmino(object: ResultAmino): Result {
     const message = createBaseResult();
@@ -1138,6 +1471,8 @@ export const Result = {
     };
   }
 };
+GlobalDecoderRegistry.register(Result.typeUrl, Result);
+GlobalDecoderRegistry.registerAminoProtoMapping(Result.aminoType, Result.typeUrl);
 function createBaseSimulationResponse(): SimulationResponse {
   return {
     gasInfo: GasInfo.fromPartial({}),
@@ -1146,6 +1481,16 @@ function createBaseSimulationResponse(): SimulationResponse {
 }
 export const SimulationResponse = {
   typeUrl: "/cosmos.base.abci.v1beta1.SimulationResponse",
+  aminoType: "cosmos-sdk/SimulationResponse",
+  is(o: any): o is SimulationResponse {
+    return o && (o.$typeUrl === SimulationResponse.typeUrl || GasInfo.is(o.gasInfo));
+  },
+  isSDK(o: any): o is SimulationResponseSDKType {
+    return o && (o.$typeUrl === SimulationResponse.typeUrl || GasInfo.isSDK(o.gas_info));
+  },
+  isAmino(o: any): o is SimulationResponseAmino {
+    return o && (o.$typeUrl === SimulationResponse.typeUrl || GasInfo.isAmino(o.gas_info));
+  },
   encode(message: SimulationResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.gasInfo !== undefined) {
       GasInfo.encode(message.gasInfo, writer.uint32(10).fork()).ldelim();
@@ -1175,11 +1520,39 @@ export const SimulationResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<SimulationResponse>): SimulationResponse {
+  fromJSON(object: any): SimulationResponse {
+    const obj = createBaseSimulationResponse();
+    if (isSet(object.gasInfo)) obj.gasInfo = GasInfo.fromJSON(object.gasInfo);
+    if (isSet(object.result)) obj.result = Result.fromJSON(object.result);
+    return obj;
+  },
+  toJSON(message: SimulationResponse): JsonSafe<SimulationResponse> {
+    const obj: any = {};
+    message.gasInfo !== undefined && (obj.gasInfo = message.gasInfo ? GasInfo.toJSON(message.gasInfo) : undefined);
+    message.result !== undefined && (obj.result = message.result ? Result.toJSON(message.result) : undefined);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<SimulationResponse>): SimulationResponse {
     const message = createBaseSimulationResponse();
-    message.gasInfo = object.gasInfo !== undefined && object.gasInfo !== null ? GasInfo.fromPartial(object.gasInfo) : undefined;
-    message.result = object.result !== undefined && object.result !== null ? Result.fromPartial(object.result) : undefined;
+    if (object.gasInfo !== undefined && object.gasInfo !== null) {
+      message.gasInfo = GasInfo.fromPartial(object.gasInfo);
+    }
+    if (object.result !== undefined && object.result !== null) {
+      message.result = Result.fromPartial(object.result);
+    }
     return message;
+  },
+  fromSDK(object: SimulationResponseSDKType): SimulationResponse {
+    return {
+      gasInfo: object.gas_info ? GasInfo.fromSDK(object.gas_info) : undefined,
+      result: object.result ? Result.fromSDK(object.result) : undefined
+    };
+  },
+  toSDK(message: SimulationResponse): SimulationResponseSDKType {
+    const obj: any = {};
+    message.gasInfo !== undefined && (obj.gas_info = message.gasInfo ? GasInfo.toSDK(message.gasInfo) : undefined);
+    message.result !== undefined && (obj.result = message.result ? Result.toSDK(message.result) : undefined);
+    return obj;
   },
   fromAmino(object: SimulationResponseAmino): SimulationResponse {
     const message = createBaseSimulationResponse();
@@ -1219,6 +1592,8 @@ export const SimulationResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(SimulationResponse.typeUrl, SimulationResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(SimulationResponse.aminoType, SimulationResponse.typeUrl);
 function createBaseMsgData(): MsgData {
   return {
     msgType: "",
@@ -1227,8 +1602,18 @@ function createBaseMsgData(): MsgData {
 }
 export const MsgData = {
   typeUrl: "/cosmos.base.abci.v1beta1.MsgData",
+  aminoType: "cosmos-sdk/MsgData",
+  is(o: any): o is MsgData {
+    return o && (o.$typeUrl === MsgData.typeUrl || typeof o.msgType === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isSDK(o: any): o is MsgDataSDKType {
+    return o && (o.$typeUrl === MsgData.typeUrl || typeof o.msg_type === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isAmino(o: any): o is MsgDataAmino {
+    return o && (o.$typeUrl === MsgData.typeUrl || typeof o.msg_type === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
   encode(message: MsgData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.msgType !== "") {
+    if (message.msgType !== undefined) {
       writer.uint32(10).string(message.msgType);
     }
     if (message.data.length !== 0) {
@@ -1256,11 +1641,35 @@ export const MsgData = {
     }
     return message;
   },
-  fromPartial(object: Partial<MsgData>): MsgData {
+  fromJSON(object: any): MsgData {
+    const obj = createBaseMsgData();
+    if (isSet(object.msgType)) obj.msgType = String(object.msgType);
+    if (isSet(object.data)) obj.data = bytesFromBase64(object.data);
+    return obj;
+  },
+  toJSON(message: MsgData): JsonSafe<MsgData> {
+    const obj: any = {};
+    message.msgType !== undefined && (obj.msgType = message.msgType);
+    message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+    return obj;
+  },
+  fromPartial(object: DeepPartial<MsgData>): MsgData {
     const message = createBaseMsgData();
     message.msgType = object.msgType ?? "";
     message.data = object.data ?? new Uint8Array();
     return message;
+  },
+  fromSDK(object: MsgDataSDKType): MsgData {
+    return {
+      msgType: object?.msg_type,
+      data: object?.data
+    };
+  },
+  toSDK(message: MsgData): MsgDataSDKType {
+    const obj: any = {};
+    obj.msg_type = message.msgType;
+    obj.data = message.data;
+    return obj;
   },
   fromAmino(object: MsgDataAmino): MsgData {
     const message = createBaseMsgData();
@@ -1300,6 +1709,8 @@ export const MsgData = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgData.typeUrl, MsgData);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgData.aminoType, MsgData.typeUrl);
 function createBaseTxMsgData(): TxMsgData {
   return {
     data: [],
@@ -1308,6 +1719,16 @@ function createBaseTxMsgData(): TxMsgData {
 }
 export const TxMsgData = {
   typeUrl: "/cosmos.base.abci.v1beta1.TxMsgData",
+  aminoType: "cosmos-sdk/TxMsgData",
+  is(o: any): o is TxMsgData {
+    return o && (o.$typeUrl === TxMsgData.typeUrl || Array.isArray(o.data) && (!o.data.length || MsgData.is(o.data[0])) && Array.isArray(o.msgResponses) && (!o.msgResponses.length || Any.is(o.msgResponses[0])));
+  },
+  isSDK(o: any): o is TxMsgDataSDKType {
+    return o && (o.$typeUrl === TxMsgData.typeUrl || Array.isArray(o.data) && (!o.data.length || MsgData.isSDK(o.data[0])) && Array.isArray(o.msg_responses) && (!o.msg_responses.length || Any.isSDK(o.msg_responses[0])));
+  },
+  isAmino(o: any): o is TxMsgDataAmino {
+    return o && (o.$typeUrl === TxMsgData.typeUrl || Array.isArray(o.data) && (!o.data.length || MsgData.isAmino(o.data[0])) && Array.isArray(o.msg_responses) && (!o.msg_responses.length || Any.isAmino(o.msg_responses[0])));
+  },
   encode(message: TxMsgData, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.data) {
       MsgData.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -1337,11 +1758,51 @@ export const TxMsgData = {
     }
     return message;
   },
-  fromPartial(object: Partial<TxMsgData>): TxMsgData {
+  fromJSON(object: any): TxMsgData {
+    const obj = createBaseTxMsgData();
+    if (Array.isArray(object?.data)) obj.data = object.data.map((e: any) => MsgData.fromJSON(e));
+    if (Array.isArray(object?.msgResponses)) obj.msgResponses = object.msgResponses.map((e: any) => Any.fromJSON(e));
+    return obj;
+  },
+  toJSON(message: TxMsgData): JsonSafe<TxMsgData> {
+    const obj: any = {};
+    if (message.data) {
+      obj.data = message.data.map(e => e ? MsgData.toJSON(e) : undefined);
+    } else {
+      obj.data = [];
+    }
+    if (message.msgResponses) {
+      obj.msgResponses = message.msgResponses.map(e => e ? Any.toJSON(e) : undefined);
+    } else {
+      obj.msgResponses = [];
+    }
+    return obj;
+  },
+  fromPartial(object: DeepPartial<TxMsgData>): TxMsgData {
     const message = createBaseTxMsgData();
     message.data = object.data?.map(e => MsgData.fromPartial(e)) || [];
     message.msgResponses = object.msgResponses?.map(e => Any.fromPartial(e)) || [];
     return message;
+  },
+  fromSDK(object: TxMsgDataSDKType): TxMsgData {
+    return {
+      data: Array.isArray(object?.data) ? object.data.map((e: any) => MsgData.fromSDK(e)) : [],
+      msgResponses: Array.isArray(object?.msg_responses) ? object.msg_responses.map((e: any) => Any.fromSDK(e)) : []
+    };
+  },
+  toSDK(message: TxMsgData): TxMsgDataSDKType {
+    const obj: any = {};
+    if (message.data) {
+      obj.data = message.data.map(e => e ? MsgData.toSDK(e) : undefined);
+    } else {
+      obj.data = [];
+    }
+    if (message.msgResponses) {
+      obj.msg_responses = message.msgResponses.map(e => e ? Any.toSDK(e) : undefined);
+    } else {
+      obj.msg_responses = [];
+    }
+    return obj;
   },
   fromAmino(object: TxMsgDataAmino): TxMsgData {
     const message = createBaseTxMsgData();
@@ -1385,6 +1846,8 @@ export const TxMsgData = {
     };
   }
 };
+GlobalDecoderRegistry.register(TxMsgData.typeUrl, TxMsgData);
+GlobalDecoderRegistry.registerAminoProtoMapping(TxMsgData.aminoType, TxMsgData.typeUrl);
 function createBaseSearchTxsResult(): SearchTxsResult {
   return {
     totalCount: BigInt(0),
@@ -1397,20 +1860,30 @@ function createBaseSearchTxsResult(): SearchTxsResult {
 }
 export const SearchTxsResult = {
   typeUrl: "/cosmos.base.abci.v1beta1.SearchTxsResult",
+  aminoType: "cosmos-sdk/SearchTxsResult",
+  is(o: any): o is SearchTxsResult {
+    return o && (o.$typeUrl === SearchTxsResult.typeUrl || typeof o.totalCount === "bigint" && typeof o.count === "bigint" && typeof o.pageNumber === "bigint" && typeof o.pageTotal === "bigint" && typeof o.limit === "bigint" && Array.isArray(o.txs) && (!o.txs.length || TxResponse.is(o.txs[0])));
+  },
+  isSDK(o: any): o is SearchTxsResultSDKType {
+    return o && (o.$typeUrl === SearchTxsResult.typeUrl || typeof o.total_count === "bigint" && typeof o.count === "bigint" && typeof o.page_number === "bigint" && typeof o.page_total === "bigint" && typeof o.limit === "bigint" && Array.isArray(o.txs) && (!o.txs.length || TxResponse.isSDK(o.txs[0])));
+  },
+  isAmino(o: any): o is SearchTxsResultAmino {
+    return o && (o.$typeUrl === SearchTxsResult.typeUrl || typeof o.total_count === "bigint" && typeof o.count === "bigint" && typeof o.page_number === "bigint" && typeof o.page_total === "bigint" && typeof o.limit === "bigint" && Array.isArray(o.txs) && (!o.txs.length || TxResponse.isAmino(o.txs[0])));
+  },
   encode(message: SearchTxsResult, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.totalCount !== BigInt(0)) {
+    if (message.totalCount !== undefined) {
       writer.uint32(8).uint64(message.totalCount);
     }
-    if (message.count !== BigInt(0)) {
+    if (message.count !== undefined) {
       writer.uint32(16).uint64(message.count);
     }
-    if (message.pageNumber !== BigInt(0)) {
+    if (message.pageNumber !== undefined) {
       writer.uint32(24).uint64(message.pageNumber);
     }
-    if (message.pageTotal !== BigInt(0)) {
+    if (message.pageTotal !== undefined) {
       writer.uint32(32).uint64(message.pageTotal);
     }
-    if (message.limit !== BigInt(0)) {
+    if (message.limit !== undefined) {
       writer.uint32(40).uint64(message.limit);
     }
     for (const v of message.txs) {
@@ -1450,15 +1923,73 @@ export const SearchTxsResult = {
     }
     return message;
   },
-  fromPartial(object: Partial<SearchTxsResult>): SearchTxsResult {
+  fromJSON(object: any): SearchTxsResult {
+    const obj = createBaseSearchTxsResult();
+    if (isSet(object.totalCount)) obj.totalCount = BigInt(object.totalCount.toString());
+    if (isSet(object.count)) obj.count = BigInt(object.count.toString());
+    if (isSet(object.pageNumber)) obj.pageNumber = BigInt(object.pageNumber.toString());
+    if (isSet(object.pageTotal)) obj.pageTotal = BigInt(object.pageTotal.toString());
+    if (isSet(object.limit)) obj.limit = BigInt(object.limit.toString());
+    if (Array.isArray(object?.txs)) obj.txs = object.txs.map((e: any) => TxResponse.fromJSON(e));
+    return obj;
+  },
+  toJSON(message: SearchTxsResult): JsonSafe<SearchTxsResult> {
+    const obj: any = {};
+    message.totalCount !== undefined && (obj.totalCount = (message.totalCount || BigInt(0)).toString());
+    message.count !== undefined && (obj.count = (message.count || BigInt(0)).toString());
+    message.pageNumber !== undefined && (obj.pageNumber = (message.pageNumber || BigInt(0)).toString());
+    message.pageTotal !== undefined && (obj.pageTotal = (message.pageTotal || BigInt(0)).toString());
+    message.limit !== undefined && (obj.limit = (message.limit || BigInt(0)).toString());
+    if (message.txs) {
+      obj.txs = message.txs.map(e => e ? TxResponse.toJSON(e) : undefined);
+    } else {
+      obj.txs = [];
+    }
+    return obj;
+  },
+  fromPartial(object: DeepPartial<SearchTxsResult>): SearchTxsResult {
     const message = createBaseSearchTxsResult();
-    message.totalCount = object.totalCount !== undefined && object.totalCount !== null ? BigInt(object.totalCount.toString()) : BigInt(0);
-    message.count = object.count !== undefined && object.count !== null ? BigInt(object.count.toString()) : BigInt(0);
-    message.pageNumber = object.pageNumber !== undefined && object.pageNumber !== null ? BigInt(object.pageNumber.toString()) : BigInt(0);
-    message.pageTotal = object.pageTotal !== undefined && object.pageTotal !== null ? BigInt(object.pageTotal.toString()) : BigInt(0);
-    message.limit = object.limit !== undefined && object.limit !== null ? BigInt(object.limit.toString()) : BigInt(0);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = BigInt(object.totalCount.toString());
+    }
+    if (object.count !== undefined && object.count !== null) {
+      message.count = BigInt(object.count.toString());
+    }
+    if (object.pageNumber !== undefined && object.pageNumber !== null) {
+      message.pageNumber = BigInt(object.pageNumber.toString());
+    }
+    if (object.pageTotal !== undefined && object.pageTotal !== null) {
+      message.pageTotal = BigInt(object.pageTotal.toString());
+    }
+    if (object.limit !== undefined && object.limit !== null) {
+      message.limit = BigInt(object.limit.toString());
+    }
     message.txs = object.txs?.map(e => TxResponse.fromPartial(e)) || [];
     return message;
+  },
+  fromSDK(object: SearchTxsResultSDKType): SearchTxsResult {
+    return {
+      totalCount: object?.total_count,
+      count: object?.count,
+      pageNumber: object?.page_number,
+      pageTotal: object?.page_total,
+      limit: object?.limit,
+      txs: Array.isArray(object?.txs) ? object.txs.map((e: any) => TxResponse.fromSDK(e)) : []
+    };
+  },
+  toSDK(message: SearchTxsResult): SearchTxsResultSDKType {
+    const obj: any = {};
+    obj.total_count = message.totalCount;
+    obj.count = message.count;
+    obj.page_number = message.pageNumber;
+    obj.page_total = message.pageTotal;
+    obj.limit = message.limit;
+    if (message.txs) {
+      obj.txs = message.txs.map(e => e ? TxResponse.toSDK(e) : undefined);
+    } else {
+      obj.txs = [];
+    }
+    return obj;
   },
   fromAmino(object: SearchTxsResultAmino): SearchTxsResult {
     const message = createBaseSearchTxsResult();
@@ -1482,11 +2013,11 @@ export const SearchTxsResult = {
   },
   toAmino(message: SearchTxsResult): SearchTxsResultAmino {
     const obj: any = {};
-    obj.total_count = message.totalCount !== BigInt(0) ? (message.totalCount?.toString)() : undefined;
-    obj.count = message.count !== BigInt(0) ? (message.count?.toString)() : undefined;
-    obj.page_number = message.pageNumber !== BigInt(0) ? (message.pageNumber?.toString)() : undefined;
-    obj.page_total = message.pageTotal !== BigInt(0) ? (message.pageTotal?.toString)() : undefined;
-    obj.limit = message.limit !== BigInt(0) ? (message.limit?.toString)() : undefined;
+    obj.total_count = message.totalCount !== BigInt(0) ? message.totalCount.toString() : undefined;
+    obj.count = message.count !== BigInt(0) ? message.count.toString() : undefined;
+    obj.page_number = message.pageNumber !== BigInt(0) ? message.pageNumber.toString() : undefined;
+    obj.page_total = message.pageTotal !== BigInt(0) ? message.pageTotal.toString() : undefined;
+    obj.limit = message.limit !== BigInt(0) ? message.limit.toString() : undefined;
     if (message.txs) {
       obj.txs = message.txs.map(e => e ? TxResponse.toAmino(e) : undefined);
     } else {
@@ -1516,3 +2047,5 @@ export const SearchTxsResult = {
     };
   }
 };
+GlobalDecoderRegistry.register(SearchTxsResult.typeUrl, SearchTxsResult);
+GlobalDecoderRegistry.registerAminoProtoMapping(SearchTxsResult.aminoType, SearchTxsResult.typeUrl);

@@ -1,7 +1,10 @@
 //@ts-nocheck
 import { Plan, PlanAmino, PlanSDKType, ModuleVersion, ModuleVersionAmino, ModuleVersionSDKType } from "./upgrade";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { DeepPartial, isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { GlobalDecoderRegistry } from "../../../registry";
+export const protobufPackage = "cosmos.upgrade.v1beta1";
 /**
  * QueryCurrentPlanRequest is the request type for the Query/CurrentPlan RPC
  * method.
@@ -337,6 +340,16 @@ function createBaseQueryCurrentPlanRequest(): QueryCurrentPlanRequest {
 }
 export const QueryCurrentPlanRequest = {
   typeUrl: "/cosmos.upgrade.v1beta1.QueryCurrentPlanRequest",
+  aminoType: "cosmos-sdk/QueryCurrentPlanRequest",
+  is(o: any): o is QueryCurrentPlanRequest {
+    return o && o.$typeUrl === QueryCurrentPlanRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryCurrentPlanRequestSDKType {
+    return o && o.$typeUrl === QueryCurrentPlanRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryCurrentPlanRequestAmino {
+    return o && o.$typeUrl === QueryCurrentPlanRequest.typeUrl;
+  },
   encode(_: QueryCurrentPlanRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -354,9 +367,24 @@ export const QueryCurrentPlanRequest = {
     }
     return message;
   },
-  fromPartial(_: Partial<QueryCurrentPlanRequest>): QueryCurrentPlanRequest {
+  fromJSON(_: any): QueryCurrentPlanRequest {
+    const obj = createBaseQueryCurrentPlanRequest();
+    return obj;
+  },
+  toJSON(_: QueryCurrentPlanRequest): JsonSafe<QueryCurrentPlanRequest> {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: DeepPartial<QueryCurrentPlanRequest>): QueryCurrentPlanRequest {
     const message = createBaseQueryCurrentPlanRequest();
     return message;
+  },
+  fromSDK(_: QueryCurrentPlanRequestSDKType): QueryCurrentPlanRequest {
+    return {};
+  },
+  toSDK(_: QueryCurrentPlanRequest): QueryCurrentPlanRequestSDKType {
+    const obj: any = {};
+    return obj;
   },
   fromAmino(_: QueryCurrentPlanRequestAmino): QueryCurrentPlanRequest {
     const message = createBaseQueryCurrentPlanRequest();
@@ -388,6 +416,8 @@ export const QueryCurrentPlanRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryCurrentPlanRequest.typeUrl, QueryCurrentPlanRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryCurrentPlanRequest.aminoType, QueryCurrentPlanRequest.typeUrl);
 function createBaseQueryCurrentPlanResponse(): QueryCurrentPlanResponse {
   return {
     plan: undefined
@@ -395,6 +425,16 @@ function createBaseQueryCurrentPlanResponse(): QueryCurrentPlanResponse {
 }
 export const QueryCurrentPlanResponse = {
   typeUrl: "/cosmos.upgrade.v1beta1.QueryCurrentPlanResponse",
+  aminoType: "cosmos-sdk/QueryCurrentPlanResponse",
+  is(o: any): o is QueryCurrentPlanResponse {
+    return o && o.$typeUrl === QueryCurrentPlanResponse.typeUrl;
+  },
+  isSDK(o: any): o is QueryCurrentPlanResponseSDKType {
+    return o && o.$typeUrl === QueryCurrentPlanResponse.typeUrl;
+  },
+  isAmino(o: any): o is QueryCurrentPlanResponseAmino {
+    return o && o.$typeUrl === QueryCurrentPlanResponse.typeUrl;
+  },
   encode(message: QueryCurrentPlanResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.plan !== undefined) {
       Plan.encode(message.plan, writer.uint32(10).fork()).ldelim();
@@ -418,10 +458,32 @@ export const QueryCurrentPlanResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryCurrentPlanResponse>): QueryCurrentPlanResponse {
+  fromJSON(object: any): QueryCurrentPlanResponse {
+    const obj = createBaseQueryCurrentPlanResponse();
+    if (isSet(object.plan)) obj.plan = Plan.fromJSON(object.plan);
+    return obj;
+  },
+  toJSON(message: QueryCurrentPlanResponse): JsonSafe<QueryCurrentPlanResponse> {
+    const obj: any = {};
+    message.plan !== undefined && (obj.plan = message.plan ? Plan.toJSON(message.plan) : undefined);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<QueryCurrentPlanResponse>): QueryCurrentPlanResponse {
     const message = createBaseQueryCurrentPlanResponse();
-    message.plan = object.plan !== undefined && object.plan !== null ? Plan.fromPartial(object.plan) : undefined;
+    if (object.plan !== undefined && object.plan !== null) {
+      message.plan = Plan.fromPartial(object.plan);
+    }
     return message;
+  },
+  fromSDK(object: QueryCurrentPlanResponseSDKType): QueryCurrentPlanResponse {
+    return {
+      plan: object.plan ? Plan.fromSDK(object.plan) : undefined
+    };
+  },
+  toSDK(message: QueryCurrentPlanResponse): QueryCurrentPlanResponseSDKType {
+    const obj: any = {};
+    message.plan !== undefined && (obj.plan = message.plan ? Plan.toSDK(message.plan) : undefined);
+    return obj;
   },
   fromAmino(object: QueryCurrentPlanResponseAmino): QueryCurrentPlanResponse {
     const message = createBaseQueryCurrentPlanResponse();
@@ -457,6 +519,8 @@ export const QueryCurrentPlanResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryCurrentPlanResponse.typeUrl, QueryCurrentPlanResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryCurrentPlanResponse.aminoType, QueryCurrentPlanResponse.typeUrl);
 function createBaseQueryAppliedPlanRequest(): QueryAppliedPlanRequest {
   return {
     name: ""
@@ -464,8 +528,18 @@ function createBaseQueryAppliedPlanRequest(): QueryAppliedPlanRequest {
 }
 export const QueryAppliedPlanRequest = {
   typeUrl: "/cosmos.upgrade.v1beta1.QueryAppliedPlanRequest",
+  aminoType: "cosmos-sdk/QueryAppliedPlanRequest",
+  is(o: any): o is QueryAppliedPlanRequest {
+    return o && (o.$typeUrl === QueryAppliedPlanRequest.typeUrl || typeof o.name === "string");
+  },
+  isSDK(o: any): o is QueryAppliedPlanRequestSDKType {
+    return o && (o.$typeUrl === QueryAppliedPlanRequest.typeUrl || typeof o.name === "string");
+  },
+  isAmino(o: any): o is QueryAppliedPlanRequestAmino {
+    return o && (o.$typeUrl === QueryAppliedPlanRequest.typeUrl || typeof o.name === "string");
+  },
   encode(message: QueryAppliedPlanRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(10).string(message.name);
     }
     return writer;
@@ -487,10 +561,30 @@ export const QueryAppliedPlanRequest = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryAppliedPlanRequest>): QueryAppliedPlanRequest {
+  fromJSON(object: any): QueryAppliedPlanRequest {
+    const obj = createBaseQueryAppliedPlanRequest();
+    if (isSet(object.name)) obj.name = String(object.name);
+    return obj;
+  },
+  toJSON(message: QueryAppliedPlanRequest): JsonSafe<QueryAppliedPlanRequest> {
+    const obj: any = {};
+    message.name !== undefined && (obj.name = message.name);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<QueryAppliedPlanRequest>): QueryAppliedPlanRequest {
     const message = createBaseQueryAppliedPlanRequest();
     message.name = object.name ?? "";
     return message;
+  },
+  fromSDK(object: QueryAppliedPlanRequestSDKType): QueryAppliedPlanRequest {
+    return {
+      name: object?.name
+    };
+  },
+  toSDK(message: QueryAppliedPlanRequest): QueryAppliedPlanRequestSDKType {
+    const obj: any = {};
+    obj.name = message.name;
+    return obj;
   },
   fromAmino(object: QueryAppliedPlanRequestAmino): QueryAppliedPlanRequest {
     const message = createBaseQueryAppliedPlanRequest();
@@ -526,6 +620,8 @@ export const QueryAppliedPlanRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAppliedPlanRequest.typeUrl, QueryAppliedPlanRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAppliedPlanRequest.aminoType, QueryAppliedPlanRequest.typeUrl);
 function createBaseQueryAppliedPlanResponse(): QueryAppliedPlanResponse {
   return {
     height: BigInt(0)
@@ -533,8 +629,18 @@ function createBaseQueryAppliedPlanResponse(): QueryAppliedPlanResponse {
 }
 export const QueryAppliedPlanResponse = {
   typeUrl: "/cosmos.upgrade.v1beta1.QueryAppliedPlanResponse",
+  aminoType: "cosmos-sdk/QueryAppliedPlanResponse",
+  is(o: any): o is QueryAppliedPlanResponse {
+    return o && (o.$typeUrl === QueryAppliedPlanResponse.typeUrl || typeof o.height === "bigint");
+  },
+  isSDK(o: any): o is QueryAppliedPlanResponseSDKType {
+    return o && (o.$typeUrl === QueryAppliedPlanResponse.typeUrl || typeof o.height === "bigint");
+  },
+  isAmino(o: any): o is QueryAppliedPlanResponseAmino {
+    return o && (o.$typeUrl === QueryAppliedPlanResponse.typeUrl || typeof o.height === "bigint");
+  },
   encode(message: QueryAppliedPlanResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.height !== BigInt(0)) {
+    if (message.height !== undefined) {
       writer.uint32(8).int64(message.height);
     }
     return writer;
@@ -556,10 +662,32 @@ export const QueryAppliedPlanResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryAppliedPlanResponse>): QueryAppliedPlanResponse {
+  fromJSON(object: any): QueryAppliedPlanResponse {
+    const obj = createBaseQueryAppliedPlanResponse();
+    if (isSet(object.height)) obj.height = BigInt(object.height.toString());
+    return obj;
+  },
+  toJSON(message: QueryAppliedPlanResponse): JsonSafe<QueryAppliedPlanResponse> {
+    const obj: any = {};
+    message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: DeepPartial<QueryAppliedPlanResponse>): QueryAppliedPlanResponse {
     const message = createBaseQueryAppliedPlanResponse();
-    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
+    if (object.height !== undefined && object.height !== null) {
+      message.height = BigInt(object.height.toString());
+    }
     return message;
+  },
+  fromSDK(object: QueryAppliedPlanResponseSDKType): QueryAppliedPlanResponse {
+    return {
+      height: object?.height
+    };
+  },
+  toSDK(message: QueryAppliedPlanResponse): QueryAppliedPlanResponseSDKType {
+    const obj: any = {};
+    obj.height = message.height;
+    return obj;
   },
   fromAmino(object: QueryAppliedPlanResponseAmino): QueryAppliedPlanResponse {
     const message = createBaseQueryAppliedPlanResponse();
@@ -570,7 +698,7 @@ export const QueryAppliedPlanResponse = {
   },
   toAmino(message: QueryAppliedPlanResponse): QueryAppliedPlanResponseAmino {
     const obj: any = {};
-    obj.height = message.height !== BigInt(0) ? (message.height?.toString)() : undefined;
+    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryAppliedPlanResponseAminoMsg): QueryAppliedPlanResponse {
@@ -595,6 +723,8 @@ export const QueryAppliedPlanResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAppliedPlanResponse.typeUrl, QueryAppliedPlanResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAppliedPlanResponse.aminoType, QueryAppliedPlanResponse.typeUrl);
 function createBaseQueryUpgradedConsensusStateRequest(): QueryUpgradedConsensusStateRequest {
   return {
     lastHeight: BigInt(0)
@@ -602,8 +732,18 @@ function createBaseQueryUpgradedConsensusStateRequest(): QueryUpgradedConsensusS
 }
 export const QueryUpgradedConsensusStateRequest = {
   typeUrl: "/cosmos.upgrade.v1beta1.QueryUpgradedConsensusStateRequest",
+  aminoType: "cosmos-sdk/QueryUpgradedConsensusStateRequest",
+  is(o: any): o is QueryUpgradedConsensusStateRequest {
+    return o && (o.$typeUrl === QueryUpgradedConsensusStateRequest.typeUrl || typeof o.lastHeight === "bigint");
+  },
+  isSDK(o: any): o is QueryUpgradedConsensusStateRequestSDKType {
+    return o && (o.$typeUrl === QueryUpgradedConsensusStateRequest.typeUrl || typeof o.last_height === "bigint");
+  },
+  isAmino(o: any): o is QueryUpgradedConsensusStateRequestAmino {
+    return o && (o.$typeUrl === QueryUpgradedConsensusStateRequest.typeUrl || typeof o.last_height === "bigint");
+  },
   encode(message: QueryUpgradedConsensusStateRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.lastHeight !== BigInt(0)) {
+    if (message.lastHeight !== undefined) {
       writer.uint32(8).int64(message.lastHeight);
     }
     return writer;
@@ -625,10 +765,32 @@ export const QueryUpgradedConsensusStateRequest = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryUpgradedConsensusStateRequest>): QueryUpgradedConsensusStateRequest {
+  fromJSON(object: any): QueryUpgradedConsensusStateRequest {
+    const obj = createBaseQueryUpgradedConsensusStateRequest();
+    if (isSet(object.lastHeight)) obj.lastHeight = BigInt(object.lastHeight.toString());
+    return obj;
+  },
+  toJSON(message: QueryUpgradedConsensusStateRequest): JsonSafe<QueryUpgradedConsensusStateRequest> {
+    const obj: any = {};
+    message.lastHeight !== undefined && (obj.lastHeight = (message.lastHeight || BigInt(0)).toString());
+    return obj;
+  },
+  fromPartial(object: DeepPartial<QueryUpgradedConsensusStateRequest>): QueryUpgradedConsensusStateRequest {
     const message = createBaseQueryUpgradedConsensusStateRequest();
-    message.lastHeight = object.lastHeight !== undefined && object.lastHeight !== null ? BigInt(object.lastHeight.toString()) : BigInt(0);
+    if (object.lastHeight !== undefined && object.lastHeight !== null) {
+      message.lastHeight = BigInt(object.lastHeight.toString());
+    }
     return message;
+  },
+  fromSDK(object: QueryUpgradedConsensusStateRequestSDKType): QueryUpgradedConsensusStateRequest {
+    return {
+      lastHeight: object?.last_height
+    };
+  },
+  toSDK(message: QueryUpgradedConsensusStateRequest): QueryUpgradedConsensusStateRequestSDKType {
+    const obj: any = {};
+    obj.last_height = message.lastHeight;
+    return obj;
   },
   fromAmino(object: QueryUpgradedConsensusStateRequestAmino): QueryUpgradedConsensusStateRequest {
     const message = createBaseQueryUpgradedConsensusStateRequest();
@@ -639,7 +801,7 @@ export const QueryUpgradedConsensusStateRequest = {
   },
   toAmino(message: QueryUpgradedConsensusStateRequest): QueryUpgradedConsensusStateRequestAmino {
     const obj: any = {};
-    obj.last_height = message.lastHeight !== BigInt(0) ? (message.lastHeight?.toString)() : undefined;
+    obj.last_height = message.lastHeight !== BigInt(0) ? message.lastHeight.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: QueryUpgradedConsensusStateRequestAminoMsg): QueryUpgradedConsensusStateRequest {
@@ -664,6 +826,8 @@ export const QueryUpgradedConsensusStateRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryUpgradedConsensusStateRequest.typeUrl, QueryUpgradedConsensusStateRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryUpgradedConsensusStateRequest.aminoType, QueryUpgradedConsensusStateRequest.typeUrl);
 function createBaseQueryUpgradedConsensusStateResponse(): QueryUpgradedConsensusStateResponse {
   return {
     upgradedConsensusState: new Uint8Array()
@@ -671,6 +835,16 @@ function createBaseQueryUpgradedConsensusStateResponse(): QueryUpgradedConsensus
 }
 export const QueryUpgradedConsensusStateResponse = {
   typeUrl: "/cosmos.upgrade.v1beta1.QueryUpgradedConsensusStateResponse",
+  aminoType: "cosmos-sdk/QueryUpgradedConsensusStateResponse",
+  is(o: any): o is QueryUpgradedConsensusStateResponse {
+    return o && (o.$typeUrl === QueryUpgradedConsensusStateResponse.typeUrl || o.upgradedConsensusState instanceof Uint8Array || typeof o.upgradedConsensusState === "string");
+  },
+  isSDK(o: any): o is QueryUpgradedConsensusStateResponseSDKType {
+    return o && (o.$typeUrl === QueryUpgradedConsensusStateResponse.typeUrl || o.upgraded_consensus_state instanceof Uint8Array || typeof o.upgraded_consensus_state === "string");
+  },
+  isAmino(o: any): o is QueryUpgradedConsensusStateResponseAmino {
+    return o && (o.$typeUrl === QueryUpgradedConsensusStateResponse.typeUrl || o.upgraded_consensus_state instanceof Uint8Array || typeof o.upgraded_consensus_state === "string");
+  },
   encode(message: QueryUpgradedConsensusStateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.upgradedConsensusState.length !== 0) {
       writer.uint32(18).bytes(message.upgradedConsensusState);
@@ -694,10 +868,30 @@ export const QueryUpgradedConsensusStateResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryUpgradedConsensusStateResponse>): QueryUpgradedConsensusStateResponse {
+  fromJSON(object: any): QueryUpgradedConsensusStateResponse {
+    const obj = createBaseQueryUpgradedConsensusStateResponse();
+    if (isSet(object.upgradedConsensusState)) obj.upgradedConsensusState = bytesFromBase64(object.upgradedConsensusState);
+    return obj;
+  },
+  toJSON(message: QueryUpgradedConsensusStateResponse): JsonSafe<QueryUpgradedConsensusStateResponse> {
+    const obj: any = {};
+    message.upgradedConsensusState !== undefined && (obj.upgradedConsensusState = base64FromBytes(message.upgradedConsensusState !== undefined ? message.upgradedConsensusState : new Uint8Array()));
+    return obj;
+  },
+  fromPartial(object: DeepPartial<QueryUpgradedConsensusStateResponse>): QueryUpgradedConsensusStateResponse {
     const message = createBaseQueryUpgradedConsensusStateResponse();
     message.upgradedConsensusState = object.upgradedConsensusState ?? new Uint8Array();
     return message;
+  },
+  fromSDK(object: QueryUpgradedConsensusStateResponseSDKType): QueryUpgradedConsensusStateResponse {
+    return {
+      upgradedConsensusState: object?.upgraded_consensus_state
+    };
+  },
+  toSDK(message: QueryUpgradedConsensusStateResponse): QueryUpgradedConsensusStateResponseSDKType {
+    const obj: any = {};
+    obj.upgraded_consensus_state = message.upgradedConsensusState;
+    return obj;
   },
   fromAmino(object: QueryUpgradedConsensusStateResponseAmino): QueryUpgradedConsensusStateResponse {
     const message = createBaseQueryUpgradedConsensusStateResponse();
@@ -733,6 +927,8 @@ export const QueryUpgradedConsensusStateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryUpgradedConsensusStateResponse.typeUrl, QueryUpgradedConsensusStateResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryUpgradedConsensusStateResponse.aminoType, QueryUpgradedConsensusStateResponse.typeUrl);
 function createBaseQueryModuleVersionsRequest(): QueryModuleVersionsRequest {
   return {
     moduleName: ""
@@ -740,8 +936,18 @@ function createBaseQueryModuleVersionsRequest(): QueryModuleVersionsRequest {
 }
 export const QueryModuleVersionsRequest = {
   typeUrl: "/cosmos.upgrade.v1beta1.QueryModuleVersionsRequest",
+  aminoType: "cosmos-sdk/QueryModuleVersionsRequest",
+  is(o: any): o is QueryModuleVersionsRequest {
+    return o && (o.$typeUrl === QueryModuleVersionsRequest.typeUrl || typeof o.moduleName === "string");
+  },
+  isSDK(o: any): o is QueryModuleVersionsRequestSDKType {
+    return o && (o.$typeUrl === QueryModuleVersionsRequest.typeUrl || typeof o.module_name === "string");
+  },
+  isAmino(o: any): o is QueryModuleVersionsRequestAmino {
+    return o && (o.$typeUrl === QueryModuleVersionsRequest.typeUrl || typeof o.module_name === "string");
+  },
   encode(message: QueryModuleVersionsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.moduleName !== "") {
+    if (message.moduleName !== undefined) {
       writer.uint32(10).string(message.moduleName);
     }
     return writer;
@@ -763,10 +969,30 @@ export const QueryModuleVersionsRequest = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryModuleVersionsRequest>): QueryModuleVersionsRequest {
+  fromJSON(object: any): QueryModuleVersionsRequest {
+    const obj = createBaseQueryModuleVersionsRequest();
+    if (isSet(object.moduleName)) obj.moduleName = String(object.moduleName);
+    return obj;
+  },
+  toJSON(message: QueryModuleVersionsRequest): JsonSafe<QueryModuleVersionsRequest> {
+    const obj: any = {};
+    message.moduleName !== undefined && (obj.moduleName = message.moduleName);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<QueryModuleVersionsRequest>): QueryModuleVersionsRequest {
     const message = createBaseQueryModuleVersionsRequest();
     message.moduleName = object.moduleName ?? "";
     return message;
+  },
+  fromSDK(object: QueryModuleVersionsRequestSDKType): QueryModuleVersionsRequest {
+    return {
+      moduleName: object?.module_name
+    };
+  },
+  toSDK(message: QueryModuleVersionsRequest): QueryModuleVersionsRequestSDKType {
+    const obj: any = {};
+    obj.module_name = message.moduleName;
+    return obj;
   },
   fromAmino(object: QueryModuleVersionsRequestAmino): QueryModuleVersionsRequest {
     const message = createBaseQueryModuleVersionsRequest();
@@ -802,6 +1028,8 @@ export const QueryModuleVersionsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryModuleVersionsRequest.typeUrl, QueryModuleVersionsRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryModuleVersionsRequest.aminoType, QueryModuleVersionsRequest.typeUrl);
 function createBaseQueryModuleVersionsResponse(): QueryModuleVersionsResponse {
   return {
     moduleVersions: []
@@ -809,6 +1037,16 @@ function createBaseQueryModuleVersionsResponse(): QueryModuleVersionsResponse {
 }
 export const QueryModuleVersionsResponse = {
   typeUrl: "/cosmos.upgrade.v1beta1.QueryModuleVersionsResponse",
+  aminoType: "cosmos-sdk/QueryModuleVersionsResponse",
+  is(o: any): o is QueryModuleVersionsResponse {
+    return o && (o.$typeUrl === QueryModuleVersionsResponse.typeUrl || Array.isArray(o.moduleVersions) && (!o.moduleVersions.length || ModuleVersion.is(o.moduleVersions[0])));
+  },
+  isSDK(o: any): o is QueryModuleVersionsResponseSDKType {
+    return o && (o.$typeUrl === QueryModuleVersionsResponse.typeUrl || Array.isArray(o.module_versions) && (!o.module_versions.length || ModuleVersion.isSDK(o.module_versions[0])));
+  },
+  isAmino(o: any): o is QueryModuleVersionsResponseAmino {
+    return o && (o.$typeUrl === QueryModuleVersionsResponse.typeUrl || Array.isArray(o.module_versions) && (!o.module_versions.length || ModuleVersion.isAmino(o.module_versions[0])));
+  },
   encode(message: QueryModuleVersionsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.moduleVersions) {
       ModuleVersion.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -832,10 +1070,38 @@ export const QueryModuleVersionsResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryModuleVersionsResponse>): QueryModuleVersionsResponse {
+  fromJSON(object: any): QueryModuleVersionsResponse {
+    const obj = createBaseQueryModuleVersionsResponse();
+    if (Array.isArray(object?.moduleVersions)) obj.moduleVersions = object.moduleVersions.map((e: any) => ModuleVersion.fromJSON(e));
+    return obj;
+  },
+  toJSON(message: QueryModuleVersionsResponse): JsonSafe<QueryModuleVersionsResponse> {
+    const obj: any = {};
+    if (message.moduleVersions) {
+      obj.moduleVersions = message.moduleVersions.map(e => e ? ModuleVersion.toJSON(e) : undefined);
+    } else {
+      obj.moduleVersions = [];
+    }
+    return obj;
+  },
+  fromPartial(object: DeepPartial<QueryModuleVersionsResponse>): QueryModuleVersionsResponse {
     const message = createBaseQueryModuleVersionsResponse();
     message.moduleVersions = object.moduleVersions?.map(e => ModuleVersion.fromPartial(e)) || [];
     return message;
+  },
+  fromSDK(object: QueryModuleVersionsResponseSDKType): QueryModuleVersionsResponse {
+    return {
+      moduleVersions: Array.isArray(object?.module_versions) ? object.module_versions.map((e: any) => ModuleVersion.fromSDK(e)) : []
+    };
+  },
+  toSDK(message: QueryModuleVersionsResponse): QueryModuleVersionsResponseSDKType {
+    const obj: any = {};
+    if (message.moduleVersions) {
+      obj.module_versions = message.moduleVersions.map(e => e ? ModuleVersion.toSDK(e) : undefined);
+    } else {
+      obj.module_versions = [];
+    }
+    return obj;
   },
   fromAmino(object: QueryModuleVersionsResponseAmino): QueryModuleVersionsResponse {
     const message = createBaseQueryModuleVersionsResponse();
@@ -873,11 +1139,23 @@ export const QueryModuleVersionsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryModuleVersionsResponse.typeUrl, QueryModuleVersionsResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryModuleVersionsResponse.aminoType, QueryModuleVersionsResponse.typeUrl);
 function createBaseQueryAuthorityRequest(): QueryAuthorityRequest {
   return {};
 }
 export const QueryAuthorityRequest = {
   typeUrl: "/cosmos.upgrade.v1beta1.QueryAuthorityRequest",
+  aminoType: "cosmos-sdk/QueryAuthorityRequest",
+  is(o: any): o is QueryAuthorityRequest {
+    return o && o.$typeUrl === QueryAuthorityRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryAuthorityRequestSDKType {
+    return o && o.$typeUrl === QueryAuthorityRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryAuthorityRequestAmino {
+    return o && o.$typeUrl === QueryAuthorityRequest.typeUrl;
+  },
   encode(_: QueryAuthorityRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -895,9 +1173,24 @@ export const QueryAuthorityRequest = {
     }
     return message;
   },
-  fromPartial(_: Partial<QueryAuthorityRequest>): QueryAuthorityRequest {
+  fromJSON(_: any): QueryAuthorityRequest {
+    const obj = createBaseQueryAuthorityRequest();
+    return obj;
+  },
+  toJSON(_: QueryAuthorityRequest): JsonSafe<QueryAuthorityRequest> {
+    const obj: any = {};
+    return obj;
+  },
+  fromPartial(_: DeepPartial<QueryAuthorityRequest>): QueryAuthorityRequest {
     const message = createBaseQueryAuthorityRequest();
     return message;
+  },
+  fromSDK(_: QueryAuthorityRequestSDKType): QueryAuthorityRequest {
+    return {};
+  },
+  toSDK(_: QueryAuthorityRequest): QueryAuthorityRequestSDKType {
+    const obj: any = {};
+    return obj;
   },
   fromAmino(_: QueryAuthorityRequestAmino): QueryAuthorityRequest {
     const message = createBaseQueryAuthorityRequest();
@@ -929,6 +1222,8 @@ export const QueryAuthorityRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAuthorityRequest.typeUrl, QueryAuthorityRequest);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAuthorityRequest.aminoType, QueryAuthorityRequest.typeUrl);
 function createBaseQueryAuthorityResponse(): QueryAuthorityResponse {
   return {
     address: ""
@@ -936,8 +1231,18 @@ function createBaseQueryAuthorityResponse(): QueryAuthorityResponse {
 }
 export const QueryAuthorityResponse = {
   typeUrl: "/cosmos.upgrade.v1beta1.QueryAuthorityResponse",
+  aminoType: "cosmos-sdk/QueryAuthorityResponse",
+  is(o: any): o is QueryAuthorityResponse {
+    return o && (o.$typeUrl === QueryAuthorityResponse.typeUrl || typeof o.address === "string");
+  },
+  isSDK(o: any): o is QueryAuthorityResponseSDKType {
+    return o && (o.$typeUrl === QueryAuthorityResponse.typeUrl || typeof o.address === "string");
+  },
+  isAmino(o: any): o is QueryAuthorityResponseAmino {
+    return o && (o.$typeUrl === QueryAuthorityResponse.typeUrl || typeof o.address === "string");
+  },
   encode(message: QueryAuthorityResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.address !== "") {
+    if (message.address !== undefined) {
       writer.uint32(10).string(message.address);
     }
     return writer;
@@ -959,10 +1264,30 @@ export const QueryAuthorityResponse = {
     }
     return message;
   },
-  fromPartial(object: Partial<QueryAuthorityResponse>): QueryAuthorityResponse {
+  fromJSON(object: any): QueryAuthorityResponse {
+    const obj = createBaseQueryAuthorityResponse();
+    if (isSet(object.address)) obj.address = String(object.address);
+    return obj;
+  },
+  toJSON(message: QueryAuthorityResponse): JsonSafe<QueryAuthorityResponse> {
+    const obj: any = {};
+    message.address !== undefined && (obj.address = message.address);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<QueryAuthorityResponse>): QueryAuthorityResponse {
     const message = createBaseQueryAuthorityResponse();
     message.address = object.address ?? "";
     return message;
+  },
+  fromSDK(object: QueryAuthorityResponseSDKType): QueryAuthorityResponse {
+    return {
+      address: object?.address
+    };
+  },
+  toSDK(message: QueryAuthorityResponse): QueryAuthorityResponseSDKType {
+    const obj: any = {};
+    obj.address = message.address;
+    return obj;
   },
   fromAmino(object: QueryAuthorityResponseAmino): QueryAuthorityResponse {
     const message = createBaseQueryAuthorityResponse();
@@ -998,3 +1323,5 @@ export const QueryAuthorityResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAuthorityResponse.typeUrl, QueryAuthorityResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(QueryAuthorityResponse.aminoType, QueryAuthorityResponse.typeUrl);

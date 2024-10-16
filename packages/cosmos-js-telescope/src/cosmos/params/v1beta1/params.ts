@@ -1,5 +1,9 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { isSet, DeepPartial } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
+export const protobufPackage = "cosmos.params.v1beta1";
 /** ParameterChangeProposal defines a proposal to change one or more parameters. */
 export interface ParameterChangeProposal {
   $typeUrl?: "/cosmos.params.v1beta1.ParameterChangeProposal";
@@ -73,11 +77,21 @@ function createBaseParameterChangeProposal(): ParameterChangeProposal {
 }
 export const ParameterChangeProposal = {
   typeUrl: "/cosmos.params.v1beta1.ParameterChangeProposal",
+  aminoType: "cosmos-sdk/ParameterChangeProposal",
+  is(o: any): o is ParameterChangeProposal {
+    return o && (o.$typeUrl === ParameterChangeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && Array.isArray(o.changes) && (!o.changes.length || ParamChange.is(o.changes[0])));
+  },
+  isSDK(o: any): o is ParameterChangeProposalSDKType {
+    return o && (o.$typeUrl === ParameterChangeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && Array.isArray(o.changes) && (!o.changes.length || ParamChange.isSDK(o.changes[0])));
+  },
+  isAmino(o: any): o is ParameterChangeProposalAmino {
+    return o && (o.$typeUrl === ParameterChangeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && Array.isArray(o.changes) && (!o.changes.length || ParamChange.isAmino(o.changes[0])));
+  },
   encode(message: ParameterChangeProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.title !== "") {
+    if (message.title !== undefined) {
       writer.uint32(10).string(message.title);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(18).string(message.description);
     }
     for (const v of message.changes) {
@@ -108,12 +122,48 @@ export const ParameterChangeProposal = {
     }
     return message;
   },
-  fromPartial(object: Partial<ParameterChangeProposal>): ParameterChangeProposal {
+  fromJSON(object: any): ParameterChangeProposal {
+    const obj = createBaseParameterChangeProposal();
+    if (isSet(object.title)) obj.title = String(object.title);
+    if (isSet(object.description)) obj.description = String(object.description);
+    if (Array.isArray(object?.changes)) obj.changes = object.changes.map((e: any) => ParamChange.fromJSON(e));
+    return obj;
+  },
+  toJSON(message: ParameterChangeProposal): JsonSafe<ParameterChangeProposal> {
+    const obj: any = {};
+    message.title !== undefined && (obj.title = message.title);
+    message.description !== undefined && (obj.description = message.description);
+    if (message.changes) {
+      obj.changes = message.changes.map(e => e ? ParamChange.toJSON(e) : undefined);
+    } else {
+      obj.changes = [];
+    }
+    return obj;
+  },
+  fromPartial(object: DeepPartial<ParameterChangeProposal>): ParameterChangeProposal {
     const message = createBaseParameterChangeProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
     message.changes = object.changes?.map(e => ParamChange.fromPartial(e)) || [];
     return message;
+  },
+  fromSDK(object: ParameterChangeProposalSDKType): ParameterChangeProposal {
+    return {
+      title: object?.title,
+      description: object?.description,
+      changes: Array.isArray(object?.changes) ? object.changes.map((e: any) => ParamChange.fromSDK(e)) : []
+    };
+  },
+  toSDK(message: ParameterChangeProposal): ParameterChangeProposalSDKType {
+    const obj: any = {};
+    obj.title = message.title;
+    obj.description = message.description;
+    if (message.changes) {
+      obj.changes = message.changes.map(e => e ? ParamChange.toSDK(e) : undefined);
+    } else {
+      obj.changes = [];
+    }
+    return obj;
   },
   fromAmino(object: ParameterChangeProposalAmino): ParameterChangeProposal {
     const message = createBaseParameterChangeProposal();
@@ -159,6 +209,8 @@ export const ParameterChangeProposal = {
     };
   }
 };
+GlobalDecoderRegistry.register(ParameterChangeProposal.typeUrl, ParameterChangeProposal);
+GlobalDecoderRegistry.registerAminoProtoMapping(ParameterChangeProposal.aminoType, ParameterChangeProposal.typeUrl);
 function createBaseParamChange(): ParamChange {
   return {
     subspace: "",
@@ -168,14 +220,24 @@ function createBaseParamChange(): ParamChange {
 }
 export const ParamChange = {
   typeUrl: "/cosmos.params.v1beta1.ParamChange",
+  aminoType: "cosmos-sdk/ParamChange",
+  is(o: any): o is ParamChange {
+    return o && (o.$typeUrl === ParamChange.typeUrl || typeof o.subspace === "string" && typeof o.key === "string" && typeof o.value === "string");
+  },
+  isSDK(o: any): o is ParamChangeSDKType {
+    return o && (o.$typeUrl === ParamChange.typeUrl || typeof o.subspace === "string" && typeof o.key === "string" && typeof o.value === "string");
+  },
+  isAmino(o: any): o is ParamChangeAmino {
+    return o && (o.$typeUrl === ParamChange.typeUrl || typeof o.subspace === "string" && typeof o.key === "string" && typeof o.value === "string");
+  },
   encode(message: ParamChange, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.subspace !== "") {
+    if (message.subspace !== undefined) {
       writer.uint32(10).string(message.subspace);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined) {
       writer.uint32(18).string(message.key);
     }
-    if (message.value !== "") {
+    if (message.value !== undefined) {
       writer.uint32(26).string(message.value);
     }
     return writer;
@@ -203,12 +265,40 @@ export const ParamChange = {
     }
     return message;
   },
-  fromPartial(object: Partial<ParamChange>): ParamChange {
+  fromJSON(object: any): ParamChange {
+    const obj = createBaseParamChange();
+    if (isSet(object.subspace)) obj.subspace = String(object.subspace);
+    if (isSet(object.key)) obj.key = String(object.key);
+    if (isSet(object.value)) obj.value = String(object.value);
+    return obj;
+  },
+  toJSON(message: ParamChange): JsonSafe<ParamChange> {
+    const obj: any = {};
+    message.subspace !== undefined && (obj.subspace = message.subspace);
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = message.value);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<ParamChange>): ParamChange {
     const message = createBaseParamChange();
     message.subspace = object.subspace ?? "";
     message.key = object.key ?? "";
     message.value = object.value ?? "";
     return message;
+  },
+  fromSDK(object: ParamChangeSDKType): ParamChange {
+    return {
+      subspace: object?.subspace,
+      key: object?.key,
+      value: object?.value
+    };
+  },
+  toSDK(message: ParamChange): ParamChangeSDKType {
+    const obj: any = {};
+    obj.subspace = message.subspace;
+    obj.key = message.key;
+    obj.value = message.value;
+    return obj;
   },
   fromAmino(object: ParamChangeAmino): ParamChange {
     const message = createBaseParamChange();
@@ -252,3 +342,5 @@ export const ParamChange = {
     };
   }
 };
+GlobalDecoderRegistry.register(ParamChange.typeUrl, ParamChange);
+GlobalDecoderRegistry.registerAminoProtoMapping(ParamChange.aminoType, ParamChange.typeUrl);

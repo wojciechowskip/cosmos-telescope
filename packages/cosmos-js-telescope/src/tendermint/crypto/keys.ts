@@ -1,6 +1,9 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { bytesFromBase64, base64FromBytes } from "../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes, DeepPartial } from "../../helpers";
+import { JsonSafe } from "../../json-safe";
+import { GlobalDecoderRegistry } from "../../registry";
+export const protobufPackage = "tendermint.crypto";
 /** PublicKey defines the keys available for use with Tendermint Validators */
 export interface PublicKey {
   ed25519?: Uint8Array;
@@ -32,6 +35,15 @@ function createBasePublicKey(): PublicKey {
 }
 export const PublicKey = {
   typeUrl: "/tendermint.crypto.PublicKey",
+  is(o: any): o is PublicKey {
+    return o && o.$typeUrl === PublicKey.typeUrl;
+  },
+  isSDK(o: any): o is PublicKeySDKType {
+    return o && o.$typeUrl === PublicKey.typeUrl;
+  },
+  isAmino(o: any): o is PublicKeyAmino {
+    return o && o.$typeUrl === PublicKey.typeUrl;
+  },
   encode(message: PublicKey, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.ed25519 !== undefined) {
       writer.uint32(10).bytes(message.ed25519);
@@ -61,11 +73,35 @@ export const PublicKey = {
     }
     return message;
   },
-  fromPartial(object: Partial<PublicKey>): PublicKey {
+  fromJSON(object: any): PublicKey {
+    const obj = createBasePublicKey();
+    if (isSet(object.ed25519)) obj.ed25519 = bytesFromBase64(object.ed25519);
+    if (isSet(object.secp256k1)) obj.secp256k1 = bytesFromBase64(object.secp256k1);
+    return obj;
+  },
+  toJSON(message: PublicKey): JsonSafe<PublicKey> {
+    const obj: any = {};
+    message.ed25519 !== undefined && (obj.ed25519 = message.ed25519 !== undefined ? base64FromBytes(message.ed25519) : undefined);
+    message.secp256k1 !== undefined && (obj.secp256k1 = message.secp256k1 !== undefined ? base64FromBytes(message.secp256k1) : undefined);
+    return obj;
+  },
+  fromPartial(object: DeepPartial<PublicKey>): PublicKey {
     const message = createBasePublicKey();
     message.ed25519 = object.ed25519 ?? undefined;
     message.secp256k1 = object.secp256k1 ?? undefined;
     return message;
+  },
+  fromSDK(object: PublicKeySDKType): PublicKey {
+    return {
+      ed25519: object?.ed25519,
+      secp256k1: object?.secp256k1
+    };
+  },
+  toSDK(message: PublicKey): PublicKeySDKType {
+    const obj: any = {};
+    obj.ed25519 = message.ed25519;
+    obj.secp256k1 = message.secp256k1;
+    return obj;
   },
   fromAmino(object: PublicKeyAmino): PublicKey {
     const message = createBasePublicKey();
@@ -99,3 +135,4 @@ export const PublicKey = {
     };
   }
 };
+GlobalDecoderRegistry.register(PublicKey.typeUrl, PublicKey);
