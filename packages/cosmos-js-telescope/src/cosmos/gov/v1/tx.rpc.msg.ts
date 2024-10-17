@@ -3,24 +3,24 @@ import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf
 import { Coin, CoinSDKType } from "../../base/v1beta1/coin";
 import { VoteOption, VoteOptionSDKType, WeightedVoteOption, WeightedVoteOptionSDKType } from "./gov";
 import { TextProposal, TextProposalSDKType } from "../v1beta1/gov";
-import { DeliverTxResponse, StdFee, TxRpc } from "../../../types";
+import { TxRpc } from "../../../types";
 import { BinaryReader } from "../../../binary";
 import { MsgSubmitProposal, MsgSubmitProposalSDKType, MsgSubmitProposalResponse, MsgSubmitProposalResponseSDKType, MsgExecLegacyContent, MsgExecLegacyContentSDKType, MsgExecLegacyContentResponse, MsgExecLegacyContentResponseSDKType, MsgVote, MsgVoteSDKType, MsgVoteResponse, MsgVoteResponseSDKType, MsgVoteWeighted, MsgVoteWeightedSDKType, MsgVoteWeightedResponse, MsgVoteWeightedResponseSDKType, MsgDeposit, MsgDepositSDKType, MsgDepositResponse, MsgDepositResponseSDKType } from "./tx";
 /** Msg defines the gov Msg service. */
 export interface Msg {
   /** SubmitProposal defines a method to create new proposal given a content. */
-  submitProposal(signerAddress: string, message: MsgSubmitProposal, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  submitProposal(request: MsgSubmitProposal): Promise<MsgSubmitProposalResponse>;
   /**
    * ExecLegacyContent defines a Msg to be in included in a MsgSubmitProposal
    * to execute a legacy content-based proposal.
    */
-  execLegacyContent(signerAddress: string, message: MsgExecLegacyContent, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  execLegacyContent(request: MsgExecLegacyContent): Promise<MsgExecLegacyContentResponse>;
   /** Vote defines a method to add a vote on a specific proposal. */
-  vote(signerAddress: string, message: MsgVote, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  vote(request: MsgVote): Promise<MsgVoteResponse>;
   /** VoteWeighted defines a method to add a weighted vote on a specific proposal. */
-  voteWeighted(signerAddress: string, message: MsgVoteWeighted, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  voteWeighted(request: MsgVoteWeighted): Promise<MsgVoteWeightedResponse>;
   /** Deposit defines a method to add deposit on a specific proposal. */
-  deposit(signerAddress: string, message: MsgDeposit, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  deposit(request: MsgDeposit): Promise<MsgDepositResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: TxRpc;
@@ -28,45 +28,35 @@ export class MsgClientImpl implements Msg {
     this.rpc = rpc;
   }
   /* SubmitProposal defines a method to create new proposal given a content. */
-  submitProposal = async (signerAddress: string, message: MsgSubmitProposal, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgSubmitProposal.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  submitProposal = async (request: MsgSubmitProposal): Promise<MsgSubmitProposalResponse> => {
+    const data = MsgSubmitProposal.encode(request).finish();
+    const promise = this.rpc.request("cosmos.gov.v1.Msg", "SubmitProposal", data);
+    return promise.then(data => MsgSubmitProposalResponse.decode(new BinaryReader(data)));
   };
   /* ExecLegacyContent defines a Msg to be in included in a MsgSubmitProposal
    to execute a legacy content-based proposal. */
-  execLegacyContent = async (signerAddress: string, message: MsgExecLegacyContent, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgExecLegacyContent.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  execLegacyContent = async (request: MsgExecLegacyContent): Promise<MsgExecLegacyContentResponse> => {
+    const data = MsgExecLegacyContent.encode(request).finish();
+    const promise = this.rpc.request("cosmos.gov.v1.Msg", "ExecLegacyContent", data);
+    return promise.then(data => MsgExecLegacyContentResponse.decode(new BinaryReader(data)));
   };
   /* Vote defines a method to add a vote on a specific proposal. */
-  vote = async (signerAddress: string, message: MsgVote, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgVote.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  vote = async (request: MsgVote): Promise<MsgVoteResponse> => {
+    const data = MsgVote.encode(request).finish();
+    const promise = this.rpc.request("cosmos.gov.v1.Msg", "Vote", data);
+    return promise.then(data => MsgVoteResponse.decode(new BinaryReader(data)));
   };
   /* VoteWeighted defines a method to add a weighted vote on a specific proposal. */
-  voteWeighted = async (signerAddress: string, message: MsgVoteWeighted, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgVoteWeighted.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  voteWeighted = async (request: MsgVoteWeighted): Promise<MsgVoteWeightedResponse> => {
+    const data = MsgVoteWeighted.encode(request).finish();
+    const promise = this.rpc.request("cosmos.gov.v1.Msg", "VoteWeighted", data);
+    return promise.then(data => MsgVoteWeightedResponse.decode(new BinaryReader(data)));
   };
   /* Deposit defines a method to add deposit on a specific proposal. */
-  deposit = async (signerAddress: string, message: MsgDeposit, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgDeposit.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  deposit = async (request: MsgDeposit): Promise<MsgDepositResponse> => {
+    const data = MsgDeposit.encode(request).finish();
+    const promise = this.rpc.request("cosmos.gov.v1.Msg", "Deposit", data);
+    return promise.then(data => MsgDepositResponse.decode(new BinaryReader(data)));
   };
 }
 export const createClientImpl = (rpc: TxRpc) => {
