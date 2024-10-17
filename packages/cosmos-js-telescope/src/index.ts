@@ -11,6 +11,8 @@ export * from "./cosmos/bundle";
 export * from "./cosmos/client";
 export * from "./gogoproto/bundle";
 export * from "./google/bundle";
+export * from "./lavanet/bundle";
+export * from "./lavanet/client";
 export * from "./tendermint/bundle";
 export * from "./varint";
 export * from "./utf8";
