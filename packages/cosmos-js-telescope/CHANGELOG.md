@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.23](https://github.com/wojciechowskip/cosmos-telescope/compare/cosmos-js-telescope@0.0.22...cosmos-js-telescope@0.0.23) (2024-10-17)
+
+**Note:** Version bump only for package cosmos-js-telescope
+
 ## [0.0.22](https://github.com/wojciechowskip/cosmos-telescope/compare/cosmos-js-telescope@0.0.21...cosmos-js-telescope@0.0.22) (2024-10-17)
 
 **Note:** Version bump only for package cosmos-js-telescope
