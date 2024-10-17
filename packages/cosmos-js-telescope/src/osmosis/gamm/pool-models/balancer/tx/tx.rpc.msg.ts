@@ -1,10 +1,10 @@
 //@ts-nocheck
 import { PoolParams, PoolParamsSDKType, PoolAsset, PoolAssetSDKType } from "../balancerPool";
-import { DeliverTxResponse, StdFee, TxRpc } from "../../../../../types";
+import { TxRpc } from "../../../../../types";
 import { BinaryReader } from "../../../../../binary";
 import { MsgCreateBalancerPool, MsgCreateBalancerPoolSDKType, MsgCreateBalancerPoolResponse, MsgCreateBalancerPoolResponseSDKType } from "./tx";
 export interface Msg {
-  createBalancerPool(signerAddress: string, message: MsgCreateBalancerPool, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  createBalancerPool(request: MsgCreateBalancerPool): Promise<MsgCreateBalancerPoolResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: TxRpc;
@@ -12,12 +12,10 @@ export class MsgClientImpl implements Msg {
     this.rpc = rpc;
   }
   /* CreateBalancerPool */
-  createBalancerPool = async (signerAddress: string, message: MsgCreateBalancerPool, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgCreateBalancerPool.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  createBalancerPool = async (request: MsgCreateBalancerPool): Promise<MsgCreateBalancerPoolResponse> => {
+    const data = MsgCreateBalancerPool.encode(request).finish();
+    const promise = this.rpc.request("osmosis.gamm.poolmodels.balancer.v1beta1.Msg", "CreateBalancerPool", data);
+    return promise.then(data => MsgCreateBalancerPoolResponse.decode(new BinaryReader(data)));
   };
 }
 export const createClientImpl = (rpc: TxRpc) => {

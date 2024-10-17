@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { Plan, PlanSDKType } from "./upgrade";
-import { DeliverTxResponse, StdFee, TxRpc } from "../../../types";
+import { TxRpc } from "../../../types";
 import { BinaryReader } from "../../../binary";
 import { MsgSoftwareUpgrade, MsgSoftwareUpgradeSDKType, MsgSoftwareUpgradeResponse, MsgSoftwareUpgradeResponseSDKType, MsgCancelUpgrade, MsgCancelUpgradeSDKType, MsgCancelUpgradeResponse, MsgCancelUpgradeResponseSDKType } from "./tx";
 /** Msg defines the upgrade Msg service. */
@@ -10,14 +10,14 @@ export interface Msg {
    * 
    * Since: cosmos-sdk 0.46
    */
-  softwareUpgrade(signerAddress: string, message: MsgSoftwareUpgrade, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  softwareUpgrade(request: MsgSoftwareUpgrade): Promise<MsgSoftwareUpgradeResponse>;
   /**
    * CancelUpgrade is a governance operation for cancelling a previously
    * approvid software upgrade.
    * 
    * Since: cosmos-sdk 0.46
    */
-  cancelUpgrade(signerAddress: string, message: MsgCancelUpgrade, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  cancelUpgrade(request: MsgCancelUpgrade): Promise<MsgCancelUpgradeResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: TxRpc;
@@ -27,23 +27,19 @@ export class MsgClientImpl implements Msg {
   /* SoftwareUpgrade is a governance operation for initiating a software upgrade.
   
    Since: cosmos-sdk 0.46 */
-  softwareUpgrade = async (signerAddress: string, message: MsgSoftwareUpgrade, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgSoftwareUpgrade.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  softwareUpgrade = async (request: MsgSoftwareUpgrade): Promise<MsgSoftwareUpgradeResponse> => {
+    const data = MsgSoftwareUpgrade.encode(request).finish();
+    const promise = this.rpc.request("cosmos.upgrade.v1beta1.Msg", "SoftwareUpgrade", data);
+    return promise.then(data => MsgSoftwareUpgradeResponse.decode(new BinaryReader(data)));
   };
   /* CancelUpgrade is a governance operation for cancelling a previously
    approvid software upgrade.
   
    Since: cosmos-sdk 0.46 */
-  cancelUpgrade = async (signerAddress: string, message: MsgCancelUpgrade, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgCancelUpgrade.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  cancelUpgrade = async (request: MsgCancelUpgrade): Promise<MsgCancelUpgradeResponse> => {
+    const data = MsgCancelUpgrade.encode(request).finish();
+    const promise = this.rpc.request("cosmos.upgrade.v1beta1.Msg", "CancelUpgrade", data);
+    return promise.then(data => MsgCancelUpgradeResponse.decode(new BinaryReader(data)));
   };
 }
 export const createClientImpl = (rpc: TxRpc) => {

@@ -1,17 +1,17 @@
 //@ts-nocheck
 import { Coin, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
-import { DeliverTxResponse, StdFee, TxRpc } from "../../../types";
+import { TxRpc } from "../../../types";
 import { BinaryReader } from "../../../binary";
 import { MsgJoinPool, MsgJoinPoolSDKType, MsgJoinPoolResponse, MsgJoinPoolResponseSDKType, MsgExitPool, MsgExitPoolSDKType, MsgExitPoolResponse, MsgExitPoolResponseSDKType, MsgSwapExactAmountIn, MsgSwapExactAmountInSDKType, MsgSwapExactAmountInResponse, MsgSwapExactAmountInResponseSDKType, MsgSwapExactAmountOut, MsgSwapExactAmountOutSDKType, MsgSwapExactAmountOutResponse, MsgSwapExactAmountOutResponseSDKType, MsgJoinSwapExternAmountIn, MsgJoinSwapExternAmountInSDKType, MsgJoinSwapExternAmountInResponse, MsgJoinSwapExternAmountInResponseSDKType, MsgJoinSwapShareAmountOut, MsgJoinSwapShareAmountOutSDKType, MsgJoinSwapShareAmountOutResponse, MsgJoinSwapShareAmountOutResponseSDKType, MsgExitSwapExternAmountOut, MsgExitSwapExternAmountOutSDKType, MsgExitSwapExternAmountOutResponse, MsgExitSwapExternAmountOutResponseSDKType, MsgExitSwapShareAmountIn, MsgExitSwapShareAmountInSDKType, MsgExitSwapShareAmountInResponse, MsgExitSwapShareAmountInResponseSDKType } from "./tx";
 export interface Msg {
-  joinPool(signerAddress: string, message: MsgJoinPool, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
-  exitPool(signerAddress: string, message: MsgExitPool, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
-  swapExactAmountIn(signerAddress: string, message: MsgSwapExactAmountIn, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
-  swapExactAmountOut(signerAddress: string, message: MsgSwapExactAmountOut, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
-  joinSwapExternAmountIn(signerAddress: string, message: MsgJoinSwapExternAmountIn, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
-  joinSwapShareAmountOut(signerAddress: string, message: MsgJoinSwapShareAmountOut, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
-  exitSwapExternAmountOut(signerAddress: string, message: MsgExitSwapExternAmountOut, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
-  exitSwapShareAmountIn(signerAddress: string, message: MsgExitSwapShareAmountIn, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  joinPool(request: MsgJoinPool): Promise<MsgJoinPoolResponse>;
+  exitPool(request: MsgExitPool): Promise<MsgExitPoolResponse>;
+  swapExactAmountIn(request: MsgSwapExactAmountIn): Promise<MsgSwapExactAmountInResponse>;
+  swapExactAmountOut(request: MsgSwapExactAmountOut): Promise<MsgSwapExactAmountOutResponse>;
+  joinSwapExternAmountIn(request: MsgJoinSwapExternAmountIn): Promise<MsgJoinSwapExternAmountInResponse>;
+  joinSwapShareAmountOut(request: MsgJoinSwapShareAmountOut): Promise<MsgJoinSwapShareAmountOutResponse>;
+  exitSwapExternAmountOut(request: MsgExitSwapExternAmountOut): Promise<MsgExitSwapExternAmountOutResponse>;
+  exitSwapShareAmountIn(request: MsgExitSwapShareAmountIn): Promise<MsgExitSwapShareAmountInResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: TxRpc;
@@ -19,68 +19,52 @@ export class MsgClientImpl implements Msg {
     this.rpc = rpc;
   }
   /* JoinPool */
-  joinPool = async (signerAddress: string, message: MsgJoinPool, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgJoinPool.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  joinPool = async (request: MsgJoinPool): Promise<MsgJoinPoolResponse> => {
+    const data = MsgJoinPool.encode(request).finish();
+    const promise = this.rpc.request("osmosis.gamm.v1beta1.Msg", "JoinPool", data);
+    return promise.then(data => MsgJoinPoolResponse.decode(new BinaryReader(data)));
   };
   /* ExitPool */
-  exitPool = async (signerAddress: string, message: MsgExitPool, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgExitPool.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  exitPool = async (request: MsgExitPool): Promise<MsgExitPoolResponse> => {
+    const data = MsgExitPool.encode(request).finish();
+    const promise = this.rpc.request("osmosis.gamm.v1beta1.Msg", "ExitPool", data);
+    return promise.then(data => MsgExitPoolResponse.decode(new BinaryReader(data)));
   };
   /* SwapExactAmountIn */
-  swapExactAmountIn = async (signerAddress: string, message: MsgSwapExactAmountIn, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgSwapExactAmountIn.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  swapExactAmountIn = async (request: MsgSwapExactAmountIn): Promise<MsgSwapExactAmountInResponse> => {
+    const data = MsgSwapExactAmountIn.encode(request).finish();
+    const promise = this.rpc.request("osmosis.gamm.v1beta1.Msg", "SwapExactAmountIn", data);
+    return promise.then(data => MsgSwapExactAmountInResponse.decode(new BinaryReader(data)));
   };
   /* SwapExactAmountOut */
-  swapExactAmountOut = async (signerAddress: string, message: MsgSwapExactAmountOut, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgSwapExactAmountOut.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  swapExactAmountOut = async (request: MsgSwapExactAmountOut): Promise<MsgSwapExactAmountOutResponse> => {
+    const data = MsgSwapExactAmountOut.encode(request).finish();
+    const promise = this.rpc.request("osmosis.gamm.v1beta1.Msg", "SwapExactAmountOut", data);
+    return promise.then(data => MsgSwapExactAmountOutResponse.decode(new BinaryReader(data)));
   };
   /* JoinSwapExternAmountIn */
-  joinSwapExternAmountIn = async (signerAddress: string, message: MsgJoinSwapExternAmountIn, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgJoinSwapExternAmountIn.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  joinSwapExternAmountIn = async (request: MsgJoinSwapExternAmountIn): Promise<MsgJoinSwapExternAmountInResponse> => {
+    const data = MsgJoinSwapExternAmountIn.encode(request).finish();
+    const promise = this.rpc.request("osmosis.gamm.v1beta1.Msg", "JoinSwapExternAmountIn", data);
+    return promise.then(data => MsgJoinSwapExternAmountInResponse.decode(new BinaryReader(data)));
   };
   /* JoinSwapShareAmountOut */
-  joinSwapShareAmountOut = async (signerAddress: string, message: MsgJoinSwapShareAmountOut, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgJoinSwapShareAmountOut.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  joinSwapShareAmountOut = async (request: MsgJoinSwapShareAmountOut): Promise<MsgJoinSwapShareAmountOutResponse> => {
+    const data = MsgJoinSwapShareAmountOut.encode(request).finish();
+    const promise = this.rpc.request("osmosis.gamm.v1beta1.Msg", "JoinSwapShareAmountOut", data);
+    return promise.then(data => MsgJoinSwapShareAmountOutResponse.decode(new BinaryReader(data)));
   };
   /* ExitSwapExternAmountOut */
-  exitSwapExternAmountOut = async (signerAddress: string, message: MsgExitSwapExternAmountOut, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgExitSwapExternAmountOut.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  exitSwapExternAmountOut = async (request: MsgExitSwapExternAmountOut): Promise<MsgExitSwapExternAmountOutResponse> => {
+    const data = MsgExitSwapExternAmountOut.encode(request).finish();
+    const promise = this.rpc.request("osmosis.gamm.v1beta1.Msg", "ExitSwapExternAmountOut", data);
+    return promise.then(data => MsgExitSwapExternAmountOutResponse.decode(new BinaryReader(data)));
   };
   /* ExitSwapShareAmountIn */
-  exitSwapShareAmountIn = async (signerAddress: string, message: MsgExitSwapShareAmountIn, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgExitSwapShareAmountIn.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  exitSwapShareAmountIn = async (request: MsgExitSwapShareAmountIn): Promise<MsgExitSwapShareAmountInResponse> => {
+    const data = MsgExitSwapShareAmountIn.encode(request).finish();
+    const promise = this.rpc.request("osmosis.gamm.v1beta1.Msg", "ExitSwapShareAmountIn", data);
+    return promise.then(data => MsgExitSwapShareAmountInResponse.decode(new BinaryReader(data)));
   };
 }
 export const createClientImpl = (rpc: TxRpc) => {

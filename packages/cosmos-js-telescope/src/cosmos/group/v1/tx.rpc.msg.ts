@@ -1,39 +1,39 @@
 //@ts-nocheck
 import { Member, MemberSDKType, VoteOption, VoteOptionSDKType, ThresholdDecisionPolicy, ThresholdDecisionPolicySDKType, PercentageDecisionPolicy, PercentageDecisionPolicySDKType } from "./types";
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
-import { DeliverTxResponse, StdFee, TxRpc } from "../../../types";
+import { TxRpc } from "../../../types";
 import { BinaryReader } from "../../../binary";
 import { MsgCreateGroup, MsgCreateGroupSDKType, MsgCreateGroupResponse, MsgCreateGroupResponseSDKType, MsgUpdateGroupMembers, MsgUpdateGroupMembersSDKType, MsgUpdateGroupMembersResponse, MsgUpdateGroupMembersResponseSDKType, MsgUpdateGroupAdmin, MsgUpdateGroupAdminSDKType, MsgUpdateGroupAdminResponse, MsgUpdateGroupAdminResponseSDKType, MsgUpdateGroupMetadata, MsgUpdateGroupMetadataSDKType, MsgUpdateGroupMetadataResponse, MsgUpdateGroupMetadataResponseSDKType, MsgCreateGroupPolicy, MsgCreateGroupPolicySDKType, MsgCreateGroupPolicyResponse, MsgCreateGroupPolicyResponseSDKType, MsgCreateGroupWithPolicy, MsgCreateGroupWithPolicySDKType, MsgCreateGroupWithPolicyResponse, MsgCreateGroupWithPolicyResponseSDKType, MsgUpdateGroupPolicyAdmin, MsgUpdateGroupPolicyAdminSDKType, MsgUpdateGroupPolicyAdminResponse, MsgUpdateGroupPolicyAdminResponseSDKType, MsgUpdateGroupPolicyDecisionPolicy, MsgUpdateGroupPolicyDecisionPolicySDKType, MsgUpdateGroupPolicyDecisionPolicyResponse, MsgUpdateGroupPolicyDecisionPolicyResponseSDKType, MsgUpdateGroupPolicyMetadata, MsgUpdateGroupPolicyMetadataSDKType, MsgUpdateGroupPolicyMetadataResponse, MsgUpdateGroupPolicyMetadataResponseSDKType, MsgSubmitProposal, MsgSubmitProposalSDKType, MsgSubmitProposalResponse, MsgSubmitProposalResponseSDKType, MsgWithdrawProposal, MsgWithdrawProposalSDKType, MsgWithdrawProposalResponse, MsgWithdrawProposalResponseSDKType, MsgVote, MsgVoteSDKType, MsgVoteResponse, MsgVoteResponseSDKType, MsgExec, MsgExecSDKType, MsgExecResponse, MsgExecResponseSDKType, MsgLeaveGroup, MsgLeaveGroupSDKType, MsgLeaveGroupResponse, MsgLeaveGroupResponseSDKType } from "./tx";
 /** Msg is the cosmos.group.v1 Msg service. */
 export interface Msg {
   /** CreateGroup creates a new group with an admin account address, a list of members and some optional metadata. */
-  createGroup(signerAddress: string, message: MsgCreateGroup, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  createGroup(request: MsgCreateGroup): Promise<MsgCreateGroupResponse>;
   /** UpdateGroupMembers updates the group members with given group id and admin address. */
-  updateGroupMembers(signerAddress: string, message: MsgUpdateGroupMembers, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  updateGroupMembers(request: MsgUpdateGroupMembers): Promise<MsgUpdateGroupMembersResponse>;
   /** UpdateGroupAdmin updates the group admin with given group id and previous admin address. */
-  updateGroupAdmin(signerAddress: string, message: MsgUpdateGroupAdmin, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  updateGroupAdmin(request: MsgUpdateGroupAdmin): Promise<MsgUpdateGroupAdminResponse>;
   /** UpdateGroupMetadata updates the group metadata with given group id and admin address. */
-  updateGroupMetadata(signerAddress: string, message: MsgUpdateGroupMetadata, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  updateGroupMetadata(request: MsgUpdateGroupMetadata): Promise<MsgUpdateGroupMetadataResponse>;
   /** CreateGroupPolicy creates a new group policy using given DecisionPolicy. */
-  createGroupPolicy(signerAddress: string, message: MsgCreateGroupPolicy, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  createGroupPolicy(request: MsgCreateGroupPolicy): Promise<MsgCreateGroupPolicyResponse>;
   /** CreateGroupWithPolicy creates a new group with policy. */
-  createGroupWithPolicy(signerAddress: string, message: MsgCreateGroupWithPolicy, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  createGroupWithPolicy(request: MsgCreateGroupWithPolicy): Promise<MsgCreateGroupWithPolicyResponse>;
   /** UpdateGroupPolicyAdmin updates a group policy admin. */
-  updateGroupPolicyAdmin(signerAddress: string, message: MsgUpdateGroupPolicyAdmin, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  updateGroupPolicyAdmin(request: MsgUpdateGroupPolicyAdmin): Promise<MsgUpdateGroupPolicyAdminResponse>;
   /** UpdateGroupPolicyDecisionPolicy allows a group policy's decision policy to be updated. */
-  updateGroupPolicyDecisionPolicy(signerAddress: string, message: MsgUpdateGroupPolicyDecisionPolicy, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  updateGroupPolicyDecisionPolicy(request: MsgUpdateGroupPolicyDecisionPolicy): Promise<MsgUpdateGroupPolicyDecisionPolicyResponse>;
   /** UpdateGroupPolicyMetadata updates a group policy metadata. */
-  updateGroupPolicyMetadata(signerAddress: string, message: MsgUpdateGroupPolicyMetadata, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  updateGroupPolicyMetadata(request: MsgUpdateGroupPolicyMetadata): Promise<MsgUpdateGroupPolicyMetadataResponse>;
   /** SubmitProposal submits a new proposal. */
-  submitProposal(signerAddress: string, message: MsgSubmitProposal, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  submitProposal(request: MsgSubmitProposal): Promise<MsgSubmitProposalResponse>;
   /** WithdrawProposal aborts a proposal. */
-  withdrawProposal(signerAddress: string, message: MsgWithdrawProposal, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  withdrawProposal(request: MsgWithdrawProposal): Promise<MsgWithdrawProposalResponse>;
   /** Vote allows a voter to vote on a proposal. */
-  vote(signerAddress: string, message: MsgVote, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  vote(request: MsgVote): Promise<MsgVoteResponse>;
   /** Exec executes a proposal. */
-  exec(signerAddress: string, message: MsgExec, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  exec(request: MsgExec): Promise<MsgExecResponse>;
   /** LeaveGroup allows a group member to leave the group. */
-  leaveGroup(signerAddress: string, message: MsgLeaveGroup, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
+  leaveGroup(request: MsgLeaveGroup): Promise<MsgLeaveGroupResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: TxRpc;
@@ -41,116 +41,88 @@ export class MsgClientImpl implements Msg {
     this.rpc = rpc;
   }
   /* CreateGroup creates a new group with an admin account address, a list of members and some optional metadata. */
-  createGroup = async (signerAddress: string, message: MsgCreateGroup, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgCreateGroup.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  createGroup = async (request: MsgCreateGroup): Promise<MsgCreateGroupResponse> => {
+    const data = MsgCreateGroup.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "CreateGroup", data);
+    return promise.then(data => MsgCreateGroupResponse.decode(new BinaryReader(data)));
   };
   /* UpdateGroupMembers updates the group members with given group id and admin address. */
-  updateGroupMembers = async (signerAddress: string, message: MsgUpdateGroupMembers, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgUpdateGroupMembers.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  updateGroupMembers = async (request: MsgUpdateGroupMembers): Promise<MsgUpdateGroupMembersResponse> => {
+    const data = MsgUpdateGroupMembers.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "UpdateGroupMembers", data);
+    return promise.then(data => MsgUpdateGroupMembersResponse.decode(new BinaryReader(data)));
   };
   /* UpdateGroupAdmin updates the group admin with given group id and previous admin address. */
-  updateGroupAdmin = async (signerAddress: string, message: MsgUpdateGroupAdmin, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgUpdateGroupAdmin.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  updateGroupAdmin = async (request: MsgUpdateGroupAdmin): Promise<MsgUpdateGroupAdminResponse> => {
+    const data = MsgUpdateGroupAdmin.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "UpdateGroupAdmin", data);
+    return promise.then(data => MsgUpdateGroupAdminResponse.decode(new BinaryReader(data)));
   };
   /* UpdateGroupMetadata updates the group metadata with given group id and admin address. */
-  updateGroupMetadata = async (signerAddress: string, message: MsgUpdateGroupMetadata, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgUpdateGroupMetadata.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  updateGroupMetadata = async (request: MsgUpdateGroupMetadata): Promise<MsgUpdateGroupMetadataResponse> => {
+    const data = MsgUpdateGroupMetadata.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "UpdateGroupMetadata", data);
+    return promise.then(data => MsgUpdateGroupMetadataResponse.decode(new BinaryReader(data)));
   };
   /* CreateGroupPolicy creates a new group policy using given DecisionPolicy. */
-  createGroupPolicy = async (signerAddress: string, message: MsgCreateGroupPolicy, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgCreateGroupPolicy.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  createGroupPolicy = async (request: MsgCreateGroupPolicy): Promise<MsgCreateGroupPolicyResponse> => {
+    const data = MsgCreateGroupPolicy.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "CreateGroupPolicy", data);
+    return promise.then(data => MsgCreateGroupPolicyResponse.decode(new BinaryReader(data)));
   };
   /* CreateGroupWithPolicy creates a new group with policy. */
-  createGroupWithPolicy = async (signerAddress: string, message: MsgCreateGroupWithPolicy, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgCreateGroupWithPolicy.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  createGroupWithPolicy = async (request: MsgCreateGroupWithPolicy): Promise<MsgCreateGroupWithPolicyResponse> => {
+    const data = MsgCreateGroupWithPolicy.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "CreateGroupWithPolicy", data);
+    return promise.then(data => MsgCreateGroupWithPolicyResponse.decode(new BinaryReader(data)));
   };
   /* UpdateGroupPolicyAdmin updates a group policy admin. */
-  updateGroupPolicyAdmin = async (signerAddress: string, message: MsgUpdateGroupPolicyAdmin, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgUpdateGroupPolicyAdmin.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  updateGroupPolicyAdmin = async (request: MsgUpdateGroupPolicyAdmin): Promise<MsgUpdateGroupPolicyAdminResponse> => {
+    const data = MsgUpdateGroupPolicyAdmin.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "UpdateGroupPolicyAdmin", data);
+    return promise.then(data => MsgUpdateGroupPolicyAdminResponse.decode(new BinaryReader(data)));
   };
   /* UpdateGroupPolicyDecisionPolicy allows a group policy's decision policy to be updated. */
-  updateGroupPolicyDecisionPolicy = async (signerAddress: string, message: MsgUpdateGroupPolicyDecisionPolicy, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgUpdateGroupPolicyDecisionPolicy.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  updateGroupPolicyDecisionPolicy = async (request: MsgUpdateGroupPolicyDecisionPolicy): Promise<MsgUpdateGroupPolicyDecisionPolicyResponse> => {
+    const data = MsgUpdateGroupPolicyDecisionPolicy.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "UpdateGroupPolicyDecisionPolicy", data);
+    return promise.then(data => MsgUpdateGroupPolicyDecisionPolicyResponse.decode(new BinaryReader(data)));
   };
   /* UpdateGroupPolicyMetadata updates a group policy metadata. */
-  updateGroupPolicyMetadata = async (signerAddress: string, message: MsgUpdateGroupPolicyMetadata, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgUpdateGroupPolicyMetadata.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  updateGroupPolicyMetadata = async (request: MsgUpdateGroupPolicyMetadata): Promise<MsgUpdateGroupPolicyMetadataResponse> => {
+    const data = MsgUpdateGroupPolicyMetadata.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "UpdateGroupPolicyMetadata", data);
+    return promise.then(data => MsgUpdateGroupPolicyMetadataResponse.decode(new BinaryReader(data)));
   };
   /* SubmitProposal submits a new proposal. */
-  submitProposal = async (signerAddress: string, message: MsgSubmitProposal, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgSubmitProposal.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  submitProposal = async (request: MsgSubmitProposal): Promise<MsgSubmitProposalResponse> => {
+    const data = MsgSubmitProposal.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "SubmitProposal", data);
+    return promise.then(data => MsgSubmitProposalResponse.decode(new BinaryReader(data)));
   };
   /* WithdrawProposal aborts a proposal. */
-  withdrawProposal = async (signerAddress: string, message: MsgWithdrawProposal, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgWithdrawProposal.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  withdrawProposal = async (request: MsgWithdrawProposal): Promise<MsgWithdrawProposalResponse> => {
+    const data = MsgWithdrawProposal.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "WithdrawProposal", data);
+    return promise.then(data => MsgWithdrawProposalResponse.decode(new BinaryReader(data)));
   };
   /* Vote allows a voter to vote on a proposal. */
-  vote = async (signerAddress: string, message: MsgVote, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgVote.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  vote = async (request: MsgVote): Promise<MsgVoteResponse> => {
+    const data = MsgVote.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "Vote", data);
+    return promise.then(data => MsgVoteResponse.decode(new BinaryReader(data)));
   };
   /* Exec executes a proposal. */
-  exec = async (signerAddress: string, message: MsgExec, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgExec.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  exec = async (request: MsgExec): Promise<MsgExecResponse> => {
+    const data = MsgExec.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "Exec", data);
+    return promise.then(data => MsgExecResponse.decode(new BinaryReader(data)));
   };
   /* LeaveGroup allows a group member to leave the group. */
-  leaveGroup = async (signerAddress: string, message: MsgLeaveGroup, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
-    const data = [{
-      typeUrl: MsgLeaveGroup.typeUrl,
-      value: message
-    }];
-    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
+  leaveGroup = async (request: MsgLeaveGroup): Promise<MsgLeaveGroupResponse> => {
+    const data = MsgLeaveGroup.encode(request).finish();
+    const promise = this.rpc.request("cosmos.group.v1.Msg", "LeaveGroup", data);
+    return promise.then(data => MsgLeaveGroupResponse.decode(new BinaryReader(data)));
   };
 }
 export const createClientImpl = (rpc: TxRpc) => {
