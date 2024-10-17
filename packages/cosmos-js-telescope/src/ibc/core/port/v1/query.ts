@@ -127,7 +127,7 @@ export const QueryAppVersionRequest = {
           message.connectionId = reader.string();
           break;
         case 3:
-          message.ordering = (reader.int32() as any);
+          message.ordering = reader.int32() as any;
           break;
         case 4:
           message.counterparty = Counterparty.decode(reader, reader.uint32());

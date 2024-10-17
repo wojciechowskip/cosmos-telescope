@@ -295,7 +295,7 @@ export const SuperfluidAsset = {
           message.denom = reader.string();
           break;
         case 2:
-          message.assetType = (reader.int32() as any);
+          message.assetType = reader.int32() as any;
           break;
         default:
           reader.skipType(tag & 7);
@@ -482,7 +482,7 @@ export const SuperfluidIntermediaryAccount = {
     const obj: any = {};
     obj.denom = message.denom === "" ? undefined : message.denom;
     obj.val_addr = message.valAddr === "" ? undefined : message.valAddr;
-    obj.gauge_id = message.gaugeId !== BigInt(0) ? message.gaugeId.toString() : undefined;
+    obj.gauge_id = message.gaugeId !== BigInt(0) ? (message.gaugeId?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: SuperfluidIntermediaryAccountAminoMsg): SuperfluidIntermediaryAccount {
@@ -615,7 +615,7 @@ export const OsmoEquivalentMultiplierRecord = {
   },
   toAmino(message: OsmoEquivalentMultiplierRecord): OsmoEquivalentMultiplierRecordAmino {
     const obj: any = {};
-    obj.epoch_number = message.epochNumber !== BigInt(0) ? message.epochNumber.toString() : undefined;
+    obj.epoch_number = message.epochNumber !== BigInt(0) ? (message.epochNumber?.toString)() : undefined;
     obj.denom = message.denom === "" ? undefined : message.denom;
     obj.multiplier = message.multiplier === "" ? undefined : message.multiplier;
     return obj;
@@ -888,7 +888,7 @@ export const LockIdIntermediaryAccountConnection = {
   },
   toAmino(message: LockIdIntermediaryAccountConnection): LockIdIntermediaryAccountConnectionAmino {
     const obj: any = {};
-    obj.lock_id = message.lockId !== BigInt(0) ? message.lockId.toString() : undefined;
+    obj.lock_id = message.lockId !== BigInt(0) ? (message.lockId?.toString)() : undefined;
     obj.intermediary_account = message.intermediaryAccount === "" ? undefined : message.intermediaryAccount;
     return obj;
   },
