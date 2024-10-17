@@ -1,11 +1,11 @@
 //@ts-nocheck
-import { TxRpc } from "../../../types";
+import { DeliverTxResponse, StdFee, TxRpc } from "../../../types";
 import { BinaryReader } from "../../../binary";
 import { MsgSend, MsgSendSDKType, MsgSendResponse, MsgSendResponseSDKType } from "./tx";
 /** Msg defines the nft Msg service. */
 export interface Msg {
   /** Send defines a method to send a nft from one account to another account. */
-  send(request: MsgSend): Promise<MsgSendResponse>;
+  send(signerAddress: string, message: MsgSend, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: TxRpc;
@@ -13,10 +13,12 @@ export class MsgClientImpl implements Msg {
     this.rpc = rpc;
   }
   /* Send defines a method to send a nft from one account to another account. */
-  send = async (request: MsgSend): Promise<MsgSendResponse> => {
-    const data = MsgSend.encode(request).finish();
-    const promise = this.rpc.request("cosmos.nft.v1beta1.Msg", "Send", data);
-    return promise.then(data => MsgSendResponse.decode(new BinaryReader(data)));
+  send = async (signerAddress: string, message: MsgSend, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
+    const data = [{
+      typeUrl: MsgSend.typeUrl,
+      value: message
+    }];
+    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
   };
 }
 export const createClientImpl = (rpc: TxRpc) => {
