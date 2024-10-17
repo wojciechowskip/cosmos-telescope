@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.25](https://github.com/wojciechowskip/cosmos-telescope/compare/cosmos-js-telescope@0.0.24...cosmos-js-telescope@0.0.25) (2024-10-17)
+
+### Reverts
+
+- Revert "Use types from create-cosmos-app" ([8b9f85c](https://github.com/wojciechowskip/cosmos-telescope/commit/8b9f85c0222966e85d629f965621d22f2cf5358c))
+- Revert "Copied newly generated types" ([1b7bb81](https://github.com/wojciechowskip/cosmos-telescope/commit/1b7bb812abe189794b20f499cc7d75c60ee4d7cd))
+- Revert "Copied newly generated types #2" ([f1bd4b8](https://github.com/wojciechowskip/cosmos-telescope/commit/f1bd4b8cca4850b045e80a18fab595736e5d52b5)), closes [#2](https://github.com/wojciechowskip/cosmos-telescope/issues/2)
+- Revert "Copied newly generated types #3" ([a7bf9c4](https://github.com/wojciechowskip/cosmos-telescope/commit/a7bf9c46d978b83e9db5c9294f63458007a75977)), closes [#3](https://github.com/wojciechowskip/cosmos-telescope/issues/3)
+- Revert "Copied newly generated types #4 with build issues" ([a416489](https://github.com/wojciechowskip/cosmos-telescope/commit/a4164898d9e603b77e09f11afafc7257191727ae)), closes [#4](https://github.com/wojciechowskip/cosmos-telescope/issues/4)
+
 ## [0.0.24](https://github.com/wojciechowskip/cosmos-telescope/compare/cosmos-js-telescope@0.0.23...cosmos-js-telescope@0.0.24) (2024-10-17)
 
 **Note:** Version bump only for package cosmos-js-telescope
