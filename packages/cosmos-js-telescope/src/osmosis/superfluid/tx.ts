@@ -140,7 +140,7 @@ export interface MsgLockAndSuperfluidDelegateSDKType {
   val_addr: string;
 }
 export interface MsgLockAndSuperfluidDelegateResponse {
-  iD: bigint;
+  ID: bigint;
 }
 export interface MsgLockAndSuperfluidDelegateResponseProtoMsg {
   typeUrl: "/osmosis.superfluid.MsgLockAndSuperfluidDelegateResponse";
@@ -330,7 +330,7 @@ export const MsgSuperfluidDelegate = {
   toAmino(message: MsgSuperfluidDelegate): MsgSuperfluidDelegateAmino {
     const obj: any = {};
     obj.sender = message.sender === "" ? undefined : message.sender;
-    obj.lock_id = message.lockId !== BigInt(0) ? (message.lockId?.toString)() : undefined;
+    obj.lock_id = message.lockId !== BigInt(0) ? message.lockId.toString() : undefined;
     obj.val_addr = message.valAddr === "" ? undefined : message.valAddr;
     return obj;
   },
@@ -533,7 +533,7 @@ export const MsgSuperfluidUndelegate = {
   toAmino(message: MsgSuperfluidUndelegate): MsgSuperfluidUndelegateAmino {
     const obj: any = {};
     obj.sender = message.sender === "" ? undefined : message.sender;
-    obj.lock_id = message.lockId !== BigInt(0) ? (message.lockId?.toString)() : undefined;
+    obj.lock_id = message.lockId !== BigInt(0) ? message.lockId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSuperfluidUndelegateAminoMsg): MsgSuperfluidUndelegate {
@@ -735,7 +735,7 @@ export const MsgSuperfluidUnbondLock = {
   toAmino(message: MsgSuperfluidUnbondLock): MsgSuperfluidUnbondLockAmino {
     const obj: any = {};
     obj.sender = message.sender === "" ? undefined : message.sender;
-    obj.lock_id = message.lockId !== BigInt(0) ? (message.lockId?.toString)() : undefined;
+    obj.lock_id = message.lockId !== BigInt(0) ? message.lockId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgSuperfluidUnbondLockAminoMsg): MsgSuperfluidUnbondLock {
@@ -990,14 +990,14 @@ GlobalDecoderRegistry.register(MsgLockAndSuperfluidDelegate.typeUrl, MsgLockAndS
 GlobalDecoderRegistry.registerAminoProtoMapping(MsgLockAndSuperfluidDelegate.aminoType, MsgLockAndSuperfluidDelegate.typeUrl);
 function createBaseMsgLockAndSuperfluidDelegateResponse(): MsgLockAndSuperfluidDelegateResponse {
   return {
-    iD: BigInt(0)
+    ID: BigInt(0)
   };
 }
 export const MsgLockAndSuperfluidDelegateResponse = {
   typeUrl: "/osmosis.superfluid.MsgLockAndSuperfluidDelegateResponse",
   aminoType: "osmosis/lock-and-superfluid-delegate-response",
   is(o: any): o is MsgLockAndSuperfluidDelegateResponse {
-    return o && (o.$typeUrl === MsgLockAndSuperfluidDelegateResponse.typeUrl || typeof o.iD === "bigint");
+    return o && (o.$typeUrl === MsgLockAndSuperfluidDelegateResponse.typeUrl || typeof o.ID === "bigint");
   },
   isSDK(o: any): o is MsgLockAndSuperfluidDelegateResponseSDKType {
     return o && (o.$typeUrl === MsgLockAndSuperfluidDelegateResponse.typeUrl || typeof o.ID === "bigint");
@@ -1006,8 +1006,8 @@ export const MsgLockAndSuperfluidDelegateResponse = {
     return o && (o.$typeUrl === MsgLockAndSuperfluidDelegateResponse.typeUrl || typeof o.ID === "bigint");
   },
   encode(message: MsgLockAndSuperfluidDelegateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.iD !== undefined) {
-      writer.uint32(8).uint64(message.iD);
+    if (message.ID !== undefined) {
+      writer.uint32(8).uint64(message.ID);
     }
     return writer;
   },
@@ -1019,7 +1019,7 @@ export const MsgLockAndSuperfluidDelegateResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.iD = reader.uint64();
+          message.ID = reader.uint64();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1030,41 +1030,41 @@ export const MsgLockAndSuperfluidDelegateResponse = {
   },
   fromJSON(object: any): MsgLockAndSuperfluidDelegateResponse {
     const obj = createBaseMsgLockAndSuperfluidDelegateResponse();
-    if (isSet(object.iD)) obj.iD = BigInt(object.iD.toString());
+    if (isSet(object.ID)) obj.ID = BigInt(object.ID.toString());
     return obj;
   },
   toJSON(message: MsgLockAndSuperfluidDelegateResponse): JsonSafe<MsgLockAndSuperfluidDelegateResponse> {
     const obj: any = {};
-    message.iD !== undefined && (obj.iD = (message.iD || BigInt(0)).toString());
+    message.ID !== undefined && (obj.ID = (message.ID || BigInt(0)).toString());
     return obj;
   },
   fromPartial(object: DeepPartial<MsgLockAndSuperfluidDelegateResponse>): MsgLockAndSuperfluidDelegateResponse {
     const message = createBaseMsgLockAndSuperfluidDelegateResponse();
-    if (object.iD !== undefined && object.iD !== null) {
-      message.iD = BigInt(object.iD.toString());
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = BigInt(object.ID.toString());
     }
     return message;
   },
   fromSDK(object: MsgLockAndSuperfluidDelegateResponseSDKType): MsgLockAndSuperfluidDelegateResponse {
     return {
-      iD: object?.ID
+      ID: object?.ID
     };
   },
   toSDK(message: MsgLockAndSuperfluidDelegateResponse): MsgLockAndSuperfluidDelegateResponseSDKType {
     const obj: any = {};
-    obj.ID = message.iD;
+    obj.ID = message.ID;
     return obj;
   },
   fromAmino(object: MsgLockAndSuperfluidDelegateResponseAmino): MsgLockAndSuperfluidDelegateResponse {
     const message = createBaseMsgLockAndSuperfluidDelegateResponse();
     if (object.ID !== undefined && object.ID !== null) {
-      message.iD = BigInt(object.ID);
+      message.ID = BigInt(object.ID);
     }
     return message;
   },
   toAmino(message: MsgLockAndSuperfluidDelegateResponse): MsgLockAndSuperfluidDelegateResponseAmino {
     const obj: any = {};
-    obj.ID = message.iD !== BigInt(0) ? (message.iD?.toString)() : undefined;
+    obj.ID = message.ID !== BigInt(0) ? message.ID.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgLockAndSuperfluidDelegateResponseAminoMsg): MsgLockAndSuperfluidDelegateResponse {
@@ -1183,7 +1183,7 @@ export const MsgUnPoolWhitelistedPool = {
   toAmino(message: MsgUnPoolWhitelistedPool): MsgUnPoolWhitelistedPoolAmino {
     const obj: any = {};
     obj.sender = message.sender === "" ? undefined : message.sender;
-    obj.pool_id = message.poolId !== BigInt(0) ? (message.poolId?.toString)() : undefined;
+    obj.pool_id = message.poolId !== BigInt(0) ? message.poolId.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: MsgUnPoolWhitelistedPoolAminoMsg): MsgUnPoolWhitelistedPool {

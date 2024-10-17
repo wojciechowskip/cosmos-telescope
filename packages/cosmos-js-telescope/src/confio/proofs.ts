@@ -1234,16 +1234,16 @@ export const LeafOp = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hash = reader.int32() as any;
+          message.hash = (reader.int32() as any);
           break;
         case 2:
-          message.prehashKey = reader.int32() as any;
+          message.prehashKey = (reader.int32() as any);
           break;
         case 3:
-          message.prehashValue = reader.int32() as any;
+          message.prehashValue = (reader.int32() as any);
           break;
         case 4:
-          message.length = reader.int32() as any;
+          message.length = (reader.int32() as any);
           break;
         case 5:
           message.prefix = reader.bytes();
@@ -1383,7 +1383,7 @@ export const InnerOp = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.hash = reader.int32() as any;
+          message.hash = (reader.int32() as any);
           break;
         case 2:
           message.prefix = reader.bytes();
@@ -1689,7 +1689,7 @@ export const InnerSpec = {
           message.emptyChild = reader.bytes();
           break;
         case 6:
-          message.hash = reader.int32() as any;
+          message.hash = (reader.int32() as any);
           break;
         default:
           reader.skipType(tag & 7);
