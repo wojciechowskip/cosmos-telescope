@@ -405,7 +405,7 @@ export const ConnectionEnd = {
           message.versions.push(Version.decode(reader, reader.uint32()));
           break;
         case 3:
-          message.state = reader.int32() as any;
+          message.state = (reader.int32() as any);
           break;
         case 4:
           message.counterparty = Counterparty.decode(reader, reader.uint32());
@@ -504,7 +504,7 @@ export const ConnectionEnd = {
     }
     obj.state = message.state === 0 ? undefined : message.state;
     obj.counterparty = message.counterparty ? Counterparty.toAmino(message.counterparty) : undefined;
-    obj.delay_period = message.delayPeriod !== BigInt(0) ? (message.delayPeriod?.toString)() : undefined;
+    obj.delay_period = message.delayPeriod !== BigInt(0) ? message.delayPeriod.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ConnectionEndAminoMsg): ConnectionEnd {
@@ -591,7 +591,7 @@ export const IdentifiedConnection = {
           message.versions.push(Version.decode(reader, reader.uint32()));
           break;
         case 4:
-          message.state = reader.int32() as any;
+          message.state = (reader.int32() as any);
           break;
         case 5:
           message.counterparty = Counterparty.decode(reader, reader.uint32());
@@ -699,7 +699,7 @@ export const IdentifiedConnection = {
     }
     obj.state = message.state === 0 ? undefined : message.state;
     obj.counterparty = message.counterparty ? Counterparty.toAmino(message.counterparty) : undefined;
-    obj.delay_period = message.delayPeriod !== BigInt(0) ? (message.delayPeriod?.toString)() : undefined;
+    obj.delay_period = message.delayPeriod !== BigInt(0) ? message.delayPeriod.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: IdentifiedConnectionAminoMsg): IdentifiedConnection {
@@ -1302,7 +1302,7 @@ export const Params = {
   },
   toAmino(message: Params): ParamsAmino {
     const obj: any = {};
-    obj.max_expected_time_per_block = message.maxExpectedTimePerBlock !== BigInt(0) ? (message.maxExpectedTimePerBlock?.toString)() : undefined;
+    obj.max_expected_time_per_block = message.maxExpectedTimePerBlock !== BigInt(0) ? message.maxExpectedTimePerBlock.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: ParamsAminoMsg): Params {

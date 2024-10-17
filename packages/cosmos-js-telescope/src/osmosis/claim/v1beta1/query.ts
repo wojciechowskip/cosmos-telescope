@@ -806,7 +806,7 @@ export const QueryClaimableForActionRequest = {
           message.address = reader.string();
           break;
         case 2:
-          message.action = reader.int32() as any;
+          message.action = (reader.int32() as any);
           break;
         default:
           reader.skipType(tag & 7);

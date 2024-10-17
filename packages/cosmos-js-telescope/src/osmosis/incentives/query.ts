@@ -661,7 +661,7 @@ export const GaugeByIDRequest = {
   },
   toAmino(message: GaugeByIDRequest): GaugeByIDRequestAmino {
     const obj: any = {};
-    obj.id = message.id !== BigInt(0) ? (message.id?.toString)() : undefined;
+    obj.id = message.id !== BigInt(0) ? message.id.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: GaugeByIDRequestAminoMsg): GaugeByIDRequest {
@@ -2110,7 +2110,7 @@ export const RewardsEstRequest = {
     } else {
       obj.lock_ids = message.lockIds;
     }
-    obj.end_epoch = message.endEpoch !== BigInt(0) ? (message.endEpoch?.toString)() : undefined;
+    obj.end_epoch = message.endEpoch !== BigInt(0) ? message.endEpoch.toString() : undefined;
     return obj;
   },
   fromAminoMsg(object: RewardsEstRequestAminoMsg): RewardsEstRequest {

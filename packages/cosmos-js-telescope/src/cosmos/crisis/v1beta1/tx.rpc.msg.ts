@@ -1,11 +1,11 @@
 //@ts-nocheck
-import { TxRpc } from "../../../types";
+import { DeliverTxResponse, StdFee, TxRpc } from "../../../types";
 import { BinaryReader } from "../../../binary";
 import { MsgVerifyInvariant, MsgVerifyInvariantSDKType, MsgVerifyInvariantResponse, MsgVerifyInvariantResponseSDKType } from "./tx";
 /** Msg defines the bank Msg service. */
 export interface Msg {
   /** VerifyInvariant defines a method to verify a particular invariance. */
-  verifyInvariant(request: MsgVerifyInvariant): Promise<MsgVerifyInvariantResponse>;
+  verifyInvariant(signerAddress: string, message: MsgVerifyInvariant, fee: number | StdFee | "auto", memo?: string): Promise<DeliverTxResponse>;
 }
 export class MsgClientImpl implements Msg {
   private readonly rpc: TxRpc;
@@ -13,10 +13,12 @@ export class MsgClientImpl implements Msg {
     this.rpc = rpc;
   }
   /* VerifyInvariant defines a method to verify a particular invariance. */
-  verifyInvariant = async (request: MsgVerifyInvariant): Promise<MsgVerifyInvariantResponse> => {
-    const data = MsgVerifyInvariant.encode(request).finish();
-    const promise = this.rpc.request("cosmos.crisis.v1beta1.Msg", "VerifyInvariant", data);
-    return promise.then(data => MsgVerifyInvariantResponse.decode(new BinaryReader(data)));
+  verifyInvariant = async (signerAddress: string, message: MsgVerifyInvariant, fee: number | StdFee | "auto" = "auto", memo: string = ""): Promise<DeliverTxResponse> => {
+    const data = [{
+      typeUrl: MsgVerifyInvariant.typeUrl,
+      value: message
+    }];
+    return this.rpc.signAndBroadcast!(signerAddress, data, fee, memo);
   };
 }
 export const createClientImpl = (rpc: TxRpc) => {
