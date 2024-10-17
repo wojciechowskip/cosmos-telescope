@@ -1,10 +1,6 @@
 //@ts-nocheck
-import { ProposalExecutorResult, ProposalExecutorResultSDKType, proposalExecutorResultFromJSON, proposalExecutorResultToJSON } from "./types";
+import { ProposalExecutorResult } from "./types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, DeepPartial } from "../../../helpers";
-import { JsonSafe } from "../../../json-safe";
-import { GlobalDecoderRegistry } from "../../../registry";
-export const protobufPackage = "cosmos.group.v1";
 /** EventCreateGroup is an event emitted when a group is created. */
 export interface EventCreateGroup {
   /** group_id is the unique ID of the group. */
@@ -220,18 +216,8 @@ function createBaseEventCreateGroup(): EventCreateGroup {
 }
 export const EventCreateGroup = {
   typeUrl: "/cosmos.group.v1.EventCreateGroup",
-  aminoType: "cosmos-sdk/EventCreateGroup",
-  is(o: any): o is EventCreateGroup {
-    return o && (o.$typeUrl === EventCreateGroup.typeUrl || typeof o.groupId === "bigint");
-  },
-  isSDK(o: any): o is EventCreateGroupSDKType {
-    return o && (o.$typeUrl === EventCreateGroup.typeUrl || typeof o.group_id === "bigint");
-  },
-  isAmino(o: any): o is EventCreateGroupAmino {
-    return o && (o.$typeUrl === EventCreateGroup.typeUrl || typeof o.group_id === "bigint");
-  },
   encode(message: EventCreateGroup, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.groupId !== undefined) {
+    if (message.groupId !== BigInt(0)) {
       writer.uint32(8).uint64(message.groupId);
     }
     return writer;
@@ -253,32 +239,10 @@ export const EventCreateGroup = {
     }
     return message;
   },
-  fromJSON(object: any): EventCreateGroup {
-    const obj = createBaseEventCreateGroup();
-    if (isSet(object.groupId)) obj.groupId = BigInt(object.groupId.toString());
-    return obj;
-  },
-  toJSON(message: EventCreateGroup): JsonSafe<EventCreateGroup> {
-    const obj: any = {};
-    message.groupId !== undefined && (obj.groupId = (message.groupId || BigInt(0)).toString());
-    return obj;
-  },
-  fromPartial(object: DeepPartial<EventCreateGroup>): EventCreateGroup {
+  fromPartial(object: Partial<EventCreateGroup>): EventCreateGroup {
     const message = createBaseEventCreateGroup();
-    if (object.groupId !== undefined && object.groupId !== null) {
-      message.groupId = BigInt(object.groupId.toString());
-    }
+    message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     return message;
-  },
-  fromSDK(object: EventCreateGroupSDKType): EventCreateGroup {
-    return {
-      groupId: object?.group_id
-    };
-  },
-  toSDK(message: EventCreateGroup): EventCreateGroupSDKType {
-    const obj: any = {};
-    obj.group_id = message.groupId;
-    return obj;
   },
   fromAmino(object: EventCreateGroupAmino): EventCreateGroup {
     const message = createBaseEventCreateGroup();
@@ -289,7 +253,7 @@ export const EventCreateGroup = {
   },
   toAmino(message: EventCreateGroup): EventCreateGroupAmino {
     const obj: any = {};
-    obj.group_id = message.groupId !== BigInt(0) ? message.groupId.toString() : undefined;
+    obj.group_id = message.groupId !== BigInt(0) ? (message.groupId?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventCreateGroupAminoMsg): EventCreateGroup {
@@ -314,8 +278,6 @@ export const EventCreateGroup = {
     };
   }
 };
-GlobalDecoderRegistry.register(EventCreateGroup.typeUrl, EventCreateGroup);
-GlobalDecoderRegistry.registerAminoProtoMapping(EventCreateGroup.aminoType, EventCreateGroup.typeUrl);
 function createBaseEventUpdateGroup(): EventUpdateGroup {
   return {
     groupId: BigInt(0)
@@ -323,18 +285,8 @@ function createBaseEventUpdateGroup(): EventUpdateGroup {
 }
 export const EventUpdateGroup = {
   typeUrl: "/cosmos.group.v1.EventUpdateGroup",
-  aminoType: "cosmos-sdk/EventUpdateGroup",
-  is(o: any): o is EventUpdateGroup {
-    return o && (o.$typeUrl === EventUpdateGroup.typeUrl || typeof o.groupId === "bigint");
-  },
-  isSDK(o: any): o is EventUpdateGroupSDKType {
-    return o && (o.$typeUrl === EventUpdateGroup.typeUrl || typeof o.group_id === "bigint");
-  },
-  isAmino(o: any): o is EventUpdateGroupAmino {
-    return o && (o.$typeUrl === EventUpdateGroup.typeUrl || typeof o.group_id === "bigint");
-  },
   encode(message: EventUpdateGroup, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.groupId !== undefined) {
+    if (message.groupId !== BigInt(0)) {
       writer.uint32(8).uint64(message.groupId);
     }
     return writer;
@@ -356,32 +308,10 @@ export const EventUpdateGroup = {
     }
     return message;
   },
-  fromJSON(object: any): EventUpdateGroup {
-    const obj = createBaseEventUpdateGroup();
-    if (isSet(object.groupId)) obj.groupId = BigInt(object.groupId.toString());
-    return obj;
-  },
-  toJSON(message: EventUpdateGroup): JsonSafe<EventUpdateGroup> {
-    const obj: any = {};
-    message.groupId !== undefined && (obj.groupId = (message.groupId || BigInt(0)).toString());
-    return obj;
-  },
-  fromPartial(object: DeepPartial<EventUpdateGroup>): EventUpdateGroup {
+  fromPartial(object: Partial<EventUpdateGroup>): EventUpdateGroup {
     const message = createBaseEventUpdateGroup();
-    if (object.groupId !== undefined && object.groupId !== null) {
-      message.groupId = BigInt(object.groupId.toString());
-    }
+    message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     return message;
-  },
-  fromSDK(object: EventUpdateGroupSDKType): EventUpdateGroup {
-    return {
-      groupId: object?.group_id
-    };
-  },
-  toSDK(message: EventUpdateGroup): EventUpdateGroupSDKType {
-    const obj: any = {};
-    obj.group_id = message.groupId;
-    return obj;
   },
   fromAmino(object: EventUpdateGroupAmino): EventUpdateGroup {
     const message = createBaseEventUpdateGroup();
@@ -392,7 +322,7 @@ export const EventUpdateGroup = {
   },
   toAmino(message: EventUpdateGroup): EventUpdateGroupAmino {
     const obj: any = {};
-    obj.group_id = message.groupId !== BigInt(0) ? message.groupId.toString() : undefined;
+    obj.group_id = message.groupId !== BigInt(0) ? (message.groupId?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventUpdateGroupAminoMsg): EventUpdateGroup {
@@ -417,8 +347,6 @@ export const EventUpdateGroup = {
     };
   }
 };
-GlobalDecoderRegistry.register(EventUpdateGroup.typeUrl, EventUpdateGroup);
-GlobalDecoderRegistry.registerAminoProtoMapping(EventUpdateGroup.aminoType, EventUpdateGroup.typeUrl);
 function createBaseEventCreateGroupPolicy(): EventCreateGroupPolicy {
   return {
     address: ""
@@ -426,18 +354,8 @@ function createBaseEventCreateGroupPolicy(): EventCreateGroupPolicy {
 }
 export const EventCreateGroupPolicy = {
   typeUrl: "/cosmos.group.v1.EventCreateGroupPolicy",
-  aminoType: "cosmos-sdk/EventCreateGroupPolicy",
-  is(o: any): o is EventCreateGroupPolicy {
-    return o && (o.$typeUrl === EventCreateGroupPolicy.typeUrl || typeof o.address === "string");
-  },
-  isSDK(o: any): o is EventCreateGroupPolicySDKType {
-    return o && (o.$typeUrl === EventCreateGroupPolicy.typeUrl || typeof o.address === "string");
-  },
-  isAmino(o: any): o is EventCreateGroupPolicyAmino {
-    return o && (o.$typeUrl === EventCreateGroupPolicy.typeUrl || typeof o.address === "string");
-  },
   encode(message: EventCreateGroupPolicy, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.address !== undefined) {
+    if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     return writer;
@@ -459,30 +377,10 @@ export const EventCreateGroupPolicy = {
     }
     return message;
   },
-  fromJSON(object: any): EventCreateGroupPolicy {
-    const obj = createBaseEventCreateGroupPolicy();
-    if (isSet(object.address)) obj.address = String(object.address);
-    return obj;
-  },
-  toJSON(message: EventCreateGroupPolicy): JsonSafe<EventCreateGroupPolicy> {
-    const obj: any = {};
-    message.address !== undefined && (obj.address = message.address);
-    return obj;
-  },
-  fromPartial(object: DeepPartial<EventCreateGroupPolicy>): EventCreateGroupPolicy {
+  fromPartial(object: Partial<EventCreateGroupPolicy>): EventCreateGroupPolicy {
     const message = createBaseEventCreateGroupPolicy();
     message.address = object.address ?? "";
     return message;
-  },
-  fromSDK(object: EventCreateGroupPolicySDKType): EventCreateGroupPolicy {
-    return {
-      address: object?.address
-    };
-  },
-  toSDK(message: EventCreateGroupPolicy): EventCreateGroupPolicySDKType {
-    const obj: any = {};
-    obj.address = message.address;
-    return obj;
   },
   fromAmino(object: EventCreateGroupPolicyAmino): EventCreateGroupPolicy {
     const message = createBaseEventCreateGroupPolicy();
@@ -518,8 +416,6 @@ export const EventCreateGroupPolicy = {
     };
   }
 };
-GlobalDecoderRegistry.register(EventCreateGroupPolicy.typeUrl, EventCreateGroupPolicy);
-GlobalDecoderRegistry.registerAminoProtoMapping(EventCreateGroupPolicy.aminoType, EventCreateGroupPolicy.typeUrl);
 function createBaseEventUpdateGroupPolicy(): EventUpdateGroupPolicy {
   return {
     address: ""
@@ -527,18 +423,8 @@ function createBaseEventUpdateGroupPolicy(): EventUpdateGroupPolicy {
 }
 export const EventUpdateGroupPolicy = {
   typeUrl: "/cosmos.group.v1.EventUpdateGroupPolicy",
-  aminoType: "cosmos-sdk/EventUpdateGroupPolicy",
-  is(o: any): o is EventUpdateGroupPolicy {
-    return o && (o.$typeUrl === EventUpdateGroupPolicy.typeUrl || typeof o.address === "string");
-  },
-  isSDK(o: any): o is EventUpdateGroupPolicySDKType {
-    return o && (o.$typeUrl === EventUpdateGroupPolicy.typeUrl || typeof o.address === "string");
-  },
-  isAmino(o: any): o is EventUpdateGroupPolicyAmino {
-    return o && (o.$typeUrl === EventUpdateGroupPolicy.typeUrl || typeof o.address === "string");
-  },
   encode(message: EventUpdateGroupPolicy, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.address !== undefined) {
+    if (message.address !== "") {
       writer.uint32(10).string(message.address);
     }
     return writer;
@@ -560,30 +446,10 @@ export const EventUpdateGroupPolicy = {
     }
     return message;
   },
-  fromJSON(object: any): EventUpdateGroupPolicy {
-    const obj = createBaseEventUpdateGroupPolicy();
-    if (isSet(object.address)) obj.address = String(object.address);
-    return obj;
-  },
-  toJSON(message: EventUpdateGroupPolicy): JsonSafe<EventUpdateGroupPolicy> {
-    const obj: any = {};
-    message.address !== undefined && (obj.address = message.address);
-    return obj;
-  },
-  fromPartial(object: DeepPartial<EventUpdateGroupPolicy>): EventUpdateGroupPolicy {
+  fromPartial(object: Partial<EventUpdateGroupPolicy>): EventUpdateGroupPolicy {
     const message = createBaseEventUpdateGroupPolicy();
     message.address = object.address ?? "";
     return message;
-  },
-  fromSDK(object: EventUpdateGroupPolicySDKType): EventUpdateGroupPolicy {
-    return {
-      address: object?.address
-    };
-  },
-  toSDK(message: EventUpdateGroupPolicy): EventUpdateGroupPolicySDKType {
-    const obj: any = {};
-    obj.address = message.address;
-    return obj;
   },
   fromAmino(object: EventUpdateGroupPolicyAmino): EventUpdateGroupPolicy {
     const message = createBaseEventUpdateGroupPolicy();
@@ -619,8 +485,6 @@ export const EventUpdateGroupPolicy = {
     };
   }
 };
-GlobalDecoderRegistry.register(EventUpdateGroupPolicy.typeUrl, EventUpdateGroupPolicy);
-GlobalDecoderRegistry.registerAminoProtoMapping(EventUpdateGroupPolicy.aminoType, EventUpdateGroupPolicy.typeUrl);
 function createBaseEventSubmitProposal(): EventSubmitProposal {
   return {
     proposalId: BigInt(0)
@@ -628,18 +492,8 @@ function createBaseEventSubmitProposal(): EventSubmitProposal {
 }
 export const EventSubmitProposal = {
   typeUrl: "/cosmos.group.v1.EventSubmitProposal",
-  aminoType: "cosmos-sdk/EventSubmitProposal",
-  is(o: any): o is EventSubmitProposal {
-    return o && (o.$typeUrl === EventSubmitProposal.typeUrl || typeof o.proposalId === "bigint");
-  },
-  isSDK(o: any): o is EventSubmitProposalSDKType {
-    return o && (o.$typeUrl === EventSubmitProposal.typeUrl || typeof o.proposal_id === "bigint");
-  },
-  isAmino(o: any): o is EventSubmitProposalAmino {
-    return o && (o.$typeUrl === EventSubmitProposal.typeUrl || typeof o.proposal_id === "bigint");
-  },
   encode(message: EventSubmitProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.proposalId !== undefined) {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     return writer;
@@ -661,32 +515,10 @@ export const EventSubmitProposal = {
     }
     return message;
   },
-  fromJSON(object: any): EventSubmitProposal {
-    const obj = createBaseEventSubmitProposal();
-    if (isSet(object.proposalId)) obj.proposalId = BigInt(object.proposalId.toString());
-    return obj;
-  },
-  toJSON(message: EventSubmitProposal): JsonSafe<EventSubmitProposal> {
-    const obj: any = {};
-    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
-    return obj;
-  },
-  fromPartial(object: DeepPartial<EventSubmitProposal>): EventSubmitProposal {
+  fromPartial(object: Partial<EventSubmitProposal>): EventSubmitProposal {
     const message = createBaseEventSubmitProposal();
-    if (object.proposalId !== undefined && object.proposalId !== null) {
-      message.proposalId = BigInt(object.proposalId.toString());
-    }
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     return message;
-  },
-  fromSDK(object: EventSubmitProposalSDKType): EventSubmitProposal {
-    return {
-      proposalId: object?.proposal_id
-    };
-  },
-  toSDK(message: EventSubmitProposal): EventSubmitProposalSDKType {
-    const obj: any = {};
-    obj.proposal_id = message.proposalId;
-    return obj;
   },
   fromAmino(object: EventSubmitProposalAmino): EventSubmitProposal {
     const message = createBaseEventSubmitProposal();
@@ -697,7 +529,7 @@ export const EventSubmitProposal = {
   },
   toAmino(message: EventSubmitProposal): EventSubmitProposalAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? (message.proposalId?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventSubmitProposalAminoMsg): EventSubmitProposal {
@@ -722,8 +554,6 @@ export const EventSubmitProposal = {
     };
   }
 };
-GlobalDecoderRegistry.register(EventSubmitProposal.typeUrl, EventSubmitProposal);
-GlobalDecoderRegistry.registerAminoProtoMapping(EventSubmitProposal.aminoType, EventSubmitProposal.typeUrl);
 function createBaseEventWithdrawProposal(): EventWithdrawProposal {
   return {
     proposalId: BigInt(0)
@@ -731,18 +561,8 @@ function createBaseEventWithdrawProposal(): EventWithdrawProposal {
 }
 export const EventWithdrawProposal = {
   typeUrl: "/cosmos.group.v1.EventWithdrawProposal",
-  aminoType: "cosmos-sdk/EventWithdrawProposal",
-  is(o: any): o is EventWithdrawProposal {
-    return o && (o.$typeUrl === EventWithdrawProposal.typeUrl || typeof o.proposalId === "bigint");
-  },
-  isSDK(o: any): o is EventWithdrawProposalSDKType {
-    return o && (o.$typeUrl === EventWithdrawProposal.typeUrl || typeof o.proposal_id === "bigint");
-  },
-  isAmino(o: any): o is EventWithdrawProposalAmino {
-    return o && (o.$typeUrl === EventWithdrawProposal.typeUrl || typeof o.proposal_id === "bigint");
-  },
   encode(message: EventWithdrawProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.proposalId !== undefined) {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     return writer;
@@ -764,32 +584,10 @@ export const EventWithdrawProposal = {
     }
     return message;
   },
-  fromJSON(object: any): EventWithdrawProposal {
-    const obj = createBaseEventWithdrawProposal();
-    if (isSet(object.proposalId)) obj.proposalId = BigInt(object.proposalId.toString());
-    return obj;
-  },
-  toJSON(message: EventWithdrawProposal): JsonSafe<EventWithdrawProposal> {
-    const obj: any = {};
-    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
-    return obj;
-  },
-  fromPartial(object: DeepPartial<EventWithdrawProposal>): EventWithdrawProposal {
+  fromPartial(object: Partial<EventWithdrawProposal>): EventWithdrawProposal {
     const message = createBaseEventWithdrawProposal();
-    if (object.proposalId !== undefined && object.proposalId !== null) {
-      message.proposalId = BigInt(object.proposalId.toString());
-    }
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     return message;
-  },
-  fromSDK(object: EventWithdrawProposalSDKType): EventWithdrawProposal {
-    return {
-      proposalId: object?.proposal_id
-    };
-  },
-  toSDK(message: EventWithdrawProposal): EventWithdrawProposalSDKType {
-    const obj: any = {};
-    obj.proposal_id = message.proposalId;
-    return obj;
   },
   fromAmino(object: EventWithdrawProposalAmino): EventWithdrawProposal {
     const message = createBaseEventWithdrawProposal();
@@ -800,7 +598,7 @@ export const EventWithdrawProposal = {
   },
   toAmino(message: EventWithdrawProposal): EventWithdrawProposalAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? (message.proposalId?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventWithdrawProposalAminoMsg): EventWithdrawProposal {
@@ -825,8 +623,6 @@ export const EventWithdrawProposal = {
     };
   }
 };
-GlobalDecoderRegistry.register(EventWithdrawProposal.typeUrl, EventWithdrawProposal);
-GlobalDecoderRegistry.registerAminoProtoMapping(EventWithdrawProposal.aminoType, EventWithdrawProposal.typeUrl);
 function createBaseEventVote(): EventVote {
   return {
     proposalId: BigInt(0)
@@ -834,18 +630,8 @@ function createBaseEventVote(): EventVote {
 }
 export const EventVote = {
   typeUrl: "/cosmos.group.v1.EventVote",
-  aminoType: "cosmos-sdk/EventVote",
-  is(o: any): o is EventVote {
-    return o && (o.$typeUrl === EventVote.typeUrl || typeof o.proposalId === "bigint");
-  },
-  isSDK(o: any): o is EventVoteSDKType {
-    return o && (o.$typeUrl === EventVote.typeUrl || typeof o.proposal_id === "bigint");
-  },
-  isAmino(o: any): o is EventVoteAmino {
-    return o && (o.$typeUrl === EventVote.typeUrl || typeof o.proposal_id === "bigint");
-  },
   encode(message: EventVote, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.proposalId !== undefined) {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     return writer;
@@ -867,32 +653,10 @@ export const EventVote = {
     }
     return message;
   },
-  fromJSON(object: any): EventVote {
-    const obj = createBaseEventVote();
-    if (isSet(object.proposalId)) obj.proposalId = BigInt(object.proposalId.toString());
-    return obj;
-  },
-  toJSON(message: EventVote): JsonSafe<EventVote> {
-    const obj: any = {};
-    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
-    return obj;
-  },
-  fromPartial(object: DeepPartial<EventVote>): EventVote {
+  fromPartial(object: Partial<EventVote>): EventVote {
     const message = createBaseEventVote();
-    if (object.proposalId !== undefined && object.proposalId !== null) {
-      message.proposalId = BigInt(object.proposalId.toString());
-    }
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     return message;
-  },
-  fromSDK(object: EventVoteSDKType): EventVote {
-    return {
-      proposalId: object?.proposal_id
-    };
-  },
-  toSDK(message: EventVote): EventVoteSDKType {
-    const obj: any = {};
-    obj.proposal_id = message.proposalId;
-    return obj;
   },
   fromAmino(object: EventVoteAmino): EventVote {
     const message = createBaseEventVote();
@@ -903,7 +667,7 @@ export const EventVote = {
   },
   toAmino(message: EventVote): EventVoteAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? (message.proposalId?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: EventVoteAminoMsg): EventVote {
@@ -928,8 +692,6 @@ export const EventVote = {
     };
   }
 };
-GlobalDecoderRegistry.register(EventVote.typeUrl, EventVote);
-GlobalDecoderRegistry.registerAminoProtoMapping(EventVote.aminoType, EventVote.typeUrl);
 function createBaseEventExec(): EventExec {
   return {
     proposalId: BigInt(0),
@@ -938,18 +700,8 @@ function createBaseEventExec(): EventExec {
 }
 export const EventExec = {
   typeUrl: "/cosmos.group.v1.EventExec",
-  aminoType: "cosmos-sdk/EventExec",
-  is(o: any): o is EventExec {
-    return o && (o.$typeUrl === EventExec.typeUrl || typeof o.proposalId === "bigint" && isSet(o.result));
-  },
-  isSDK(o: any): o is EventExecSDKType {
-    return o && (o.$typeUrl === EventExec.typeUrl || typeof o.proposal_id === "bigint" && isSet(o.result));
-  },
-  isAmino(o: any): o is EventExecAmino {
-    return o && (o.$typeUrl === EventExec.typeUrl || typeof o.proposal_id === "bigint" && isSet(o.result));
-  },
   encode(message: EventExec, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.proposalId !== undefined) {
+    if (message.proposalId !== BigInt(0)) {
       writer.uint32(8).uint64(message.proposalId);
     }
     if (message.result !== 0) {
@@ -968,7 +720,7 @@ export const EventExec = {
           message.proposalId = reader.uint64();
           break;
         case 2:
-          message.result = (reader.int32() as any);
+          message.result = reader.int32() as any;
           break;
         default:
           reader.skipType(tag & 7);
@@ -977,37 +729,11 @@ export const EventExec = {
     }
     return message;
   },
-  fromJSON(object: any): EventExec {
-    const obj = createBaseEventExec();
-    if (isSet(object.proposalId)) obj.proposalId = BigInt(object.proposalId.toString());
-    if (isSet(object.result)) obj.result = proposalExecutorResultFromJSON(object.result);
-    return obj;
-  },
-  toJSON(message: EventExec): JsonSafe<EventExec> {
-    const obj: any = {};
-    message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
-    message.result !== undefined && (obj.result = proposalExecutorResultToJSON(message.result));
-    return obj;
-  },
-  fromPartial(object: DeepPartial<EventExec>): EventExec {
+  fromPartial(object: Partial<EventExec>): EventExec {
     const message = createBaseEventExec();
-    if (object.proposalId !== undefined && object.proposalId !== null) {
-      message.proposalId = BigInt(object.proposalId.toString());
-    }
+    message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.result = object.result ?? 0;
     return message;
-  },
-  fromSDK(object: EventExecSDKType): EventExec {
-    return {
-      proposalId: object?.proposal_id,
-      result: isSet(object.result) ? proposalExecutorResultFromJSON(object.result) : -1
-    };
-  },
-  toSDK(message: EventExec): EventExecSDKType {
-    const obj: any = {};
-    obj.proposal_id = message.proposalId;
-    message.result !== undefined && (obj.result = proposalExecutorResultToJSON(message.result));
-    return obj;
   },
   fromAmino(object: EventExecAmino): EventExec {
     const message = createBaseEventExec();
@@ -1021,7 +747,7 @@ export const EventExec = {
   },
   toAmino(message: EventExec): EventExecAmino {
     const obj: any = {};
-    obj.proposal_id = message.proposalId !== BigInt(0) ? message.proposalId.toString() : undefined;
+    obj.proposal_id = message.proposalId !== BigInt(0) ? (message.proposalId?.toString)() : undefined;
     obj.result = message.result === 0 ? undefined : message.result;
     return obj;
   },
@@ -1047,8 +773,6 @@ export const EventExec = {
     };
   }
 };
-GlobalDecoderRegistry.register(EventExec.typeUrl, EventExec);
-GlobalDecoderRegistry.registerAminoProtoMapping(EventExec.aminoType, EventExec.typeUrl);
 function createBaseEventLeaveGroup(): EventLeaveGroup {
   return {
     groupId: BigInt(0),
@@ -1057,21 +781,11 @@ function createBaseEventLeaveGroup(): EventLeaveGroup {
 }
 export const EventLeaveGroup = {
   typeUrl: "/cosmos.group.v1.EventLeaveGroup",
-  aminoType: "cosmos-sdk/EventLeaveGroup",
-  is(o: any): o is EventLeaveGroup {
-    return o && (o.$typeUrl === EventLeaveGroup.typeUrl || typeof o.groupId === "bigint" && typeof o.address === "string");
-  },
-  isSDK(o: any): o is EventLeaveGroupSDKType {
-    return o && (o.$typeUrl === EventLeaveGroup.typeUrl || typeof o.group_id === "bigint" && typeof o.address === "string");
-  },
-  isAmino(o: any): o is EventLeaveGroupAmino {
-    return o && (o.$typeUrl === EventLeaveGroup.typeUrl || typeof o.group_id === "bigint" && typeof o.address === "string");
-  },
   encode(message: EventLeaveGroup, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.groupId !== undefined) {
+    if (message.groupId !== BigInt(0)) {
       writer.uint32(8).uint64(message.groupId);
     }
-    if (message.address !== undefined) {
+    if (message.address !== "") {
       writer.uint32(18).string(message.address);
     }
     return writer;
@@ -1096,37 +810,11 @@ export const EventLeaveGroup = {
     }
     return message;
   },
-  fromJSON(object: any): EventLeaveGroup {
-    const obj = createBaseEventLeaveGroup();
-    if (isSet(object.groupId)) obj.groupId = BigInt(object.groupId.toString());
-    if (isSet(object.address)) obj.address = String(object.address);
-    return obj;
-  },
-  toJSON(message: EventLeaveGroup): JsonSafe<EventLeaveGroup> {
-    const obj: any = {};
-    message.groupId !== undefined && (obj.groupId = (message.groupId || BigInt(0)).toString());
-    message.address !== undefined && (obj.address = message.address);
-    return obj;
-  },
-  fromPartial(object: DeepPartial<EventLeaveGroup>): EventLeaveGroup {
+  fromPartial(object: Partial<EventLeaveGroup>): EventLeaveGroup {
     const message = createBaseEventLeaveGroup();
-    if (object.groupId !== undefined && object.groupId !== null) {
-      message.groupId = BigInt(object.groupId.toString());
-    }
+    message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     message.address = object.address ?? "";
     return message;
-  },
-  fromSDK(object: EventLeaveGroupSDKType): EventLeaveGroup {
-    return {
-      groupId: object?.group_id,
-      address: object?.address
-    };
-  },
-  toSDK(message: EventLeaveGroup): EventLeaveGroupSDKType {
-    const obj: any = {};
-    obj.group_id = message.groupId;
-    obj.address = message.address;
-    return obj;
   },
   fromAmino(object: EventLeaveGroupAmino): EventLeaveGroup {
     const message = createBaseEventLeaveGroup();
@@ -1140,7 +828,7 @@ export const EventLeaveGroup = {
   },
   toAmino(message: EventLeaveGroup): EventLeaveGroupAmino {
     const obj: any = {};
-    obj.group_id = message.groupId !== BigInt(0) ? message.groupId.toString() : undefined;
+    obj.group_id = message.groupId !== BigInt(0) ? (message.groupId?.toString)() : undefined;
     obj.address = message.address === "" ? undefined : message.address;
     return obj;
   },
@@ -1166,5 +854,3 @@ export const EventLeaveGroup = {
     };
   }
 };
-GlobalDecoderRegistry.register(EventLeaveGroup.typeUrl, EventLeaveGroup);
-GlobalDecoderRegistry.registerAminoProtoMapping(EventLeaveGroup.aminoType, EventLeaveGroup.typeUrl);

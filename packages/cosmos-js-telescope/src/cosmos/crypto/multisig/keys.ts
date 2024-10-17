@@ -1,10 +1,6 @@
 //@ts-nocheck
-import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
+import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, DeepPartial } from "../../../helpers";
-import { JsonSafe } from "../../../json-safe";
-import { GlobalDecoderRegistry } from "../../../registry";
-export const protobufPackage = "cosmos.crypto.multisig";
 /**
  * LegacyAminoPubKey specifies a public key type
  * which nests multiple public keys and a threshold,
@@ -48,18 +44,8 @@ function createBaseLegacyAminoPubKey(): LegacyAminoPubKey {
 }
 export const LegacyAminoPubKey = {
   typeUrl: "/cosmos.crypto.multisig.LegacyAminoPubKey",
-  aminoType: "cosmos-sdk/LegacyAminoPubKey",
-  is(o: any): o is LegacyAminoPubKey {
-    return o && (o.$typeUrl === LegacyAminoPubKey.typeUrl || typeof o.threshold === "number" && Array.isArray(o.publicKeys) && (!o.publicKeys.length || Any.is(o.publicKeys[0])));
-  },
-  isSDK(o: any): o is LegacyAminoPubKeySDKType {
-    return o && (o.$typeUrl === LegacyAminoPubKey.typeUrl || typeof o.threshold === "number" && Array.isArray(o.public_keys) && (!o.public_keys.length || Any.isSDK(o.public_keys[0])));
-  },
-  isAmino(o: any): o is LegacyAminoPubKeyAmino {
-    return o && (o.$typeUrl === LegacyAminoPubKey.typeUrl || typeof o.threshold === "number" && Array.isArray(o.public_keys) && (!o.public_keys.length || Any.isAmino(o.public_keys[0])));
-  },
   encode(message: LegacyAminoPubKey, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.threshold !== undefined) {
+    if (message.threshold !== 0) {
       writer.uint32(8).uint32(message.threshold);
     }
     for (const v of message.publicKeys) {
@@ -87,43 +73,11 @@ export const LegacyAminoPubKey = {
     }
     return message;
   },
-  fromJSON(object: any): LegacyAminoPubKey {
-    const obj = createBaseLegacyAminoPubKey();
-    if (isSet(object.threshold)) obj.threshold = Number(object.threshold);
-    if (Array.isArray(object?.publicKeys)) obj.publicKeys = object.publicKeys.map((e: any) => Any.fromJSON(e));
-    return obj;
-  },
-  toJSON(message: LegacyAminoPubKey): JsonSafe<LegacyAminoPubKey> {
-    const obj: any = {};
-    message.threshold !== undefined && (obj.threshold = Math.round(message.threshold));
-    if (message.publicKeys) {
-      obj.publicKeys = message.publicKeys.map(e => e ? Any.toJSON(e) : undefined);
-    } else {
-      obj.publicKeys = [];
-    }
-    return obj;
-  },
-  fromPartial(object: DeepPartial<LegacyAminoPubKey>): LegacyAminoPubKey {
+  fromPartial(object: Partial<LegacyAminoPubKey>): LegacyAminoPubKey {
     const message = createBaseLegacyAminoPubKey();
     message.threshold = object.threshold ?? 0;
     message.publicKeys = object.publicKeys?.map(e => Any.fromPartial(e)) || [];
     return message;
-  },
-  fromSDK(object: LegacyAminoPubKeySDKType): LegacyAminoPubKey {
-    return {
-      threshold: object?.threshold,
-      publicKeys: Array.isArray(object?.public_keys) ? object.public_keys.map((e: any) => Any.fromSDK(e)) : []
-    };
-  },
-  toSDK(message: LegacyAminoPubKey): LegacyAminoPubKeySDKType {
-    const obj: any = {};
-    obj.threshold = message.threshold;
-    if (message.publicKeys) {
-      obj.public_keys = message.publicKeys.map(e => e ? Any.toSDK(e) : undefined);
-    } else {
-      obj.public_keys = [];
-    }
-    return obj;
   },
   fromAmino(object: LegacyAminoPubKeyAmino): LegacyAminoPubKey {
     const message = createBaseLegacyAminoPubKey();
@@ -165,5 +119,3 @@ export const LegacyAminoPubKey = {
     };
   }
 };
-GlobalDecoderRegistry.register(LegacyAminoPubKey.typeUrl, LegacyAminoPubKey);
-GlobalDecoderRegistry.registerAminoProtoMapping(LegacyAminoPubKey.aminoType, LegacyAminoPubKey.typeUrl);

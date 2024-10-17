@@ -1,9 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../../binary";
-import { isSet, bytesFromBase64, base64FromBytes, DeepPartial } from "../../../../helpers";
-import { JsonSafe } from "../../../../json-safe";
-import { GlobalDecoderRegistry } from "../../../../registry";
-export const protobufPackage = "cosmos.base.query.v1beta1";
+import { bytesFromBase64, base64FromBytes } from "../../../../helpers";
 /**
  * PageRequest is to be embedded in gRPC request messages for efficient
  * pagination. Ex:
@@ -186,30 +183,20 @@ function createBasePageRequest(): PageRequest {
 }
 export const PageRequest = {
   typeUrl: "/cosmos.base.query.v1beta1.PageRequest",
-  aminoType: "cosmos-sdk/PageRequest",
-  is(o: any): o is PageRequest {
-    return o && (o.$typeUrl === PageRequest.typeUrl || (o.key instanceof Uint8Array || typeof o.key === "string") && typeof o.offset === "bigint" && typeof o.limit === "bigint" && typeof o.countTotal === "boolean" && typeof o.reverse === "boolean");
-  },
-  isSDK(o: any): o is PageRequestSDKType {
-    return o && (o.$typeUrl === PageRequest.typeUrl || (o.key instanceof Uint8Array || typeof o.key === "string") && typeof o.offset === "bigint" && typeof o.limit === "bigint" && typeof o.count_total === "boolean" && typeof o.reverse === "boolean");
-  },
-  isAmino(o: any): o is PageRequestAmino {
-    return o && (o.$typeUrl === PageRequest.typeUrl || (o.key instanceof Uint8Array || typeof o.key === "string") && typeof o.offset === "bigint" && typeof o.limit === "bigint" && typeof o.count_total === "boolean" && typeof o.reverse === "boolean");
-  },
   encode(message: PageRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key.length !== 0) {
       writer.uint32(10).bytes(message.key);
     }
-    if (message.offset !== undefined) {
+    if (message.offset !== BigInt(0)) {
       writer.uint32(16).uint64(message.offset);
     }
-    if (message.limit !== undefined) {
+    if (message.limit !== BigInt(0)) {
       writer.uint32(24).uint64(message.limit);
     }
-    if (message.countTotal !== undefined) {
+    if (message.countTotal === true) {
       writer.uint32(32).bool(message.countTotal);
     }
-    if (message.reverse !== undefined) {
+    if (message.reverse === true) {
       writer.uint32(40).bool(message.reverse);
     }
     return writer;
@@ -243,54 +230,14 @@ export const PageRequest = {
     }
     return message;
   },
-  fromJSON(object: any): PageRequest {
-    const obj = createBasePageRequest();
-    if (isSet(object.key)) obj.key = bytesFromBase64(object.key);
-    if (isSet(object.offset)) obj.offset = BigInt(object.offset.toString());
-    if (isSet(object.limit)) obj.limit = BigInt(object.limit.toString());
-    if (isSet(object.countTotal)) obj.countTotal = Boolean(object.countTotal);
-    if (isSet(object.reverse)) obj.reverse = Boolean(object.reverse);
-    return obj;
-  },
-  toJSON(message: PageRequest): JsonSafe<PageRequest> {
-    const obj: any = {};
-    message.key !== undefined && (obj.key = base64FromBytes(message.key !== undefined ? message.key : new Uint8Array()));
-    message.offset !== undefined && (obj.offset = (message.offset || BigInt(0)).toString());
-    message.limit !== undefined && (obj.limit = (message.limit || BigInt(0)).toString());
-    message.countTotal !== undefined && (obj.countTotal = message.countTotal);
-    message.reverse !== undefined && (obj.reverse = message.reverse);
-    return obj;
-  },
-  fromPartial(object: DeepPartial<PageRequest>): PageRequest {
+  fromPartial(object: Partial<PageRequest>): PageRequest {
     const message = createBasePageRequest();
     message.key = object.key ?? new Uint8Array();
-    if (object.offset !== undefined && object.offset !== null) {
-      message.offset = BigInt(object.offset.toString());
-    }
-    if (object.limit !== undefined && object.limit !== null) {
-      message.limit = BigInt(object.limit.toString());
-    }
+    message.offset = object.offset !== undefined && object.offset !== null ? BigInt(object.offset.toString()) : BigInt(0);
+    message.limit = object.limit !== undefined && object.limit !== null ? BigInt(object.limit.toString()) : BigInt(0);
     message.countTotal = object.countTotal ?? false;
     message.reverse = object.reverse ?? false;
     return message;
-  },
-  fromSDK(object: PageRequestSDKType): PageRequest {
-    return {
-      key: object?.key,
-      offset: object?.offset,
-      limit: object?.limit,
-      countTotal: object?.count_total,
-      reverse: object?.reverse
-    };
-  },
-  toSDK(message: PageRequest): PageRequestSDKType {
-    const obj: any = {};
-    obj.key = message.key;
-    obj.offset = message.offset;
-    obj.limit = message.limit;
-    obj.count_total = message.countTotal;
-    obj.reverse = message.reverse;
-    return obj;
   },
   fromAmino(object: PageRequestAmino): PageRequest {
     const message = createBasePageRequest();
@@ -314,8 +261,8 @@ export const PageRequest = {
   toAmino(message: PageRequest): PageRequestAmino {
     const obj: any = {};
     obj.key = message.key ? base64FromBytes(message.key) : undefined;
-    obj.offset = message.offset !== BigInt(0) ? message.offset.toString() : undefined;
-    obj.limit = message.limit !== BigInt(0) ? message.limit.toString() : undefined;
+    obj.offset = message.offset !== BigInt(0) ? (message.offset?.toString)() : undefined;
+    obj.limit = message.limit !== BigInt(0) ? (message.limit?.toString)() : undefined;
     obj.count_total = message.countTotal === false ? undefined : message.countTotal;
     obj.reverse = message.reverse === false ? undefined : message.reverse;
     return obj;
@@ -342,8 +289,6 @@ export const PageRequest = {
     };
   }
 };
-GlobalDecoderRegistry.register(PageRequest.typeUrl, PageRequest);
-GlobalDecoderRegistry.registerAminoProtoMapping(PageRequest.aminoType, PageRequest.typeUrl);
 function createBasePageResponse(): PageResponse {
   return {
     nextKey: new Uint8Array(),
@@ -352,21 +297,11 @@ function createBasePageResponse(): PageResponse {
 }
 export const PageResponse = {
   typeUrl: "/cosmos.base.query.v1beta1.PageResponse",
-  aminoType: "cosmos-sdk/PageResponse",
-  is(o: any): o is PageResponse {
-    return o && (o.$typeUrl === PageResponse.typeUrl || (o.nextKey instanceof Uint8Array || typeof o.nextKey === "string") && typeof o.total === "bigint");
-  },
-  isSDK(o: any): o is PageResponseSDKType {
-    return o && (o.$typeUrl === PageResponse.typeUrl || (o.next_key instanceof Uint8Array || typeof o.next_key === "string") && typeof o.total === "bigint");
-  },
-  isAmino(o: any): o is PageResponseAmino {
-    return o && (o.$typeUrl === PageResponse.typeUrl || (o.next_key instanceof Uint8Array || typeof o.next_key === "string") && typeof o.total === "bigint");
-  },
   encode(message: PageResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.nextKey.length !== 0) {
       writer.uint32(10).bytes(message.nextKey);
     }
-    if (message.total !== undefined) {
+    if (message.total !== BigInt(0)) {
       writer.uint32(16).uint64(message.total);
     }
     return writer;
@@ -391,37 +326,11 @@ export const PageResponse = {
     }
     return message;
   },
-  fromJSON(object: any): PageResponse {
-    const obj = createBasePageResponse();
-    if (isSet(object.nextKey)) obj.nextKey = bytesFromBase64(object.nextKey);
-    if (isSet(object.total)) obj.total = BigInt(object.total.toString());
-    return obj;
-  },
-  toJSON(message: PageResponse): JsonSafe<PageResponse> {
-    const obj: any = {};
-    message.nextKey !== undefined && (obj.nextKey = base64FromBytes(message.nextKey !== undefined ? message.nextKey : new Uint8Array()));
-    message.total !== undefined && (obj.total = (message.total || BigInt(0)).toString());
-    return obj;
-  },
-  fromPartial(object: DeepPartial<PageResponse>): PageResponse {
+  fromPartial(object: Partial<PageResponse>): PageResponse {
     const message = createBasePageResponse();
     message.nextKey = object.nextKey ?? new Uint8Array();
-    if (object.total !== undefined && object.total !== null) {
-      message.total = BigInt(object.total.toString());
-    }
+    message.total = object.total !== undefined && object.total !== null ? BigInt(object.total.toString()) : BigInt(0);
     return message;
-  },
-  fromSDK(object: PageResponseSDKType): PageResponse {
-    return {
-      nextKey: object?.next_key,
-      total: object?.total
-    };
-  },
-  toSDK(message: PageResponse): PageResponseSDKType {
-    const obj: any = {};
-    obj.next_key = message.nextKey;
-    obj.total = message.total;
-    return obj;
   },
   fromAmino(object: PageResponseAmino): PageResponse {
     const message = createBasePageResponse();
@@ -436,7 +345,7 @@ export const PageResponse = {
   toAmino(message: PageResponse): PageResponseAmino {
     const obj: any = {};
     obj.next_key = message.nextKey ? base64FromBytes(message.nextKey) : undefined;
-    obj.total = message.total !== BigInt(0) ? message.total.toString() : undefined;
+    obj.total = message.total !== BigInt(0) ? (message.total?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: PageResponseAminoMsg): PageResponse {
@@ -461,5 +370,3 @@ export const PageResponse = {
     };
   }
 };
-GlobalDecoderRegistry.register(PageResponse.typeUrl, PageResponse);
-GlobalDecoderRegistry.registerAminoProtoMapping(PageResponse.aminoType, PageResponse.typeUrl);

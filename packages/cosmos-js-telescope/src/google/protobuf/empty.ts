@@ -1,9 +1,5 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { JsonSafe } from "../../json-safe";
-import { DeepPartial } from "../../helpers";
-import { GlobalDecoderRegistry } from "../../registry";
-export const protobufPackage = "google.protobuf";
 /**
  * A generic empty message that you can re-use to avoid defining duplicated
  * empty messages in your APIs. A typical example is to use it as the request
@@ -53,15 +49,6 @@ function createBaseEmpty(): Empty {
 }
 export const Empty = {
   typeUrl: "/google.protobuf.Empty",
-  is(o: any): o is Empty {
-    return o && o.$typeUrl === Empty.typeUrl;
-  },
-  isSDK(o: any): o is EmptySDKType {
-    return o && o.$typeUrl === Empty.typeUrl;
-  },
-  isAmino(o: any): o is EmptyAmino {
-    return o && o.$typeUrl === Empty.typeUrl;
-  },
   encode(_: Empty, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -79,24 +66,9 @@ export const Empty = {
     }
     return message;
   },
-  fromJSON(_: any): Empty {
-    const obj = createBaseEmpty();
-    return obj;
-  },
-  toJSON(_: Empty): JsonSafe<Empty> {
-    const obj: any = {};
-    return obj;
-  },
-  fromPartial(_: DeepPartial<Empty>): Empty {
+  fromPartial(_: Partial<Empty>): Empty {
     const message = createBaseEmpty();
     return message;
-  },
-  fromSDK(_: EmptySDKType): Empty {
-    return {};
-  },
-  toSDK(_: Empty): EmptySDKType {
-    const obj: any = {};
-    return obj;
   },
   fromAmino(_: EmptyAmino): Empty {
     const message = createBaseEmpty();
@@ -122,4 +94,3 @@ export const Empty = {
     };
   }
 };
-GlobalDecoderRegistry.register(Empty.typeUrl, Empty);

@@ -1,13 +1,8 @@
 //@ts-nocheck
-import { Tx, TxSDKType } from "./tx";
-import { PageRequest, PageRequestSDKType, PageResponse, PageResponseSDKType } from "../../base/query/v1beta1/pagination";
-import { TxResponse, TxResponseSDKType, GasInfo, GasInfoSDKType, Result, ResultSDKType } from "../../base/abci/v1beta1/abci";
-import { BlockID, BlockIDSDKType } from "../../../tendermint/types/types";
-import { Block, BlockSDKType } from "../../../tendermint/types/block";
-import { TxRpc } from "../../../types";
+import { Rpc } from "../../../helpers";
 import { BinaryReader } from "../../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
-import { SimulateRequest, SimulateRequestSDKType, SimulateResponse, SimulateResponseSDKType, GetTxRequest, GetTxRequestSDKType, GetTxResponse, GetTxResponseSDKType, BroadcastTxRequest, BroadcastTxRequestSDKType, BroadcastTxResponse, BroadcastTxResponseSDKType, GetTxsEventRequest, GetTxsEventRequestSDKType, GetTxsEventResponse, GetTxsEventResponseSDKType, GetBlockWithTxsRequest, GetBlockWithTxsRequestSDKType, GetBlockWithTxsResponse, GetBlockWithTxsResponseSDKType } from "./service";
+import { SimulateRequest, SimulateResponse, GetTxRequest, GetTxResponse, BroadcastTxRequest, BroadcastTxResponse, GetTxsEventRequest, GetTxsEventResponse, GetBlockWithTxsRequest, GetBlockWithTxsResponse } from "./service";
 /** Service defines a gRPC service for interacting with transactions. */
 export interface Service {
   /** Simulate simulates executing a transaction for estimating gas usage. */
@@ -26,42 +21,40 @@ export interface Service {
   getBlockWithTxs(request: GetBlockWithTxsRequest): Promise<GetBlockWithTxsResponse>;
 }
 export class ServiceClientImpl implements Service {
-  private readonly rpc: TxRpc;
-  constructor(rpc: TxRpc) {
+  private readonly rpc: Rpc;
+  constructor(rpc: Rpc) {
     this.rpc = rpc;
+    this.simulate = this.simulate.bind(this);
+    this.getTx = this.getTx.bind(this);
+    this.broadcastTx = this.broadcastTx.bind(this);
+    this.getTxsEvent = this.getTxsEvent.bind(this);
+    this.getBlockWithTxs = this.getBlockWithTxs.bind(this);
   }
-  /* Simulate simulates executing a transaction for estimating gas usage. */
-  simulate = async (request: SimulateRequest): Promise<SimulateResponse> => {
+  simulate(request: SimulateRequest): Promise<SimulateResponse> {
     const data = SimulateRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.tx.v1beta1.Service", "Simulate", data);
     return promise.then(data => SimulateResponse.decode(new BinaryReader(data)));
-  };
-  /* GetTx fetches a tx by hash. */
-  getTx = async (request: GetTxRequest): Promise<GetTxResponse> => {
+  }
+  getTx(request: GetTxRequest): Promise<GetTxResponse> {
     const data = GetTxRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.tx.v1beta1.Service", "GetTx", data);
     return promise.then(data => GetTxResponse.decode(new BinaryReader(data)));
-  };
-  /* BroadcastTx broadcast transaction. */
-  broadcastTx = async (request: BroadcastTxRequest): Promise<BroadcastTxResponse> => {
+  }
+  broadcastTx(request: BroadcastTxRequest): Promise<BroadcastTxResponse> {
     const data = BroadcastTxRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.tx.v1beta1.Service", "BroadcastTx", data);
     return promise.then(data => BroadcastTxResponse.decode(new BinaryReader(data)));
-  };
-  /* GetTxsEvent fetches txs by event. */
-  getTxsEvent = async (request: GetTxsEventRequest): Promise<GetTxsEventResponse> => {
+  }
+  getTxsEvent(request: GetTxsEventRequest): Promise<GetTxsEventResponse> {
     const data = GetTxsEventRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.tx.v1beta1.Service", "GetTxsEvent", data);
     return promise.then(data => GetTxsEventResponse.decode(new BinaryReader(data)));
-  };
-  /* GetBlockWithTxs fetches a block with decoded txs.
-  
-   Since: cosmos-sdk 0.45.2 */
-  getBlockWithTxs = async (request: GetBlockWithTxsRequest): Promise<GetBlockWithTxsResponse> => {
+  }
+  getBlockWithTxs(request: GetBlockWithTxsRequest): Promise<GetBlockWithTxsResponse> {
     const data = GetBlockWithTxsRequest.encode(request).finish();
     const promise = this.rpc.request("cosmos.tx.v1beta1.Service", "GetBlockWithTxs", data);
     return promise.then(data => GetBlockWithTxsResponse.decode(new BinaryReader(data)));
-  };
+  }
 }
 export const createRpcQueryExtension = (base: QueryClient) => {
   const rpc = createProtobufRpcClient(base);

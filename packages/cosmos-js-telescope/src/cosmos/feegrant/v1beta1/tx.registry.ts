@@ -1,10 +1,7 @@
 //@ts-nocheck
-import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
-import { BasicAllowance, BasicAllowanceSDKType, PeriodicAllowance, PeriodicAllowanceSDKType, AllowedMsgAllowance, AllowedMsgAllowanceSDKType } from "./feegrant";
-import { TelescopeGeneratedType } from "../../../types";
-import { Registry } from "@cosmjs/proto-signing";
-import { MsgGrantAllowance, MsgGrantAllowanceSDKType, MsgRevokeAllowance, MsgRevokeAllowanceSDKType } from "./tx";
-export const registry: ReadonlyArray<[string, TelescopeGeneratedType<any, any, any>]> = [["/cosmos.feegrant.v1beta1.MsgGrantAllowance", MsgGrantAllowance], ["/cosmos.feegrant.v1beta1.MsgRevokeAllowance", MsgRevokeAllowance]];
+import { GeneratedType, Registry } from "@cosmjs/proto-signing";
+import { MsgGrantAllowance, MsgRevokeAllowance } from "./tx";
+export const registry: ReadonlyArray<[string, GeneratedType]> = [["/cosmos.feegrant.v1beta1.MsgGrantAllowance", MsgGrantAllowance], ["/cosmos.feegrant.v1beta1.MsgRevokeAllowance", MsgRevokeAllowance]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);
@@ -36,34 +33,6 @@ export const MessageComposer = {
       return {
         typeUrl: "/cosmos.feegrant.v1beta1.MsgRevokeAllowance",
         value
-      };
-    }
-  },
-  toJSON: {
-    grantAllowance(value: MsgGrantAllowance) {
-      return {
-        typeUrl: "/cosmos.feegrant.v1beta1.MsgGrantAllowance",
-        value: MsgGrantAllowance.toJSON(value)
-      };
-    },
-    revokeAllowance(value: MsgRevokeAllowance) {
-      return {
-        typeUrl: "/cosmos.feegrant.v1beta1.MsgRevokeAllowance",
-        value: MsgRevokeAllowance.toJSON(value)
-      };
-    }
-  },
-  fromJSON: {
-    grantAllowance(value: any) {
-      return {
-        typeUrl: "/cosmos.feegrant.v1beta1.MsgGrantAllowance",
-        value: MsgGrantAllowance.fromJSON(value)
-      };
-    },
-    revokeAllowance(value: any) {
-      return {
-        typeUrl: "/cosmos.feegrant.v1beta1.MsgRevokeAllowance",
-        value: MsgRevokeAllowance.fromJSON(value)
       };
     }
   },

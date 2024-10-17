@@ -1,9 +1,5 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, DeepPartial } from "../../helpers";
-import { JsonSafe } from "../../json-safe";
-import { GlobalDecoderRegistry } from "../../registry";
-export const protobufPackage = "google.protobuf";
 /**
  * A Duration represents a signed, fixed-length span of time represented
  * as a count of seconds and fractions of seconds at nanosecond
@@ -222,20 +218,11 @@ function createBaseDuration(): Duration {
 }
 export const Duration = {
   typeUrl: "/google.protobuf.Duration",
-  is(o: any): o is Duration {
-    return o && (o.$typeUrl === Duration.typeUrl || typeof o.seconds === "bigint" && typeof o.nanos === "number");
-  },
-  isSDK(o: any): o is DurationSDKType {
-    return o && (o.$typeUrl === Duration.typeUrl || typeof o.seconds === "bigint" && typeof o.nanos === "number");
-  },
-  isAmino(o: any): o is DurationAmino {
-    return o && (o.$typeUrl === Duration.typeUrl || typeof o.seconds === "bigint" && typeof o.nanos === "number");
-  },
   encode(message: Duration, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.seconds !== undefined) {
+    if (message.seconds !== BigInt(0)) {
       writer.uint32(8).int64(message.seconds);
     }
-    if (message.nanos !== undefined) {
+    if (message.nanos !== 0) {
       writer.uint32(16).int32(message.nanos);
     }
     return writer;
@@ -260,37 +247,11 @@ export const Duration = {
     }
     return message;
   },
-  fromJSON(object: any): Duration {
-    const obj = createBaseDuration();
-    if (isSet(object.seconds)) obj.seconds = BigInt(object.seconds.toString());
-    if (isSet(object.nanos)) obj.nanos = Number(object.nanos);
-    return obj;
-  },
-  toJSON(message: Duration): JsonSafe<Duration> {
-    const obj: any = {};
-    message.seconds !== undefined && (obj.seconds = (message.seconds || BigInt(0)).toString());
-    message.nanos !== undefined && (obj.nanos = Math.round(message.nanos));
-    return obj;
-  },
-  fromPartial(object: DeepPartial<Duration>): Duration {
+  fromPartial(object: Partial<Duration>): Duration {
     const message = createBaseDuration();
-    if (object.seconds !== undefined && object.seconds !== null) {
-      message.seconds = BigInt(object.seconds.toString());
-    }
+    message.seconds = object.seconds !== undefined && object.seconds !== null ? BigInt(object.seconds.toString()) : BigInt(0);
     message.nanos = object.nanos ?? 0;
     return message;
-  },
-  fromSDK(object: DurationSDKType): Duration {
-    return {
-      seconds: object?.seconds,
-      nanos: object?.nanos
-    };
-  },
-  toSDK(message: Duration): DurationSDKType {
-    const obj: any = {};
-    obj.seconds = message.seconds;
-    obj.nanos = message.nanos;
-    return obj;
   },
   fromAmino(object: DurationAmino): Duration {
     const value = BigInt(object);
@@ -318,4 +279,3 @@ export const Duration = {
     };
   }
 };
-GlobalDecoderRegistry.register(Duration.typeUrl, Duration);

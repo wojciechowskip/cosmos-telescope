@@ -1,11 +1,8 @@
 //@ts-nocheck
-import { Timestamp, TimestampAmino, TimestampSDKType } from "../../../google/protobuf/timestamp";
-import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
+import { Timestamp } from "../../../google/protobuf/timestamp";
+import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { toTimestamp, fromTimestamp, isSet, DeepPartial } from "../../../helpers";
-import { JsonSafe } from "../../../json-safe";
-import { GlobalDecoderRegistry } from "../../../registry";
-export const protobufPackage = "cosmos.upgrade.v1beta1";
+import { toTimestamp, fromTimestamp } from "../../../helpers";
 /** Plan specifies information about a planned upgrade and when it should occur. */
 export interface Plan {
   /**
@@ -237,27 +234,17 @@ function createBasePlan(): Plan {
 }
 export const Plan = {
   typeUrl: "/cosmos.upgrade.v1beta1.Plan",
-  aminoType: "cosmos-sdk/Plan",
-  is(o: any): o is Plan {
-    return o && (o.$typeUrl === Plan.typeUrl || typeof o.name === "string" && Timestamp.is(o.time) && typeof o.height === "bigint" && typeof o.info === "string");
-  },
-  isSDK(o: any): o is PlanSDKType {
-    return o && (o.$typeUrl === Plan.typeUrl || typeof o.name === "string" && Timestamp.isSDK(o.time) && typeof o.height === "bigint" && typeof o.info === "string");
-  },
-  isAmino(o: any): o is PlanAmino {
-    return o && (o.$typeUrl === Plan.typeUrl || typeof o.name === "string" && Timestamp.isAmino(o.time) && typeof o.height === "bigint" && typeof o.info === "string");
-  },
   encode(message: Plan, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.name !== undefined) {
+    if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
     if (message.time !== undefined) {
       Timestamp.encode(toTimestamp(message.time), writer.uint32(18).fork()).ldelim();
     }
-    if (message.height !== undefined) {
+    if (message.height !== BigInt(0)) {
       writer.uint32(24).int64(message.height);
     }
-    if (message.info !== undefined) {
+    if (message.info !== "") {
       writer.uint32(34).string(message.info);
     }
     if (message.upgradedClientState !== undefined) {
@@ -294,54 +281,14 @@ export const Plan = {
     }
     return message;
   },
-  fromJSON(object: any): Plan {
-    const obj = createBasePlan();
-    if (isSet(object.name)) obj.name = String(object.name);
-    if (isSet(object.time)) obj.time = new Date(object.time);
-    if (isSet(object.height)) obj.height = BigInt(object.height.toString());
-    if (isSet(object.info)) obj.info = String(object.info);
-    if (isSet(object.upgradedClientState)) obj.upgradedClientState = Any.fromJSON(object.upgradedClientState);
-    return obj;
-  },
-  toJSON(message: Plan): JsonSafe<Plan> {
-    const obj: any = {};
-    message.name !== undefined && (obj.name = message.name);
-    message.time !== undefined && (obj.time = message.time.toISOString());
-    message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
-    message.info !== undefined && (obj.info = message.info);
-    message.upgradedClientState !== undefined && (obj.upgradedClientState = message.upgradedClientState ? Any.toJSON(message.upgradedClientState) : undefined);
-    return obj;
-  },
-  fromPartial(object: DeepPartial<Plan>): Plan {
+  fromPartial(object: Partial<Plan>): Plan {
     const message = createBasePlan();
     message.name = object.name ?? "";
     message.time = object.time ?? undefined;
-    if (object.height !== undefined && object.height !== null) {
-      message.height = BigInt(object.height.toString());
-    }
+    message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     message.info = object.info ?? "";
-    if (object.upgradedClientState !== undefined && object.upgradedClientState !== null) {
-      message.upgradedClientState = Any.fromPartial(object.upgradedClientState);
-    }
+    message.upgradedClientState = object.upgradedClientState !== undefined && object.upgradedClientState !== null ? Any.fromPartial(object.upgradedClientState) : undefined;
     return message;
-  },
-  fromSDK(object: PlanSDKType): Plan {
-    return {
-      name: object?.name,
-      time: object.time ?? undefined,
-      height: object?.height,
-      info: object?.info,
-      upgradedClientState: object.upgraded_client_state ? Any.fromSDK(object.upgraded_client_state) : undefined
-    };
-  },
-  toSDK(message: Plan): PlanSDKType {
-    const obj: any = {};
-    obj.name = message.name;
-    message.time !== undefined && (obj.time = message.time ?? undefined);
-    obj.height = message.height;
-    obj.info = message.info;
-    message.upgradedClientState !== undefined && (obj.upgraded_client_state = message.upgradedClientState ? Any.toSDK(message.upgradedClientState) : undefined);
-    return obj;
   },
   fromAmino(object: PlanAmino): Plan {
     const message = createBasePlan();
@@ -366,7 +313,7 @@ export const Plan = {
     const obj: any = {};
     obj.name = message.name === "" ? undefined : message.name;
     obj.time = message.time ? Timestamp.toAmino(toTimestamp(message.time)) : undefined;
-    obj.height = message.height !== BigInt(0) ? message.height.toString() : undefined;
+    obj.height = message.height !== BigInt(0) ? (message.height?.toString)() : undefined;
     obj.info = message.info === "" ? undefined : message.info;
     obj.upgraded_client_state = message.upgradedClientState ? Any.toAmino(message.upgradedClientState) : undefined;
     return obj;
@@ -393,8 +340,6 @@ export const Plan = {
     };
   }
 };
-GlobalDecoderRegistry.register(Plan.typeUrl, Plan);
-GlobalDecoderRegistry.registerAminoProtoMapping(Plan.aminoType, Plan.typeUrl);
 function createBaseSoftwareUpgradeProposal(): SoftwareUpgradeProposal {
   return {
     $typeUrl: "/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal",
@@ -405,21 +350,11 @@ function createBaseSoftwareUpgradeProposal(): SoftwareUpgradeProposal {
 }
 export const SoftwareUpgradeProposal = {
   typeUrl: "/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal",
-  aminoType: "cosmos-sdk/SoftwareUpgradeProposal",
-  is(o: any): o is SoftwareUpgradeProposal {
-    return o && (o.$typeUrl === SoftwareUpgradeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && Plan.is(o.plan));
-  },
-  isSDK(o: any): o is SoftwareUpgradeProposalSDKType {
-    return o && (o.$typeUrl === SoftwareUpgradeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && Plan.isSDK(o.plan));
-  },
-  isAmino(o: any): o is SoftwareUpgradeProposalAmino {
-    return o && (o.$typeUrl === SoftwareUpgradeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string" && Plan.isAmino(o.plan));
-  },
   encode(message: SoftwareUpgradeProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.title !== undefined) {
+    if (message.title !== "") {
       writer.uint32(10).string(message.title);
     }
-    if (message.description !== undefined) {
+    if (message.description !== "") {
       writer.uint32(18).string(message.description);
     }
     if (message.plan !== undefined) {
@@ -450,42 +385,12 @@ export const SoftwareUpgradeProposal = {
     }
     return message;
   },
-  fromJSON(object: any): SoftwareUpgradeProposal {
-    const obj = createBaseSoftwareUpgradeProposal();
-    if (isSet(object.title)) obj.title = String(object.title);
-    if (isSet(object.description)) obj.description = String(object.description);
-    if (isSet(object.plan)) obj.plan = Plan.fromJSON(object.plan);
-    return obj;
-  },
-  toJSON(message: SoftwareUpgradeProposal): JsonSafe<SoftwareUpgradeProposal> {
-    const obj: any = {};
-    message.title !== undefined && (obj.title = message.title);
-    message.description !== undefined && (obj.description = message.description);
-    message.plan !== undefined && (obj.plan = message.plan ? Plan.toJSON(message.plan) : undefined);
-    return obj;
-  },
-  fromPartial(object: DeepPartial<SoftwareUpgradeProposal>): SoftwareUpgradeProposal {
+  fromPartial(object: Partial<SoftwareUpgradeProposal>): SoftwareUpgradeProposal {
     const message = createBaseSoftwareUpgradeProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
-    if (object.plan !== undefined && object.plan !== null) {
-      message.plan = Plan.fromPartial(object.plan);
-    }
+    message.plan = object.plan !== undefined && object.plan !== null ? Plan.fromPartial(object.plan) : undefined;
     return message;
-  },
-  fromSDK(object: SoftwareUpgradeProposalSDKType): SoftwareUpgradeProposal {
-    return {
-      title: object?.title,
-      description: object?.description,
-      plan: object.plan ? Plan.fromSDK(object.plan) : undefined
-    };
-  },
-  toSDK(message: SoftwareUpgradeProposal): SoftwareUpgradeProposalSDKType {
-    const obj: any = {};
-    obj.title = message.title;
-    obj.description = message.description;
-    message.plan !== undefined && (obj.plan = message.plan ? Plan.toSDK(message.plan) : undefined);
-    return obj;
   },
   fromAmino(object: SoftwareUpgradeProposalAmino): SoftwareUpgradeProposal {
     const message = createBaseSoftwareUpgradeProposal();
@@ -529,8 +434,6 @@ export const SoftwareUpgradeProposal = {
     };
   }
 };
-GlobalDecoderRegistry.register(SoftwareUpgradeProposal.typeUrl, SoftwareUpgradeProposal);
-GlobalDecoderRegistry.registerAminoProtoMapping(SoftwareUpgradeProposal.aminoType, SoftwareUpgradeProposal.typeUrl);
 function createBaseCancelSoftwareUpgradeProposal(): CancelSoftwareUpgradeProposal {
   return {
     $typeUrl: "/cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal",
@@ -540,21 +443,11 @@ function createBaseCancelSoftwareUpgradeProposal(): CancelSoftwareUpgradeProposa
 }
 export const CancelSoftwareUpgradeProposal = {
   typeUrl: "/cosmos.upgrade.v1beta1.CancelSoftwareUpgradeProposal",
-  aminoType: "cosmos-sdk/CancelSoftwareUpgradeProposal",
-  is(o: any): o is CancelSoftwareUpgradeProposal {
-    return o && (o.$typeUrl === CancelSoftwareUpgradeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string");
-  },
-  isSDK(o: any): o is CancelSoftwareUpgradeProposalSDKType {
-    return o && (o.$typeUrl === CancelSoftwareUpgradeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string");
-  },
-  isAmino(o: any): o is CancelSoftwareUpgradeProposalAmino {
-    return o && (o.$typeUrl === CancelSoftwareUpgradeProposal.typeUrl || typeof o.title === "string" && typeof o.description === "string");
-  },
   encode(message: CancelSoftwareUpgradeProposal, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.title !== undefined) {
+    if (message.title !== "") {
       writer.uint32(10).string(message.title);
     }
-    if (message.description !== undefined) {
+    if (message.description !== "") {
       writer.uint32(18).string(message.description);
     }
     return writer;
@@ -579,35 +472,11 @@ export const CancelSoftwareUpgradeProposal = {
     }
     return message;
   },
-  fromJSON(object: any): CancelSoftwareUpgradeProposal {
-    const obj = createBaseCancelSoftwareUpgradeProposal();
-    if (isSet(object.title)) obj.title = String(object.title);
-    if (isSet(object.description)) obj.description = String(object.description);
-    return obj;
-  },
-  toJSON(message: CancelSoftwareUpgradeProposal): JsonSafe<CancelSoftwareUpgradeProposal> {
-    const obj: any = {};
-    message.title !== undefined && (obj.title = message.title);
-    message.description !== undefined && (obj.description = message.description);
-    return obj;
-  },
-  fromPartial(object: DeepPartial<CancelSoftwareUpgradeProposal>): CancelSoftwareUpgradeProposal {
+  fromPartial(object: Partial<CancelSoftwareUpgradeProposal>): CancelSoftwareUpgradeProposal {
     const message = createBaseCancelSoftwareUpgradeProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
     return message;
-  },
-  fromSDK(object: CancelSoftwareUpgradeProposalSDKType): CancelSoftwareUpgradeProposal {
-    return {
-      title: object?.title,
-      description: object?.description
-    };
-  },
-  toSDK(message: CancelSoftwareUpgradeProposal): CancelSoftwareUpgradeProposalSDKType {
-    const obj: any = {};
-    obj.title = message.title;
-    obj.description = message.description;
-    return obj;
   },
   fromAmino(object: CancelSoftwareUpgradeProposalAmino): CancelSoftwareUpgradeProposal {
     const message = createBaseCancelSoftwareUpgradeProposal();
@@ -647,8 +516,6 @@ export const CancelSoftwareUpgradeProposal = {
     };
   }
 };
-GlobalDecoderRegistry.register(CancelSoftwareUpgradeProposal.typeUrl, CancelSoftwareUpgradeProposal);
-GlobalDecoderRegistry.registerAminoProtoMapping(CancelSoftwareUpgradeProposal.aminoType, CancelSoftwareUpgradeProposal.typeUrl);
 function createBaseModuleVersion(): ModuleVersion {
   return {
     name: "",
@@ -657,21 +524,11 @@ function createBaseModuleVersion(): ModuleVersion {
 }
 export const ModuleVersion = {
   typeUrl: "/cosmos.upgrade.v1beta1.ModuleVersion",
-  aminoType: "cosmos-sdk/ModuleVersion",
-  is(o: any): o is ModuleVersion {
-    return o && (o.$typeUrl === ModuleVersion.typeUrl || typeof o.name === "string" && typeof o.version === "bigint");
-  },
-  isSDK(o: any): o is ModuleVersionSDKType {
-    return o && (o.$typeUrl === ModuleVersion.typeUrl || typeof o.name === "string" && typeof o.version === "bigint");
-  },
-  isAmino(o: any): o is ModuleVersionAmino {
-    return o && (o.$typeUrl === ModuleVersion.typeUrl || typeof o.name === "string" && typeof o.version === "bigint");
-  },
   encode(message: ModuleVersion, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.name !== undefined) {
+    if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
-    if (message.version !== undefined) {
+    if (message.version !== BigInt(0)) {
       writer.uint32(16).uint64(message.version);
     }
     return writer;
@@ -696,37 +553,11 @@ export const ModuleVersion = {
     }
     return message;
   },
-  fromJSON(object: any): ModuleVersion {
-    const obj = createBaseModuleVersion();
-    if (isSet(object.name)) obj.name = String(object.name);
-    if (isSet(object.version)) obj.version = BigInt(object.version.toString());
-    return obj;
-  },
-  toJSON(message: ModuleVersion): JsonSafe<ModuleVersion> {
-    const obj: any = {};
-    message.name !== undefined && (obj.name = message.name);
-    message.version !== undefined && (obj.version = (message.version || BigInt(0)).toString());
-    return obj;
-  },
-  fromPartial(object: DeepPartial<ModuleVersion>): ModuleVersion {
+  fromPartial(object: Partial<ModuleVersion>): ModuleVersion {
     const message = createBaseModuleVersion();
     message.name = object.name ?? "";
-    if (object.version !== undefined && object.version !== null) {
-      message.version = BigInt(object.version.toString());
-    }
+    message.version = object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);
     return message;
-  },
-  fromSDK(object: ModuleVersionSDKType): ModuleVersion {
-    return {
-      name: object?.name,
-      version: object?.version
-    };
-  },
-  toSDK(message: ModuleVersion): ModuleVersionSDKType {
-    const obj: any = {};
-    obj.name = message.name;
-    obj.version = message.version;
-    return obj;
   },
   fromAmino(object: ModuleVersionAmino): ModuleVersion {
     const message = createBaseModuleVersion();
@@ -741,7 +572,7 @@ export const ModuleVersion = {
   toAmino(message: ModuleVersion): ModuleVersionAmino {
     const obj: any = {};
     obj.name = message.name === "" ? undefined : message.name;
-    obj.version = message.version !== BigInt(0) ? message.version.toString() : undefined;
+    obj.version = message.version !== BigInt(0) ? (message.version?.toString)() : undefined;
     return obj;
   },
   fromAminoMsg(object: ModuleVersionAminoMsg): ModuleVersion {
@@ -766,5 +597,3 @@ export const ModuleVersion = {
     };
   }
 };
-GlobalDecoderRegistry.register(ModuleVersion.typeUrl, ModuleVersion);
-GlobalDecoderRegistry.registerAminoProtoMapping(ModuleVersion.aminoType, ModuleVersion.typeUrl);

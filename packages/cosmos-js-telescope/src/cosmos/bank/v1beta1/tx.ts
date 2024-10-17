@@ -2,10 +2,6 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { Input, InputAmino, InputSDKType, Output, OutputAmino, OutputSDKType } from "./bank";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, DeepPartial } from "../../../helpers";
-import { JsonSafe } from "../../../json-safe";
-import { GlobalDecoderRegistry } from "../../../registry";
-export const protobufPackage = "cosmos.bank.v1beta1";
 /** MsgSend represents a message to send coins from one account to another. */
 export interface MsgSend {
   fromAddress: string;
@@ -92,21 +88,11 @@ function createBaseMsgSend(): MsgSend {
 }
 export const MsgSend = {
   typeUrl: "/cosmos.bank.v1beta1.MsgSend",
-  aminoType: "cosmos-sdk/MsgSend",
-  is(o: any): o is MsgSend {
-    return o && (o.$typeUrl === MsgSend.typeUrl || typeof o.fromAddress === "string" && typeof o.toAddress === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])));
-  },
-  isSDK(o: any): o is MsgSendSDKType {
-    return o && (o.$typeUrl === MsgSend.typeUrl || typeof o.from_address === "string" && typeof o.to_address === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])));
-  },
-  isAmino(o: any): o is MsgSendAmino {
-    return o && (o.$typeUrl === MsgSend.typeUrl || typeof o.from_address === "string" && typeof o.to_address === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])));
-  },
   encode(message: MsgSend, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
-    if (message.fromAddress !== undefined) {
+    if (message.fromAddress !== "") {
       writer.uint32(10).string(message.fromAddress);
     }
-    if (message.toAddress !== undefined) {
+    if (message.toAddress !== "") {
       writer.uint32(18).string(message.toAddress);
     }
     for (const v of message.amount) {
@@ -137,48 +123,12 @@ export const MsgSend = {
     }
     return message;
   },
-  fromJSON(object: any): MsgSend {
-    const obj = createBaseMsgSend();
-    if (isSet(object.fromAddress)) obj.fromAddress = String(object.fromAddress);
-    if (isSet(object.toAddress)) obj.toAddress = String(object.toAddress);
-    if (Array.isArray(object?.amount)) obj.amount = object.amount.map((e: any) => Coin.fromJSON(e));
-    return obj;
-  },
-  toJSON(message: MsgSend): JsonSafe<MsgSend> {
-    const obj: any = {};
-    message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
-    message.toAddress !== undefined && (obj.toAddress = message.toAddress);
-    if (message.amount) {
-      obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
-    } else {
-      obj.amount = [];
-    }
-    return obj;
-  },
-  fromPartial(object: DeepPartial<MsgSend>): MsgSend {
+  fromPartial(object: Partial<MsgSend>): MsgSend {
     const message = createBaseMsgSend();
     message.fromAddress = object.fromAddress ?? "";
     message.toAddress = object.toAddress ?? "";
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     return message;
-  },
-  fromSDK(object: MsgSendSDKType): MsgSend {
-    return {
-      fromAddress: object?.from_address,
-      toAddress: object?.to_address,
-      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromSDK(e)) : []
-    };
-  },
-  toSDK(message: MsgSend): MsgSendSDKType {
-    const obj: any = {};
-    obj.from_address = message.fromAddress;
-    obj.to_address = message.toAddress;
-    if (message.amount) {
-      obj.amount = message.amount.map(e => e ? Coin.toSDK(e) : undefined);
-    } else {
-      obj.amount = [];
-    }
-    return obj;
   },
   fromAmino(object: MsgSendAmino): MsgSend {
     const message = createBaseMsgSend();
@@ -224,23 +174,11 @@ export const MsgSend = {
     };
   }
 };
-GlobalDecoderRegistry.register(MsgSend.typeUrl, MsgSend);
-GlobalDecoderRegistry.registerAminoProtoMapping(MsgSend.aminoType, MsgSend.typeUrl);
 function createBaseMsgSendResponse(): MsgSendResponse {
   return {};
 }
 export const MsgSendResponse = {
   typeUrl: "/cosmos.bank.v1beta1.MsgSendResponse",
-  aminoType: "cosmos-sdk/MsgSendResponse",
-  is(o: any): o is MsgSendResponse {
-    return o && o.$typeUrl === MsgSendResponse.typeUrl;
-  },
-  isSDK(o: any): o is MsgSendResponseSDKType {
-    return o && o.$typeUrl === MsgSendResponse.typeUrl;
-  },
-  isAmino(o: any): o is MsgSendResponseAmino {
-    return o && o.$typeUrl === MsgSendResponse.typeUrl;
-  },
   encode(_: MsgSendResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -258,24 +196,9 @@ export const MsgSendResponse = {
     }
     return message;
   },
-  fromJSON(_: any): MsgSendResponse {
-    const obj = createBaseMsgSendResponse();
-    return obj;
-  },
-  toJSON(_: MsgSendResponse): JsonSafe<MsgSendResponse> {
-    const obj: any = {};
-    return obj;
-  },
-  fromPartial(_: DeepPartial<MsgSendResponse>): MsgSendResponse {
+  fromPartial(_: Partial<MsgSendResponse>): MsgSendResponse {
     const message = createBaseMsgSendResponse();
     return message;
-  },
-  fromSDK(_: MsgSendResponseSDKType): MsgSendResponse {
-    return {};
-  },
-  toSDK(_: MsgSendResponse): MsgSendResponseSDKType {
-    const obj: any = {};
-    return obj;
   },
   fromAmino(_: MsgSendResponseAmino): MsgSendResponse {
     const message = createBaseMsgSendResponse();
@@ -307,8 +230,6 @@ export const MsgSendResponse = {
     };
   }
 };
-GlobalDecoderRegistry.register(MsgSendResponse.typeUrl, MsgSendResponse);
-GlobalDecoderRegistry.registerAminoProtoMapping(MsgSendResponse.aminoType, MsgSendResponse.typeUrl);
 function createBaseMsgMultiSend(): MsgMultiSend {
   return {
     inputs: [],
@@ -317,16 +238,6 @@ function createBaseMsgMultiSend(): MsgMultiSend {
 }
 export const MsgMultiSend = {
   typeUrl: "/cosmos.bank.v1beta1.MsgMultiSend",
-  aminoType: "cosmos-sdk/MsgMultiSend",
-  is(o: any): o is MsgMultiSend {
-    return o && (o.$typeUrl === MsgMultiSend.typeUrl || Array.isArray(o.inputs) && (!o.inputs.length || Input.is(o.inputs[0])) && Array.isArray(o.outputs) && (!o.outputs.length || Output.is(o.outputs[0])));
-  },
-  isSDK(o: any): o is MsgMultiSendSDKType {
-    return o && (o.$typeUrl === MsgMultiSend.typeUrl || Array.isArray(o.inputs) && (!o.inputs.length || Input.isSDK(o.inputs[0])) && Array.isArray(o.outputs) && (!o.outputs.length || Output.isSDK(o.outputs[0])));
-  },
-  isAmino(o: any): o is MsgMultiSendAmino {
-    return o && (o.$typeUrl === MsgMultiSend.typeUrl || Array.isArray(o.inputs) && (!o.inputs.length || Input.isAmino(o.inputs[0])) && Array.isArray(o.outputs) && (!o.outputs.length || Output.isAmino(o.outputs[0])));
-  },
   encode(message: MsgMultiSend, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.inputs) {
       Input.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -356,51 +267,11 @@ export const MsgMultiSend = {
     }
     return message;
   },
-  fromJSON(object: any): MsgMultiSend {
-    const obj = createBaseMsgMultiSend();
-    if (Array.isArray(object?.inputs)) obj.inputs = object.inputs.map((e: any) => Input.fromJSON(e));
-    if (Array.isArray(object?.outputs)) obj.outputs = object.outputs.map((e: any) => Output.fromJSON(e));
-    return obj;
-  },
-  toJSON(message: MsgMultiSend): JsonSafe<MsgMultiSend> {
-    const obj: any = {};
-    if (message.inputs) {
-      obj.inputs = message.inputs.map(e => e ? Input.toJSON(e) : undefined);
-    } else {
-      obj.inputs = [];
-    }
-    if (message.outputs) {
-      obj.outputs = message.outputs.map(e => e ? Output.toJSON(e) : undefined);
-    } else {
-      obj.outputs = [];
-    }
-    return obj;
-  },
-  fromPartial(object: DeepPartial<MsgMultiSend>): MsgMultiSend {
+  fromPartial(object: Partial<MsgMultiSend>): MsgMultiSend {
     const message = createBaseMsgMultiSend();
     message.inputs = object.inputs?.map(e => Input.fromPartial(e)) || [];
     message.outputs = object.outputs?.map(e => Output.fromPartial(e)) || [];
     return message;
-  },
-  fromSDK(object: MsgMultiSendSDKType): MsgMultiSend {
-    return {
-      inputs: Array.isArray(object?.inputs) ? object.inputs.map((e: any) => Input.fromSDK(e)) : [],
-      outputs: Array.isArray(object?.outputs) ? object.outputs.map((e: any) => Output.fromSDK(e)) : []
-    };
-  },
-  toSDK(message: MsgMultiSend): MsgMultiSendSDKType {
-    const obj: any = {};
-    if (message.inputs) {
-      obj.inputs = message.inputs.map(e => e ? Input.toSDK(e) : undefined);
-    } else {
-      obj.inputs = [];
-    }
-    if (message.outputs) {
-      obj.outputs = message.outputs.map(e => e ? Output.toSDK(e) : undefined);
-    } else {
-      obj.outputs = [];
-    }
-    return obj;
   },
   fromAmino(object: MsgMultiSendAmino): MsgMultiSend {
     const message = createBaseMsgMultiSend();
@@ -444,23 +315,11 @@ export const MsgMultiSend = {
     };
   }
 };
-GlobalDecoderRegistry.register(MsgMultiSend.typeUrl, MsgMultiSend);
-GlobalDecoderRegistry.registerAminoProtoMapping(MsgMultiSend.aminoType, MsgMultiSend.typeUrl);
 function createBaseMsgMultiSendResponse(): MsgMultiSendResponse {
   return {};
 }
 export const MsgMultiSendResponse = {
   typeUrl: "/cosmos.bank.v1beta1.MsgMultiSendResponse",
-  aminoType: "cosmos-sdk/MsgMultiSendResponse",
-  is(o: any): o is MsgMultiSendResponse {
-    return o && o.$typeUrl === MsgMultiSendResponse.typeUrl;
-  },
-  isSDK(o: any): o is MsgMultiSendResponseSDKType {
-    return o && o.$typeUrl === MsgMultiSendResponse.typeUrl;
-  },
-  isAmino(o: any): o is MsgMultiSendResponseAmino {
-    return o && o.$typeUrl === MsgMultiSendResponse.typeUrl;
-  },
   encode(_: MsgMultiSendResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -478,24 +337,9 @@ export const MsgMultiSendResponse = {
     }
     return message;
   },
-  fromJSON(_: any): MsgMultiSendResponse {
-    const obj = createBaseMsgMultiSendResponse();
-    return obj;
-  },
-  toJSON(_: MsgMultiSendResponse): JsonSafe<MsgMultiSendResponse> {
-    const obj: any = {};
-    return obj;
-  },
-  fromPartial(_: DeepPartial<MsgMultiSendResponse>): MsgMultiSendResponse {
+  fromPartial(_: Partial<MsgMultiSendResponse>): MsgMultiSendResponse {
     const message = createBaseMsgMultiSendResponse();
     return message;
-  },
-  fromSDK(_: MsgMultiSendResponseSDKType): MsgMultiSendResponse {
-    return {};
-  },
-  toSDK(_: MsgMultiSendResponse): MsgMultiSendResponseSDKType {
-    const obj: any = {};
-    return obj;
   },
   fromAmino(_: MsgMultiSendResponseAmino): MsgMultiSendResponse {
     const message = createBaseMsgMultiSendResponse();
@@ -527,5 +371,3 @@ export const MsgMultiSendResponse = {
     };
   }
 };
-GlobalDecoderRegistry.register(MsgMultiSendResponse.typeUrl, MsgMultiSendResponse);
-GlobalDecoderRegistry.registerAminoProtoMapping(MsgMultiSendResponse.aminoType, MsgMultiSendResponse.typeUrl);
