@@ -2,7 +2,6 @@
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { Timestamp } from "../../../google/protobuf/timestamp";
 import { SendAuthorization, SendAuthorizationProtoMsg, SendAuthorizationSDKType } from "../../bank/v1beta1/authz";
-import { StakeAuthorization, StakeAuthorizationProtoMsg, StakeAuthorizationSDKType } from "../../staking/v1beta1/authz";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { toTimestamp, fromTimestamp } from "../../../helpers";
 /**
@@ -43,7 +42,7 @@ export interface GenericAuthorizationSDKType {
  * the provide method with expiration time.
  */
 export interface Grant {
-  authorization?: GenericAuthorization | SendAuthorization | StakeAuthorization | Any | undefined;
+  authorization?: GenericAuthorization | SendAuthorization | Any | undefined;
   /**
    * time when the grant will expire and will be pruned. If null, then the grant
    * doesn't have a time expiration (other conditions  in `authorization`
@@ -56,7 +55,7 @@ export interface GrantProtoMsg {
   value: Uint8Array;
 }
 export type GrantEncoded = Omit<Grant, "authorization"> & {
-  authorization?: GenericAuthorizationProtoMsg | SendAuthorizationProtoMsg | StakeAuthorizationProtoMsg | AnyProtoMsg | undefined;
+  authorization?: GenericAuthorizationProtoMsg | SendAuthorizationProtoMsg | AnyProtoMsg | undefined;
 };
 /**
  * Grant gives permissions to execute
@@ -80,7 +79,7 @@ export interface GrantAminoMsg {
  * the provide method with expiration time.
  */
 export interface GrantSDKType {
-  authorization?: GenericAuthorizationSDKType | SendAuthorizationSDKType | StakeAuthorizationSDKType | AnySDKType | undefined;
+  authorization?: GenericAuthorizationSDKType | SendAuthorizationSDKType | AnySDKType | undefined;
   expiration?: Date;
 }
 /**
@@ -90,7 +89,7 @@ export interface GrantSDKType {
 export interface GrantAuthorization {
   granter: string;
   grantee: string;
-  authorization?: GenericAuthorization | SendAuthorization | StakeAuthorization | Any | undefined;
+  authorization?: GenericAuthorization | SendAuthorization | Any | undefined;
   expiration?: Date;
 }
 export interface GrantAuthorizationProtoMsg {
@@ -98,7 +97,7 @@ export interface GrantAuthorizationProtoMsg {
   value: Uint8Array;
 }
 export type GrantAuthorizationEncoded = Omit<GrantAuthorization, "authorization"> & {
-  authorization?: GenericAuthorizationProtoMsg | SendAuthorizationProtoMsg | StakeAuthorizationProtoMsg | AnyProtoMsg | undefined;
+  authorization?: GenericAuthorizationProtoMsg | SendAuthorizationProtoMsg | AnyProtoMsg | undefined;
 };
 /**
  * GrantAuthorization extends a grant with both the addresses of the grantee and granter.
@@ -121,7 +120,7 @@ export interface GrantAuthorizationAminoMsg {
 export interface GrantAuthorizationSDKType {
   granter: string;
   grantee: string;
-  authorization?: GenericAuthorizationSDKType | SendAuthorizationSDKType | StakeAuthorizationSDKType | AnySDKType | undefined;
+  authorization?: GenericAuthorizationSDKType | SendAuthorizationSDKType | AnySDKType | undefined;
   expiration?: Date;
 }
 /** GrantQueueItem contains the list of TypeURL of a sdk.Msg. */
@@ -473,7 +472,7 @@ export const GrantQueueItem = {
     };
   }
 };
-export const Cosmos_authzAuthorization_InterfaceDecoder = (input: BinaryReader | Uint8Array): GenericAuthorization | SendAuthorization | StakeAuthorization | Any => {
+export const Cosmos_authzAuthorization_InterfaceDecoder = (input: BinaryReader | Uint8Array): GenericAuthorization | SendAuthorization | Any => {
   const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
   const data = Any.decode(reader, reader.uint32());
   switch (data.typeUrl) {
@@ -481,8 +480,6 @@ export const Cosmos_authzAuthorization_InterfaceDecoder = (input: BinaryReader |
       return GenericAuthorization.decode(data.value);
     case "/cosmos.bank.v1beta1.SendAuthorization":
       return SendAuthorization.decode(data.value);
-    case "/cosmos.staking.v1beta1.StakeAuthorization":
-      return StakeAuthorization.decode(data.value);
     default:
       return data;
   }
@@ -499,11 +496,6 @@ export const Cosmos_authzAuthorization_FromAmino = (content: AnyAmino): Any => {
         typeUrl: "/cosmos.bank.v1beta1.SendAuthorization",
         value: SendAuthorization.encode(SendAuthorization.fromPartial(SendAuthorization.fromAmino(content.value))).finish()
       });
-    case "cosmos-sdk/StakeAuthorization":
-      return Any.fromPartial({
-        typeUrl: "/cosmos.staking.v1beta1.StakeAuthorization",
-        value: StakeAuthorization.encode(StakeAuthorization.fromPartial(StakeAuthorization.fromAmino(content.value))).finish()
-      });
     default:
       return Any.fromAmino(content);
   }
@@ -519,11 +511,6 @@ export const Cosmos_authzAuthorization_ToAmino = (content: Any) => {
       return {
         type: "cosmos-sdk/SendAuthorization",
         value: SendAuthorization.toAmino(SendAuthorization.decode(content.value, undefined))
-      };
-    case "/cosmos.staking.v1beta1.StakeAuthorization":
-      return {
-        type: "cosmos-sdk/StakeAuthorization",
-        value: StakeAuthorization.toAmino(StakeAuthorization.decode(content.value, undefined))
       };
     default:
       return Any.toAmino(content);
