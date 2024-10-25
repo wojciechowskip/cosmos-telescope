@@ -1,13 +1,16 @@
 //@ts-nocheck
 import { Params, ParamsAmino, ParamsSDKType } from "./params";
+import { GenesisState as GenesisState1 } from "../fixationstore/fixation";
+import { GenesisStateAmino as GenesisState1Amino } from "../fixationstore/fixation";
+import { GenesisStateSDKType as GenesisState1SDKType } from "../fixationstore/fixation";
 import { DelegatorReward, DelegatorRewardAmino, DelegatorRewardSDKType } from "./delegator_reward";
-import { Delegation, DelegationAmino, DelegationSDKType } from "./delegate";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 /** GenesisState defines the dualstaking module's genesis state. */
 export interface GenesisState {
   params: Params;
+  delegationsFS: GenesisState1;
+  delegatorsFS: GenesisState1;
   delegatorRewardList: DelegatorReward[];
-  delegations: Delegation[];
 }
 export interface GenesisStateProtoMsg {
   typeUrl: "/lavanet.lava.dualstaking.GenesisState";
@@ -16,8 +19,9 @@ export interface GenesisStateProtoMsg {
 /** GenesisState defines the dualstaking module's genesis state. */
 export interface GenesisStateAmino {
   params?: ParamsAmino;
+  delegationsFS?: GenesisState1Amino;
+  delegatorsFS?: GenesisState1Amino;
   delegator_reward_list?: DelegatorRewardAmino[];
-  Delegations?: DelegationAmino[];
 }
 export interface GenesisStateAminoMsg {
   type: "/lavanet.lava.dualstaking.GenesisState";
@@ -26,14 +30,16 @@ export interface GenesisStateAminoMsg {
 /** GenesisState defines the dualstaking module's genesis state. */
 export interface GenesisStateSDKType {
   params: ParamsSDKType;
+  delegationsFS: GenesisState1SDKType;
+  delegatorsFS: GenesisState1SDKType;
   delegator_reward_list: DelegatorRewardSDKType[];
-  Delegations: DelegationSDKType[];
 }
 function createBaseGenesisState(): GenesisState {
   return {
     params: Params.fromPartial({}),
-    delegatorRewardList: [],
-    delegations: []
+    delegationsFS: GenesisState1.fromPartial({}),
+    delegatorsFS: GenesisState1.fromPartial({}),
+    delegatorRewardList: []
   };
 }
 export const GenesisState = {
@@ -42,11 +48,14 @@ export const GenesisState = {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
     }
+    if (message.delegationsFS !== undefined) {
+      GenesisState1.encode(message.delegationsFS, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.delegatorsFS !== undefined) {
+      GenesisState1.encode(message.delegatorsFS, writer.uint32(26).fork()).ldelim();
+    }
     for (const v of message.delegatorRewardList) {
       DelegatorReward.encode(v!, writer.uint32(42).fork()).ldelim();
-    }
-    for (const v of message.delegations) {
-      Delegation.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -60,11 +69,14 @@ export const GenesisState = {
         case 1:
           message.params = Params.decode(reader, reader.uint32());
           break;
+        case 2:
+          message.delegationsFS = GenesisState1.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.delegatorsFS = GenesisState1.decode(reader, reader.uint32());
+          break;
         case 5:
           message.delegatorRewardList.push(DelegatorReward.decode(reader, reader.uint32()));
-          break;
-        case 6:
-          message.delegations.push(Delegation.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -76,8 +88,9 @@ export const GenesisState = {
   fromPartial(object: Partial<GenesisState>): GenesisState {
     const message = createBaseGenesisState();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
+    message.delegationsFS = object.delegationsFS !== undefined && object.delegationsFS !== null ? GenesisState1.fromPartial(object.delegationsFS) : undefined;
+    message.delegatorsFS = object.delegatorsFS !== undefined && object.delegatorsFS !== null ? GenesisState1.fromPartial(object.delegatorsFS) : undefined;
     message.delegatorRewardList = object.delegatorRewardList?.map(e => DelegatorReward.fromPartial(e)) || [];
-    message.delegations = object.delegations?.map(e => Delegation.fromPartial(e)) || [];
     return message;
   },
   fromAmino(object: GenesisStateAmino): GenesisState {
@@ -85,22 +98,24 @@ export const GenesisState = {
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromAmino(object.params);
     }
+    if (object.delegationsFS !== undefined && object.delegationsFS !== null) {
+      message.delegationsFS = GenesisState1.fromAmino(object.delegationsFS);
+    }
+    if (object.delegatorsFS !== undefined && object.delegatorsFS !== null) {
+      message.delegatorsFS = GenesisState1.fromAmino(object.delegatorsFS);
+    }
     message.delegatorRewardList = object.delegator_reward_list?.map(e => DelegatorReward.fromAmino(e)) || [];
-    message.delegations = object.Delegations?.map(e => Delegation.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: GenesisState): GenesisStateAmino {
     const obj: any = {};
     obj.params = message.params ? Params.toAmino(message.params) : undefined;
+    obj.delegationsFS = message.delegationsFS ? GenesisState1.toAmino(message.delegationsFS) : undefined;
+    obj.delegatorsFS = message.delegatorsFS ? GenesisState1.toAmino(message.delegatorsFS) : undefined;
     if (message.delegatorRewardList) {
       obj.delegator_reward_list = message.delegatorRewardList.map(e => e ? DelegatorReward.toAmino(e) : undefined);
     } else {
       obj.delegator_reward_list = message.delegatorRewardList;
-    }
-    if (message.delegations) {
-      obj.Delegations = message.delegations.map(e => e ? Delegation.toAmino(e) : undefined);
-    } else {
-      obj.Delegations = message.delegations;
     }
     return obj;
   },

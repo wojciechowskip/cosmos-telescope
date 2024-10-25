@@ -50,7 +50,9 @@ export const createRPCQueryClient = async ({
     },
     lavanet: {
       lava: {
-        dualstaking: (await import("./lava/dualstaking/query.rpc.Query")).createRpcQueryExtension(client)
+        dualstaking: (await import("./lava/dualstaking/query.rpc.Query")).createRpcQueryExtension(client),
+        fixationstore: (await import("./lava/fixationstore/query.rpc.Query")).createRpcQueryExtension(client),
+        timerstore: (await import("./lava/timerstore/query.rpc.Query")).createRpcQueryExtension(client)
       }
     }
   };

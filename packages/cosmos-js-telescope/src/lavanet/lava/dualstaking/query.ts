@@ -155,6 +155,7 @@ export interface QueryDelegatorRewardsResponseSDKType {
 }
 export interface DelegatorRewardInfo {
   provider: string;
+  chainId: string;
   amount: Coin[];
 }
 export interface DelegatorRewardInfoProtoMsg {
@@ -163,6 +164,7 @@ export interface DelegatorRewardInfoProtoMsg {
 }
 export interface DelegatorRewardInfoAmino {
   provider?: string;
+  chain_id?: string;
   amount?: CoinAmino[];
 }
 export interface DelegatorRewardInfoAminoMsg {
@@ -171,6 +173,7 @@ export interface DelegatorRewardInfoAminoMsg {
 }
 export interface DelegatorRewardInfoSDKType {
   provider: string;
+  chain_id: string;
   amount: CoinSDKType[];
 }
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -721,6 +724,7 @@ export const QueryDelegatorRewardsResponse = {
 function createBaseDelegatorRewardInfo(): DelegatorRewardInfo {
   return {
     provider: "",
+    chainId: "",
     amount: []
   };
 }
@@ -729,6 +733,9 @@ export const DelegatorRewardInfo = {
   encode(message: DelegatorRewardInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.provider !== "") {
       writer.uint32(10).string(message.provider);
+    }
+    if (message.chainId !== "") {
+      writer.uint32(18).string(message.chainId);
     }
     for (const v of message.amount) {
       Coin.encode(v!, writer.uint32(26).fork()).ldelim();
@@ -745,6 +752,9 @@ export const DelegatorRewardInfo = {
         case 1:
           message.provider = reader.string();
           break;
+        case 2:
+          message.chainId = reader.string();
+          break;
         case 3:
           message.amount.push(Coin.decode(reader, reader.uint32()));
           break;
@@ -758,6 +768,7 @@ export const DelegatorRewardInfo = {
   fromPartial(object: Partial<DelegatorRewardInfo>): DelegatorRewardInfo {
     const message = createBaseDelegatorRewardInfo();
     message.provider = object.provider ?? "";
+    message.chainId = object.chainId ?? "";
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     return message;
   },
@@ -766,12 +777,16 @@ export const DelegatorRewardInfo = {
     if (object.provider !== undefined && object.provider !== null) {
       message.provider = object.provider;
     }
+    if (object.chain_id !== undefined && object.chain_id !== null) {
+      message.chainId = object.chain_id;
+    }
     message.amount = object.amount?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
   toAmino(message: DelegatorRewardInfo): DelegatorRewardInfoAmino {
     const obj: any = {};
     obj.provider = message.provider === "" ? undefined : message.provider;
+    obj.chain_id = message.chainId === "" ? undefined : message.chainId;
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);
     } else {
