@@ -1185,7 +1185,7 @@
     "@cosmjs/utils" "^0.32.3"
     cosmjs-types "^0.9.0"
 
-"@cosmjs/proto-signing@^0.32.3":
+"@cosmjs/proto-signing@^0.32.4":
   version "0.32.4"
   resolved "https://registry.yarnpkg.com/@cosmjs/proto-signing/-/proto-signing-0.32.4.tgz#5a06e087c6d677439c8c9b25b5223d5e72c4cd93"
   integrity sha512-QdyQDbezvdRI4xxSlyM1rSVBO2st5sqtbEIl3IX03uJ7YiZIQHyv6vaHVf1V4mapusCqguiHJzm4N4gsFdLBbQ==
@@ -1207,30 +1207,14 @@
     ws "^7"
     xstream "^11.14.0"
 
-"@cosmjs/stargate@0.32.3":
-  version "0.32.3"
-  resolved "https://registry.yarnpkg.com/@cosmjs/stargate/-/stargate-0.32.3.tgz#5a92b222ada960ebecea72cc9f366370763f4b66"
-  integrity sha512-OQWzO9YWKerUinPIxrO1MARbe84XkeXJAW0lyMIjXIEikajuXZ+PwftiKA5yA+8OyditVmHVLtPud6Pjna2s5w==
-  dependencies:
-    "@confio/ics23" "^0.6.8"
-    "@cosmjs/amino" "^0.32.3"
-    "@cosmjs/encoding" "^0.32.3"
-    "@cosmjs/math" "^0.32.3"
-    "@cosmjs/proto-signing" "^0.32.3"
-    "@cosmjs/stream" "^0.32.3"
-    "@cosmjs/tendermint-rpc" "^0.32.3"
-    "@cosmjs/utils" "^0.32.3"
-    cosmjs-types "^0.9.0"
-    xstream "^11.14.0"
-
-"@cosmjs/stream@^0.32.3", "@cosmjs/stream@^0.32.4":
+"@cosmjs/stream@^0.32.4":
   version "0.32.4"
   resolved "https://registry.yarnpkg.com/@cosmjs/stream/-/stream-0.32.4.tgz#83e1f2285807467c56d9ea0e1113f79d9fa63802"
   integrity sha512-Gih++NYHEiP+oyD4jNEUxU9antoC0pFSg+33Hpp0JlHwH0wXhtD3OOKnzSfDB7OIoEbrzLJUpEjOgpCp5Z+W3A==
   dependencies:
     xstream "^11.14.0"
 
-"@cosmjs/tendermint-rpc@^0.32.3":
+"@cosmjs/tendermint-rpc@^0.32.4":
   version "0.32.4"
   resolved "https://registry.yarnpkg.com/@cosmjs/tendermint-rpc/-/tendermint-rpc-0.32.4.tgz#b36f9ec657498e42c97e21bb7368798ef6279752"
   integrity sha512-MWvUUno+4bCb/LmlMIErLypXxy7ckUuzEmpufYYYd9wgbdCXaTaO08SZzyFM5PI8UJ/0S2AmUrgWhldlbxO8mw==
@@ -1847,6 +1831,22 @@
     write-file-atomic "4.0.1"
     write-pkg "4.0.0"
     yargs "16.2.0"
+
+"@liftedinit/stargate@0.32.3":
+  version "0.32.4-ll.3"
+  resolved "https://registry.yarnpkg.com/@liftedinit/stargate/-/stargate-0.32.4-ll.3.tgz#9e280aedc3a14561945276bb9fd63227719d501f"
+  integrity sha512-HhRI9/43EV9jef1gnsGBPrlqJHZwy4MlX0e3VOaaAiYTB9i/0YdMiKoKUoHtMMritWD9ZeiqMtQRyzV3jJKzhg==
+  dependencies:
+    "@confio/ics23" "^0.6.8"
+    "@cosmjs/amino" "^0.32.4"
+    "@cosmjs/encoding" "^0.32.4"
+    "@cosmjs/math" "^0.32.4"
+    "@cosmjs/proto-signing" "^0.32.4"
+    "@cosmjs/stream" "^0.32.4"
+    "@cosmjs/tendermint-rpc" "^0.32.4"
+    "@cosmjs/utils" "^0.32.4"
+    cosmjs-types "^0.9.0"
+    xstream "^11.14.0"
 
 "@noble/hashes@^1", "@noble/hashes@^1.0.0":
   version "1.5.0"
