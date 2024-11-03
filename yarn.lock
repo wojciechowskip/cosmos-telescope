@@ -1832,7 +1832,7 @@
     write-pkg "4.0.0"
     yargs "16.2.0"
 
-"@liftedinit/stargate@0.32.3":
+"@liftedinit/stargate@0.32.4-ll.3":
   version "0.32.4-ll.3"
   resolved "https://registry.yarnpkg.com/@liftedinit/stargate/-/stargate-0.32.4-ll.3.tgz#9e280aedc3a14561945276bb9fd63227719d501f"
   integrity sha512-HhRI9/43EV9jef1gnsGBPrlqJHZwy4MlX0e3VOaaAiYTB9i/0YdMiKoKUoHtMMritWD9ZeiqMtQRyzV3jJKzhg==
