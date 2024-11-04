@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -256,7 +256,7 @@ export const MsgSetWithdrawAddress = {
     message.withdrawAddress !== undefined && (obj.withdrawAddress = message.withdrawAddress);
     return obj;
   },
-  fromPartial(object: Partial<MsgSetWithdrawAddress>): MsgSetWithdrawAddress {
+  fromPartial<I extends Exact<DeepPartial<MsgSetWithdrawAddress>, I>>(object: I): MsgSetWithdrawAddress {
     const message = createBaseMsgSetWithdrawAddress();
     message.delegatorAddress = object.delegatorAddress ?? "";
     message.withdrawAddress = object.withdrawAddress ?? "";
@@ -341,7 +341,7 @@ export const MsgSetWithdrawAddressResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgSetWithdrawAddressResponse>): MsgSetWithdrawAddressResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSetWithdrawAddressResponse>, I>>(_: I): MsgSetWithdrawAddressResponse {
     const message = createBaseMsgSetWithdrawAddressResponse();
     return message;
   },
@@ -436,7 +436,7 @@ export const MsgWithdrawDelegatorReward = {
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     return obj;
   },
-  fromPartial(object: Partial<MsgWithdrawDelegatorReward>): MsgWithdrawDelegatorReward {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawDelegatorReward>, I>>(object: I): MsgWithdrawDelegatorReward {
     const message = createBaseMsgWithdrawDelegatorReward();
     message.delegatorAddress = object.delegatorAddress ?? "";
     message.validatorAddress = object.validatorAddress ?? "";
@@ -536,7 +536,7 @@ export const MsgWithdrawDelegatorRewardResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<MsgWithdrawDelegatorRewardResponse>): MsgWithdrawDelegatorRewardResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawDelegatorRewardResponse>, I>>(object: I): MsgWithdrawDelegatorRewardResponse {
     const message = createBaseMsgWithdrawDelegatorRewardResponse();
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     return message;
@@ -629,7 +629,7 @@ export const MsgWithdrawValidatorCommission = {
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     return obj;
   },
-  fromPartial(object: Partial<MsgWithdrawValidatorCommission>): MsgWithdrawValidatorCommission {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawValidatorCommission>, I>>(object: I): MsgWithdrawValidatorCommission {
     const message = createBaseMsgWithdrawValidatorCommission();
     message.validatorAddress = object.validatorAddress ?? "";
     return message;
@@ -724,7 +724,7 @@ export const MsgWithdrawValidatorCommissionResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<MsgWithdrawValidatorCommissionResponse>): MsgWithdrawValidatorCommissionResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawValidatorCommissionResponse>, I>>(object: I): MsgWithdrawValidatorCommissionResponse {
     const message = createBaseMsgWithdrawValidatorCommissionResponse();
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     return message;
@@ -830,7 +830,7 @@ export const MsgFundCommunityPool = {
     message.depositor !== undefined && (obj.depositor = message.depositor);
     return obj;
   },
-  fromPartial(object: Partial<MsgFundCommunityPool>): MsgFundCommunityPool {
+  fromPartial<I extends Exact<DeepPartial<MsgFundCommunityPool>, I>>(object: I): MsgFundCommunityPool {
     const message = createBaseMsgFundCommunityPool();
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     message.depositor = object.depositor ?? "";
@@ -917,7 +917,7 @@ export const MsgFundCommunityPoolResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgFundCommunityPoolResponse>): MsgFundCommunityPoolResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgFundCommunityPoolResponse>, I>>(_: I): MsgFundCommunityPoolResponse {
     const message = createBaseMsgFundCommunityPoolResponse();
     return message;
   },

@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Plan, PlanAmino, PlanSDKType } from "./upgrade";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -188,7 +188,7 @@ export const MsgSoftwareUpgrade = {
     message.plan !== undefined && (obj.plan = message.plan ? Plan.toJSON(message.plan) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<MsgSoftwareUpgrade>): MsgSoftwareUpgrade {
+  fromPartial<I extends Exact<DeepPartial<MsgSoftwareUpgrade>, I>>(object: I): MsgSoftwareUpgrade {
     const message = createBaseMsgSoftwareUpgrade();
     message.authority = object.authority ?? "";
     message.plan = object.plan !== undefined && object.plan !== null ? Plan.fromPartial(object.plan) : undefined;
@@ -273,7 +273,7 @@ export const MsgSoftwareUpgradeResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgSoftwareUpgradeResponse>): MsgSoftwareUpgradeResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSoftwareUpgradeResponse>, I>>(_: I): MsgSoftwareUpgradeResponse {
     const message = createBaseMsgSoftwareUpgradeResponse();
     return message;
   },
@@ -359,7 +359,7 @@ export const MsgCancelUpgrade = {
     message.authority !== undefined && (obj.authority = message.authority);
     return obj;
   },
-  fromPartial(object: Partial<MsgCancelUpgrade>): MsgCancelUpgrade {
+  fromPartial<I extends Exact<DeepPartial<MsgCancelUpgrade>, I>>(object: I): MsgCancelUpgrade {
     const message = createBaseMsgCancelUpgrade();
     message.authority = object.authority ?? "";
     return message;
@@ -439,7 +439,7 @@ export const MsgCancelUpgradeResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgCancelUpgradeResponse>): MsgCancelUpgradeResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCancelUpgradeResponse>, I>>(_: I): MsgCancelUpgradeResponse {
     const message = createBaseMsgCancelUpgradeResponse();
     return message;
   },

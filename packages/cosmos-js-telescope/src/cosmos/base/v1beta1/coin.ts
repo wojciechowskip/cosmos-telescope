@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -178,7 +178,7 @@ export const Coin = {
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
-  fromPartial(object: Partial<Coin>): Coin {
+  fromPartial<I extends Exact<DeepPartial<Coin>, I>>(object: I): Coin {
     const message = createBaseCoin();
     message.denom = object.denom ?? "";
     message.amount = object.amount ?? "";
@@ -283,7 +283,7 @@ export const DecCoin = {
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
-  fromPartial(object: Partial<DecCoin>): DecCoin {
+  fromPartial<I extends Exact<DeepPartial<DecCoin>, I>>(object: I): DecCoin {
     const message = createBaseDecCoin();
     message.denom = object.denom ?? "";
     message.amount = object.amount ?? "";
@@ -379,7 +379,7 @@ export const IntProto = {
     message.int !== undefined && (obj.int = message.int);
     return obj;
   },
-  fromPartial(object: Partial<IntProto>): IntProto {
+  fromPartial<I extends Exact<DeepPartial<IntProto>, I>>(object: I): IntProto {
     const message = createBaseIntProto();
     message.int = object.int ?? "";
     return message;
@@ -470,7 +470,7 @@ export const DecProto = {
     message.dec !== undefined && (obj.dec = message.dec);
     return obj;
   },
-  fromPartial(object: Partial<DecProto>): DecProto {
+  fromPartial<I extends Exact<DeepPartial<DecProto>, I>>(object: I): DecProto {
     const message = createBaseDecProto();
     message.dec = object.dec ?? "";
     return message;

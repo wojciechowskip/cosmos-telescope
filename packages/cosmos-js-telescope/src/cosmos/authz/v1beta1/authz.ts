@@ -4,7 +4,7 @@ import { Timestamp } from "../../../google/protobuf/timestamp";
 import { SendAuthorization, SendAuthorizationProtoMsg, SendAuthorizationSDKType } from "../../bank/v1beta1/authz";
 import { StakeAuthorization, StakeAuthorizationProtoMsg, StakeAuthorizationSDKType } from "../../staking/v1beta1/authz";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, toTimestamp, fromTimestamp, fromJsonTimestamp } from "../../../helpers";
+import { isSet, DeepPartial, Exact, toTimestamp, fromTimestamp, fromJsonTimestamp } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -199,7 +199,7 @@ export const GenericAuthorization = {
     message.msg !== undefined && (obj.msg = message.msg);
     return obj;
   },
-  fromPartial(object: Partial<GenericAuthorization>): GenericAuthorization {
+  fromPartial<I extends Exact<DeepPartial<GenericAuthorization>, I>>(object: I): GenericAuthorization {
     const message = createBaseGenericAuthorization();
     message.msg = object.msg ?? "";
     return message;
@@ -299,7 +299,7 @@ export const Grant = {
     message.expiration !== undefined && (obj.expiration = message.expiration.toISOString());
     return obj;
   },
-  fromPartial(object: Partial<Grant>): Grant {
+  fromPartial<I extends Exact<DeepPartial<Grant>, I>>(object: I): Grant {
     const message = createBaseGrant();
     message.authorization = object.authorization !== undefined && object.authorization !== null ? GlobalDecoderRegistry.fromPartial(object.authorization) : undefined;
     message.expiration = object.expiration ?? undefined;
@@ -422,7 +422,7 @@ export const GrantAuthorization = {
     message.expiration !== undefined && (obj.expiration = message.expiration.toISOString());
     return obj;
   },
-  fromPartial(object: Partial<GrantAuthorization>): GrantAuthorization {
+  fromPartial<I extends Exact<DeepPartial<GrantAuthorization>, I>>(object: I): GrantAuthorization {
     const message = createBaseGrantAuthorization();
     message.granter = object.granter ?? "";
     message.grantee = object.grantee ?? "";
@@ -532,7 +532,7 @@ export const GrantQueueItem = {
     }
     return obj;
   },
-  fromPartial(object: Partial<GrantQueueItem>): GrantQueueItem {
+  fromPartial<I extends Exact<DeepPartial<GrantQueueItem>, I>>(object: I): GrantQueueItem {
     const message = createBaseGrantQueueItem();
     message.msgTypeUrls = object.msgTypeUrls?.map(e => e) || [];
     return message;

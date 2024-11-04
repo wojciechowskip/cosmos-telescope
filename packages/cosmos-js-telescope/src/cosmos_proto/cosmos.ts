@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../binary";
-import { isSet } from "../helpers";
+import { isSet, DeepPartial, Exact } from "../helpers";
 import { JsonSafe } from "../json-safe";
 import { GlobalDecoderRegistry } from "../registry";
 export enum ScalarType {
@@ -235,7 +235,7 @@ export const InterfaceDescriptor = {
     message.description !== undefined && (obj.description = message.description);
     return obj;
   },
-  fromPartial(object: Partial<InterfaceDescriptor>): InterfaceDescriptor {
+  fromPartial<I extends Exact<DeepPartial<InterfaceDescriptor>, I>>(object: I): InterfaceDescriptor {
     const message = createBaseInterfaceDescriptor();
     message.name = object.name ?? "";
     message.description = object.description ?? "";
@@ -354,7 +354,7 @@ export const ScalarDescriptor = {
     }
     return obj;
   },
-  fromPartial(object: Partial<ScalarDescriptor>): ScalarDescriptor {
+  fromPartial<I extends Exact<DeepPartial<ScalarDescriptor>, I>>(object: I): ScalarDescriptor {
     const message = createBaseScalarDescriptor();
     message.name = object.name ?? "";
     message.description = object.description ?? "";

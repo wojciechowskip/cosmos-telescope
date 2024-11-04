@@ -2,7 +2,7 @@
 import { Header, HeaderAmino, HeaderSDKType, Data, DataAmino, DataSDKType, Commit, CommitAmino, CommitSDKType } from "./types";
 import { EvidenceList, EvidenceListAmino, EvidenceListSDKType } from "./evidence";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet } from "../../helpers";
+import { isSet, DeepPartial, Exact } from "../../helpers";
 import { JsonSafe } from "../../json-safe";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface Block {
@@ -107,7 +107,7 @@ export const Block = {
     message.lastCommit !== undefined && (obj.lastCommit = message.lastCommit ? Commit.toJSON(message.lastCommit) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<Block>): Block {
+  fromPartial<I extends Exact<DeepPartial<Block>, I>>(object: I): Block {
     const message = createBaseBlock();
     message.header = object.header !== undefined && object.header !== null ? Header.fromPartial(object.header) : undefined;
     message.data = object.data !== undefined && object.data !== null ? Data.fromPartial(object.data) : undefined;

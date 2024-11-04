@@ -2,7 +2,7 @@
 import { Timestamp } from "../../../google/protobuf/timestamp";
 import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { toTimestamp, fromTimestamp, isSet, fromJsonTimestamp } from "../../../helpers";
+import { toTimestamp, fromTimestamp, isSet, fromJsonTimestamp, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** Plan specifies information about a planned upgrade and when it should occur. */
@@ -311,7 +311,7 @@ export const Plan = {
     message.upgradedClientState !== undefined && (obj.upgradedClientState = message.upgradedClientState ? Any.toJSON(message.upgradedClientState) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<Plan>): Plan {
+  fromPartial<I extends Exact<DeepPartial<Plan>, I>>(object: I): Plan {
     const message = createBasePlan();
     message.name = object.name ?? "";
     message.time = object.time ?? undefined;
@@ -441,7 +441,7 @@ export const SoftwareUpgradeProposal = {
     message.plan !== undefined && (obj.plan = message.plan ? Plan.toJSON(message.plan) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<SoftwareUpgradeProposal>): SoftwareUpgradeProposal {
+  fromPartial<I extends Exact<DeepPartial<SoftwareUpgradeProposal>, I>>(object: I): SoftwareUpgradeProposal {
     const message = createBaseSoftwareUpgradeProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
@@ -552,7 +552,7 @@ export const CancelSoftwareUpgradeProposal = {
     message.description !== undefined && (obj.description = message.description);
     return obj;
   },
-  fromPartial(object: Partial<CancelSoftwareUpgradeProposal>): CancelSoftwareUpgradeProposal {
+  fromPartial<I extends Exact<DeepPartial<CancelSoftwareUpgradeProposal>, I>>(object: I): CancelSoftwareUpgradeProposal {
     const message = createBaseCancelSoftwareUpgradeProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
@@ -657,7 +657,7 @@ export const ModuleVersion = {
     message.version !== undefined && (obj.version = (message.version || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<ModuleVersion>): ModuleVersion {
+  fromPartial<I extends Exact<DeepPartial<ModuleVersion>, I>>(object: I): ModuleVersion {
     const message = createBaseModuleVersion();
     message.name = object.name ?? "";
     message.version = object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);

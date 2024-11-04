@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Rpc } from "../../../helpers";
+import { TxRpc } from "../../../types";
 import { BinaryReader } from "../../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
 import { QueryParamsRequest, QueryParamsResponse, QueryDelegatorProvidersRequest, QueryDelegatorProvidersResponse, QueryProviderDelegatorsRequest, QueryProviderDelegatorsResponse, QueryDelegatorRewardsRequest, QueryDelegatorRewardsResponse } from "./query";
@@ -17,8 +17,8 @@ export interface Query {
   delegatorRewardsList(request: QueryDelegatorRewardsRequest): Promise<QueryDelegatorRewardsResponse>;
 }
 export class QueryClientImpl implements Query {
-  private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly rpc: TxRpc;
+  constructor(rpc: TxRpc) {
     this.rpc = rpc;
     this.params = this.params.bind(this);
     this.delegatorProviders = this.delegatorProviders.bind(this);

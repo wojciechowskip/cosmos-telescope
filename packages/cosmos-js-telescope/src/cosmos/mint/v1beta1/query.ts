@@ -2,8 +2,8 @@
 import { Params, ParamsAmino, ParamsSDKType } from "./mint";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { JsonSafe } from "../../../json-safe";
+import { DeepPartial, Exact, isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
 /** QueryParamsRequest is the request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 export interface QueryParamsRequestProtoMsg {
@@ -178,7 +178,7 @@ export const QueryParamsRequest = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<QueryParamsRequest>): QueryParamsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(_: I): QueryParamsRequest {
     const message = createBaseQueryParamsRequest();
     return message;
   },
@@ -264,7 +264,7 @@ export const QueryParamsResponse = {
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryParamsResponse>): QueryParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(object: I): QueryParamsResponse {
     const message = createBaseQueryParamsResponse();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
@@ -344,7 +344,7 @@ export const QueryInflationRequest = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<QueryInflationRequest>): QueryInflationRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryInflationRequest>, I>>(_: I): QueryInflationRequest {
     const message = createBaseQueryInflationRequest();
     return message;
   },
@@ -430,7 +430,7 @@ export const QueryInflationResponse = {
     message.inflation !== undefined && (obj.inflation = base64FromBytes(message.inflation !== undefined ? message.inflation : new Uint8Array()));
     return obj;
   },
-  fromPartial(object: Partial<QueryInflationResponse>): QueryInflationResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryInflationResponse>, I>>(object: I): QueryInflationResponse {
     const message = createBaseQueryInflationResponse();
     message.inflation = object.inflation ?? new Uint8Array();
     return message;
@@ -510,7 +510,7 @@ export const QueryAnnualProvisionsRequest = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<QueryAnnualProvisionsRequest>): QueryAnnualProvisionsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAnnualProvisionsRequest>, I>>(_: I): QueryAnnualProvisionsRequest {
     const message = createBaseQueryAnnualProvisionsRequest();
     return message;
   },
@@ -596,7 +596,7 @@ export const QueryAnnualProvisionsResponse = {
     message.annualProvisions !== undefined && (obj.annualProvisions = base64FromBytes(message.annualProvisions !== undefined ? message.annualProvisions : new Uint8Array()));
     return obj;
   },
-  fromPartial(object: Partial<QueryAnnualProvisionsResponse>): QueryAnnualProvisionsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAnnualProvisionsResponse>, I>>(object: I): QueryAnnualProvisionsResponse {
     const message = createBaseQueryAnnualProvisionsResponse();
     message.annualProvisions = object.annualProvisions ?? new Uint8Array();
     return message;

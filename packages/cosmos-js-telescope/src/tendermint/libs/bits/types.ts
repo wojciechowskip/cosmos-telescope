@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface BitArray {
@@ -94,7 +94,7 @@ export const BitArray = {
     }
     return obj;
   },
-  fromPartial(object: Partial<BitArray>): BitArray {
+  fromPartial<I extends Exact<DeepPartial<BitArray>, I>>(object: I): BitArray {
     const message = createBaseBitArray();
     message.bits = object.bits !== undefined && object.bits !== null ? BigInt(object.bits.toString()) : BigInt(0);
     message.elems = object.elems?.map(e => BigInt(e.toString())) || [];

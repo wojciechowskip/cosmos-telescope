@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Timestamp } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, bytesFromBase64, base64FromBytes, toTimestamp, fromTimestamp, fromJsonTimestamp } from "../../helpers";
+import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes, toTimestamp, fromTimestamp, fromJsonTimestamp } from "../../helpers";
 import { JsonSafe } from "../../json-safe";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface ProtocolVersion {
@@ -201,7 +201,7 @@ export const ProtocolVersion = {
     message.app !== undefined && (obj.app = (message.app || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<ProtocolVersion>): ProtocolVersion {
+  fromPartial<I extends Exact<DeepPartial<ProtocolVersion>, I>>(object: I): ProtocolVersion {
     const message = createBaseProtocolVersion();
     message.p2p = object.p2p !== undefined && object.p2p !== null ? BigInt(object.p2p.toString()) : BigInt(0);
     message.block = object.block !== undefined && object.block !== null ? BigInt(object.block.toString()) : BigInt(0);
@@ -357,7 +357,7 @@ export const NodeInfo = {
     message.other !== undefined && (obj.other = message.other ? NodeInfoOther.toJSON(message.other) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<NodeInfo>): NodeInfo {
+  fromPartial<I extends Exact<DeepPartial<NodeInfo>, I>>(object: I): NodeInfo {
     const message = createBaseNodeInfo();
     message.protocolVersion = object.protocolVersion !== undefined && object.protocolVersion !== null ? ProtocolVersion.fromPartial(object.protocolVersion) : undefined;
     message.nodeId = object.nodeId ?? "";
@@ -484,7 +484,7 @@ export const NodeInfoOther = {
     message.rpcAddress !== undefined && (obj.rpcAddress = message.rpcAddress);
     return obj;
   },
-  fromPartial(object: Partial<NodeInfoOther>): NodeInfoOther {
+  fromPartial<I extends Exact<DeepPartial<NodeInfoOther>, I>>(object: I): NodeInfoOther {
     const message = createBaseNodeInfoOther();
     message.txIndex = object.txIndex ?? "";
     message.rpcAddress = object.rpcAddress ?? "";
@@ -594,7 +594,7 @@ export const PeerInfo = {
     message.lastConnected !== undefined && (obj.lastConnected = message.lastConnected.toISOString());
     return obj;
   },
-  fromPartial(object: Partial<PeerInfo>): PeerInfo {
+  fromPartial<I extends Exact<DeepPartial<PeerInfo>, I>>(object: I): PeerInfo {
     const message = createBasePeerInfo();
     message.id = object.id ?? "";
     message.addressInfo = object.addressInfo?.map(e => PeerAddressInfo.fromPartial(e)) || [];
@@ -716,7 +716,7 @@ export const PeerAddressInfo = {
     message.dialFailures !== undefined && (obj.dialFailures = Math.round(message.dialFailures));
     return obj;
   },
-  fromPartial(object: Partial<PeerAddressInfo>): PeerAddressInfo {
+  fromPartial<I extends Exact<DeepPartial<PeerAddressInfo>, I>>(object: I): PeerAddressInfo {
     const message = createBasePeerAddressInfo();
     message.address = object.address ?? "";
     message.lastDialSuccess = object.lastDialSuccess ?? undefined;

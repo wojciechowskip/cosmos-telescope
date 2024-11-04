@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
@@ -225,7 +225,7 @@ export const StakeAuthorization = {
     message.authorizationType !== undefined && (obj.authorizationType = authorizationTypeToJSON(message.authorizationType));
     return obj;
   },
-  fromPartial(object: Partial<StakeAuthorization>): StakeAuthorization {
+  fromPartial<I extends Exact<DeepPartial<StakeAuthorization>, I>>(object: I): StakeAuthorization {
     const message = createBaseStakeAuthorization();
     message.maxTokens = object.maxTokens !== undefined && object.maxTokens !== null ? Coin.fromPartial(object.maxTokens) : undefined;
     message.allowList = object.allowList !== undefined && object.allowList !== null ? StakeAuthorization_Validators.fromPartial(object.allowList) : undefined;
@@ -335,7 +335,7 @@ export const StakeAuthorization_Validators = {
     }
     return obj;
   },
-  fromPartial(object: Partial<StakeAuthorization_Validators>): StakeAuthorization_Validators {
+  fromPartial<I extends Exact<DeepPartial<StakeAuthorization_Validators>, I>>(object: I): StakeAuthorization_Validators {
     const message = createBaseStakeAuthorization_Validators();
     message.address = object.address?.map(e => e) || [];
     return message;

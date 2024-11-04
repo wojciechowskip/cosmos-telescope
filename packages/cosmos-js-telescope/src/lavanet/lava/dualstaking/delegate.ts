@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface Delegation {
@@ -145,7 +145,7 @@ export const Delegation = {
     message.timestamp !== undefined && (obj.timestamp = (message.timestamp || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<Delegation>): Delegation {
+  fromPartial<I extends Exact<DeepPartial<Delegation>, I>>(object: I): Delegation {
     const message = createBaseDelegation();
     message.provider = object.provider ?? "";
     message.chainID = object.chainID ?? "";
@@ -252,7 +252,7 @@ export const Delegator = {
     }
     return obj;
   },
-  fromPartial(object: Partial<Delegator>): Delegator {
+  fromPartial<I extends Exact<DeepPartial<Delegator>, I>>(object: I): Delegator {
     const message = createBaseDelegator();
     message.providers = object.providers?.map(e => e) || [];
     return message;

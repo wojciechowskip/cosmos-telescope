@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface DelegatorReward {
@@ -110,7 +110,7 @@ export const DelegatorReward = {
     }
     return obj;
   },
-  fromPartial(object: Partial<DelegatorReward>): DelegatorReward {
+  fromPartial<I extends Exact<DeepPartial<DelegatorReward>, I>>(object: I): DelegatorReward {
     const message = createBaseDelegatorReward();
     message.delegator = object.delegator ?? "";
     message.provider = object.provider ?? "";

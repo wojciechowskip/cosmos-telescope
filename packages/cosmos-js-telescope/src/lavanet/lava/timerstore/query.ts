@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryAllTimersRequest {
@@ -221,7 +221,7 @@ export const QueryAllTimersRequest = {
     message.prefix !== undefined && (obj.prefix = message.prefix);
     return obj;
   },
-  fromPartial(object: Partial<QueryAllTimersRequest>): QueryAllTimersRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAllTimersRequest>, I>>(object: I): QueryAllTimersRequest {
     const message = createBaseQueryAllTimersRequest();
     message.storeKey = object.storeKey ?? "";
     message.prefix = object.prefix ?? "";
@@ -338,7 +338,7 @@ export const TimerInfo = {
     message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
     return obj;
   },
-  fromPartial(object: Partial<TimerInfo>): TimerInfo {
+  fromPartial<I extends Exact<DeepPartial<TimerInfo>, I>>(object: I): TimerInfo {
     const message = createBaseTimerInfo();
     message.blockTime = object.blockTime ?? undefined;
     message.blockHeight = object.blockHeight !== undefined && object.blockHeight !== null ? BigInt(object.blockHeight.toString()) : undefined;
@@ -462,7 +462,7 @@ export const QueryAllTimersResponse = {
     message.tick !== undefined && (obj.tick = message.tick);
     return obj;
   },
-  fromPartial(object: Partial<QueryAllTimersResponse>): QueryAllTimersResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAllTimersResponse>, I>>(object: I): QueryAllTimersResponse {
     const message = createBaseQueryAllTimersResponse();
     message.blockTimeTimers = object.blockTimeTimers?.map(e => TimerInfo.fromPartial(e)) || [];
     message.blockHeightTimers = object.blockHeightTimers?.map(e => TimerInfo.fromPartial(e)) || [];
@@ -548,7 +548,7 @@ export const QueryStoreKeysRequest = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<QueryStoreKeysRequest>): QueryStoreKeysRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryStoreKeysRequest>, I>>(_: I): QueryStoreKeysRequest {
     const message = createBaseQueryStoreKeysRequest();
     return message;
   },
@@ -635,7 +635,7 @@ export const StoreKeyAndPrefix = {
     message.prefix !== undefined && (obj.prefix = message.prefix);
     return obj;
   },
-  fromPartial(object: Partial<StoreKeyAndPrefix>): StoreKeyAndPrefix {
+  fromPartial<I extends Exact<DeepPartial<StoreKeyAndPrefix>, I>>(object: I): StoreKeyAndPrefix {
     const message = createBaseStoreKeyAndPrefix();
     message.storeKey = object.storeKey ?? "";
     message.prefix = object.prefix ?? "";
@@ -727,7 +727,7 @@ export const QueryStoreKeysResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<QueryStoreKeysResponse>): QueryStoreKeysResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryStoreKeysResponse>, I>>(object: I): QueryStoreKeysResponse {
     const message = createBaseQueryStoreKeysResponse();
     message.keys = object.keys?.map(e => StoreKeyAndPrefix.fromPartial(e)) || [];
     return message;
@@ -821,7 +821,7 @@ export const QueryNextRequest = {
     message.prefix !== undefined && (obj.prefix = message.prefix);
     return obj;
   },
-  fromPartial(object: Partial<QueryNextRequest>): QueryNextRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryNextRequest>, I>>(object: I): QueryNextRequest {
     const message = createBaseQueryNextRequest();
     message.storeKey = object.storeKey ?? "";
     message.prefix = object.prefix ?? "";
@@ -927,7 +927,7 @@ export const QueryNextResponse = {
     message.tick !== undefined && (obj.tick = message.tick);
     return obj;
   },
-  fromPartial(object: Partial<QueryNextResponse>): QueryNextResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryNextResponse>, I>>(object: I): QueryNextResponse {
     const message = createBaseQueryNextResponse();
     message.nextBlockHeight = object.nextBlockHeight !== undefined && object.nextBlockHeight !== null ? BigInt(object.nextBlockHeight.toString()) : BigInt(0);
     message.nextBlockTime = object.nextBlockTime ?? "";

@@ -6,7 +6,7 @@ import { Duration, DurationAmino, DurationSDKType } from "../../../google/protob
 import { CommunityPoolSpendProposal, CommunityPoolSpendProposalProtoMsg, CommunityPoolSpendProposalSDKType, CommunityPoolSpendProposalWithDeposit, CommunityPoolSpendProposalWithDepositProtoMsg, CommunityPoolSpendProposalWithDepositSDKType } from "../../distribution/v1beta1/distribution";
 import { ParameterChangeProposal, ParameterChangeProposalProtoMsg, ParameterChangeProposalSDKType } from "../../params/v1beta1/params";
 import { SoftwareUpgradeProposal, SoftwareUpgradeProposalProtoMsg, SoftwareUpgradeProposalSDKType, CancelSoftwareUpgradeProposal, CancelSoftwareUpgradeProposalProtoMsg, CancelSoftwareUpgradeProposalSDKType } from "../../upgrade/v1beta1/upgrade";
-import { isSet, toTimestamp, fromTimestamp, fromJsonTimestamp, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, DeepPartial, Exact, toTimestamp, fromTimestamp, fromJsonTimestamp, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
 import { JsonSafe } from "../../../json-safe";
@@ -546,7 +546,7 @@ export const WeightedVoteOption = {
     message.weight !== undefined && (obj.weight = message.weight);
     return obj;
   },
-  fromPartial(object: Partial<WeightedVoteOption>): WeightedVoteOption {
+  fromPartial<I extends Exact<DeepPartial<WeightedVoteOption>, I>>(object: I): WeightedVoteOption {
     const message = createBaseWeightedVoteOption();
     message.option = object.option ?? 0;
     message.weight = object.weight ?? "";
@@ -652,7 +652,7 @@ export const TextProposal = {
     message.description !== undefined && (obj.description = message.description);
     return obj;
   },
-  fromPartial(object: Partial<TextProposal>): TextProposal {
+  fromPartial<I extends Exact<DeepPartial<TextProposal>, I>>(object: I): TextProposal {
     const message = createBaseTextProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
@@ -770,7 +770,7 @@ export const Deposit = {
     }
     return obj;
   },
-  fromPartial(object: Partial<Deposit>): Deposit {
+  fromPartial<I extends Exact<DeepPartial<Deposit>, I>>(object: I): Deposit {
     const message = createBaseDeposit();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.depositor = object.depositor ?? "";
@@ -949,7 +949,7 @@ export const Proposal = {
     message.votingEndTime !== undefined && (obj.votingEndTime = message.votingEndTime.toISOString());
     return obj;
   },
-  fromPartial(object: Partial<Proposal>): Proposal {
+  fromPartial<I extends Exact<DeepPartial<Proposal>, I>>(object: I): Proposal {
     const message = createBaseProposal();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.content = object.content !== undefined && object.content !== null ? GlobalDecoderRegistry.fromPartial(object.content) : undefined;
@@ -1109,7 +1109,7 @@ export const TallyResult = {
     message.noWithVeto !== undefined && (obj.noWithVeto = message.noWithVeto);
     return obj;
   },
-  fromPartial(object: Partial<TallyResult>): TallyResult {
+  fromPartial<I extends Exact<DeepPartial<TallyResult>, I>>(object: I): TallyResult {
     const message = createBaseTallyResult();
     message.yes = object.yes ?? "";
     message.abstain = object.abstain ?? "";
@@ -1246,7 +1246,7 @@ export const Vote = {
     }
     return obj;
   },
-  fromPartial(object: Partial<Vote>): Vote {
+  fromPartial<I extends Exact<DeepPartial<Vote>, I>>(object: I): Vote {
     const message = createBaseVote();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.voter = object.voter ?? "";
@@ -1367,7 +1367,7 @@ export const DepositParams = {
     message.maxDepositPeriod !== undefined && (obj.maxDepositPeriod = message.maxDepositPeriod ? Duration.toJSON(message.maxDepositPeriod) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<DepositParams>): DepositParams {
+  fromPartial<I extends Exact<DeepPartial<DepositParams>, I>>(object: I): DepositParams {
     const message = createBaseDepositParams();
     message.minDeposit = object.minDeposit?.map(e => Coin.fromPartial(e)) || [];
     message.maxDepositPeriod = object.maxDepositPeriod !== undefined && object.maxDepositPeriod !== null ? Duration.fromPartial(object.maxDepositPeriod) : undefined;
@@ -1465,7 +1465,7 @@ export const VotingParams = {
     message.votingPeriod !== undefined && (obj.votingPeriod = message.votingPeriod ? Duration.toJSON(message.votingPeriod) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<VotingParams>): VotingParams {
+  fromPartial<I extends Exact<DeepPartial<VotingParams>, I>>(object: I): VotingParams {
     const message = createBaseVotingParams();
     message.votingPeriod = object.votingPeriod !== undefined && object.votingPeriod !== null ? Duration.fromPartial(object.votingPeriod) : undefined;
     return message;
@@ -1574,7 +1574,7 @@ export const TallyParams = {
     message.vetoThreshold !== undefined && (obj.vetoThreshold = base64FromBytes(message.vetoThreshold !== undefined ? message.vetoThreshold : new Uint8Array()));
     return obj;
   },
-  fromPartial(object: Partial<TallyParams>): TallyParams {
+  fromPartial<I extends Exact<DeepPartial<TallyParams>, I>>(object: I): TallyParams {
     const message = createBaseTallyParams();
     message.quorum = object.quorum ?? new Uint8Array();
     message.threshold = object.threshold ?? new Uint8Array();

@@ -7,7 +7,7 @@ import { TextProposal, TextProposalProtoMsg, TextProposalSDKType } from "../v1be
 import { ParameterChangeProposal, ParameterChangeProposalProtoMsg, ParameterChangeProposalSDKType } from "../../params/v1beta1/params";
 import { SoftwareUpgradeProposal, SoftwareUpgradeProposalProtoMsg, SoftwareUpgradeProposalSDKType, CancelSoftwareUpgradeProposal, CancelSoftwareUpgradeProposalProtoMsg, CancelSoftwareUpgradeProposalSDKType } from "../../upgrade/v1beta1/upgrade";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -334,7 +334,7 @@ export const MsgSubmitProposal = {
     message.metadata !== undefined && (obj.metadata = message.metadata);
     return obj;
   },
-  fromPartial(object: Partial<MsgSubmitProposal>): MsgSubmitProposal {
+  fromPartial<I extends Exact<DeepPartial<MsgSubmitProposal>, I>>(object: I): MsgSubmitProposal {
     const message = createBaseMsgSubmitProposal();
     message.messages = object.messages?.map(e => Any.fromPartial(e)) || [];
     message.initialDeposit = object.initialDeposit?.map(e => Coin.fromPartial(e)) || [];
@@ -444,7 +444,7 @@ export const MsgSubmitProposalResponse = {
     message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<MsgSubmitProposalResponse>): MsgSubmitProposalResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSubmitProposalResponse>, I>>(object: I): MsgSubmitProposalResponse {
     const message = createBaseMsgSubmitProposalResponse();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     return message;
@@ -544,7 +544,7 @@ export const MsgExecLegacyContent = {
     message.authority !== undefined && (obj.authority = message.authority);
     return obj;
   },
-  fromPartial(object: Partial<MsgExecLegacyContent>): MsgExecLegacyContent {
+  fromPartial<I extends Exact<DeepPartial<MsgExecLegacyContent>, I>>(object: I): MsgExecLegacyContent {
     const message = createBaseMsgExecLegacyContent();
     message.content = object.content !== undefined && object.content !== null ? GlobalDecoderRegistry.fromPartial(object.content) : undefined;
     message.authority = object.authority ?? "";
@@ -629,7 +629,7 @@ export const MsgExecLegacyContentResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgExecLegacyContentResponse>): MsgExecLegacyContentResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgExecLegacyContentResponse>, I>>(_: I): MsgExecLegacyContentResponse {
     const message = createBaseMsgExecLegacyContentResponse();
     return message;
   },
@@ -742,7 +742,7 @@ export const MsgVote = {
     message.metadata !== undefined && (obj.metadata = message.metadata);
     return obj;
   },
-  fromPartial(object: Partial<MsgVote>): MsgVote {
+  fromPartial<I extends Exact<DeepPartial<MsgVote>, I>>(object: I): MsgVote {
     const message = createBaseMsgVote();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.voter = object.voter ?? "";
@@ -837,7 +837,7 @@ export const MsgVoteResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgVoteResponse>): MsgVoteResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgVoteResponse>, I>>(_: I): MsgVoteResponse {
     const message = createBaseMsgVoteResponse();
     return message;
   },
@@ -954,7 +954,7 @@ export const MsgVoteWeighted = {
     message.metadata !== undefined && (obj.metadata = message.metadata);
     return obj;
   },
-  fromPartial(object: Partial<MsgVoteWeighted>): MsgVoteWeighted {
+  fromPartial<I extends Exact<DeepPartial<MsgVoteWeighted>, I>>(object: I): MsgVoteWeighted {
     const message = createBaseMsgVoteWeighted();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.voter = object.voter ?? "";
@@ -1051,7 +1051,7 @@ export const MsgVoteWeightedResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgVoteWeightedResponse>): MsgVoteWeightedResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgVoteWeightedResponse>, I>>(_: I): MsgVoteWeightedResponse {
     const message = createBaseMsgVoteWeightedResponse();
     return message;
   },
@@ -1159,7 +1159,7 @@ export const MsgDeposit = {
     }
     return obj;
   },
-  fromPartial(object: Partial<MsgDeposit>): MsgDeposit {
+  fromPartial<I extends Exact<DeepPartial<MsgDeposit>, I>>(object: I): MsgDeposit {
     const message = createBaseMsgDeposit();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.depositor = object.depositor ?? "";
@@ -1251,7 +1251,7 @@ export const MsgDepositResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgDepositResponse>): MsgDepositResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgDepositResponse>, I>>(_: I): MsgDepositResponse {
     const message = createBaseMsgDepositResponse();
     return message;
   },

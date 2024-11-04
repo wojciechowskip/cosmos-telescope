@@ -59,8 +59,16 @@ export const options: TelescopeInput = {
           'ibc.core.types.v1'
         ]
       },
+      typingsFormat: {
+        useDeepPartial: true,
+        duration: 'duration',
+        timestamp: 'date',
+        useExact: true,
+        autoFixUndefinedEnumDefault: true,
+        num64: 'bigint',
+        useTelescopeGeneratedType: true,
+      },
     },
-
     bundle: {
       enabled: true
     },

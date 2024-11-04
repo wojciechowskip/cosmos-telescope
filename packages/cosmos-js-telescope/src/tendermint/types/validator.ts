@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { PublicKey, PublicKeyAmino, PublicKeySDKType } from "../crypto/keys";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../helpers";
+import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes } from "../../helpers";
 import { JsonSafe } from "../../json-safe";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface ValidatorSet {
@@ -144,7 +144,7 @@ export const ValidatorSet = {
     message.totalVotingPower !== undefined && (obj.totalVotingPower = (message.totalVotingPower || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<ValidatorSet>): ValidatorSet {
+  fromPartial<I extends Exact<DeepPartial<ValidatorSet>, I>>(object: I): ValidatorSet {
     const message = createBaseValidatorSet();
     message.validators = object.validators?.map(e => Validator.fromPartial(e)) || [];
     message.proposer = object.proposer !== undefined && object.proposer !== null ? Validator.fromPartial(object.proposer) : undefined;
@@ -266,7 +266,7 @@ export const Validator = {
     message.proposerPriority !== undefined && (obj.proposerPriority = (message.proposerPriority || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<Validator>): Validator {
+  fromPartial<I extends Exact<DeepPartial<Validator>, I>>(object: I): Validator {
     const message = createBaseValidator();
     message.address = object.address ?? new Uint8Array();
     message.pubKey = object.pubKey !== undefined && object.pubKey !== null ? PublicKey.fromPartial(object.pubKey) : undefined;
@@ -373,7 +373,7 @@ export const SimpleValidator = {
     message.votingPower !== undefined && (obj.votingPower = (message.votingPower || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<SimpleValidator>): SimpleValidator {
+  fromPartial<I extends Exact<DeepPartial<SimpleValidator>, I>>(object: I): SimpleValidator {
     const message = createBaseSimpleValidator();
     message.pubKey = object.pubKey !== undefined && object.pubKey !== null ? PublicKey.fromPartial(object.pubKey) : undefined;
     message.votingPower = object.votingPower !== undefined && object.votingPower !== null ? BigInt(object.votingPower.toString()) : BigInt(0);

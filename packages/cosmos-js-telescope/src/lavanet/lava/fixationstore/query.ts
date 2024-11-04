@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Entry, EntryAmino, EntrySDKType } from "./fixation";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryAllIndicesRequest {
@@ -241,7 +241,7 @@ export const QueryAllIndicesRequest = {
     message.prefix !== undefined && (obj.prefix = message.prefix);
     return obj;
   },
-  fromPartial(object: Partial<QueryAllIndicesRequest>): QueryAllIndicesRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAllIndicesRequest>, I>>(object: I): QueryAllIndicesRequest {
     const message = createBaseQueryAllIndicesRequest();
     message.storeKey = object.storeKey ?? "";
     message.prefix = object.prefix ?? "";
@@ -333,7 +333,7 @@ export const QueryAllIndicesResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<QueryAllIndicesResponse>): QueryAllIndicesResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAllIndicesResponse>, I>>(object: I): QueryAllIndicesResponse {
     const message = createBaseQueryAllIndicesResponse();
     message.indices = object.indices?.map(e => e) || [];
     return message;
@@ -407,7 +407,7 @@ export const QueryStoreKeysRequest = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<QueryStoreKeysRequest>): QueryStoreKeysRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryStoreKeysRequest>, I>>(_: I): QueryStoreKeysRequest {
     const message = createBaseQueryStoreKeysRequest();
     return message;
   },
@@ -494,7 +494,7 @@ export const StoreKeyAndPrefix = {
     message.prefix !== undefined && (obj.prefix = message.prefix);
     return obj;
   },
-  fromPartial(object: Partial<StoreKeyAndPrefix>): StoreKeyAndPrefix {
+  fromPartial<I extends Exact<DeepPartial<StoreKeyAndPrefix>, I>>(object: I): StoreKeyAndPrefix {
     const message = createBaseStoreKeyAndPrefix();
     message.storeKey = object.storeKey ?? "";
     message.prefix = object.prefix ?? "";
@@ -586,7 +586,7 @@ export const QueryStoreKeysResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<QueryStoreKeysResponse>): QueryStoreKeysResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryStoreKeysResponse>, I>>(object: I): QueryStoreKeysResponse {
     const message = createBaseQueryStoreKeysResponse();
     message.keys = object.keys?.map(e => StoreKeyAndPrefix.fromPartial(e)) || [];
     return message;
@@ -689,7 +689,7 @@ export const QueryVersionsRequest = {
     message.key !== undefined && (obj.key = message.key);
     return obj;
   },
-  fromPartial(object: Partial<QueryVersionsRequest>): QueryVersionsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryVersionsRequest>, I>>(object: I): QueryVersionsRequest {
     const message = createBaseQueryVersionsRequest();
     message.storeKey = object.storeKey ?? "";
     message.prefix = object.prefix ?? "";
@@ -786,7 +786,7 @@ export const QueryVersionsResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<QueryVersionsResponse>): QueryVersionsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryVersionsResponse>, I>>(object: I): QueryVersionsResponse {
     const message = createBaseQueryVersionsResponse();
     message.entries = object.entries?.map(e => Entry.fromPartial(e)) || [];
     return message;
@@ -916,7 +916,7 @@ export const QueryEntryRequest = {
     message.stringData !== undefined && (obj.stringData = message.stringData);
     return obj;
   },
-  fromPartial(object: Partial<QueryEntryRequest>): QueryEntryRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryEntryRequest>, I>>(object: I): QueryEntryRequest {
     const message = createBaseQueryEntryRequest();
     message.storeKey = object.storeKey ?? "";
     message.prefix = object.prefix ?? "";
@@ -1033,7 +1033,7 @@ export const QueryEntryResponse = {
     message.stringData !== undefined && (obj.stringData = message.stringData);
     return obj;
   },
-  fromPartial(object: Partial<QueryEntryResponse>): QueryEntryResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryEntryResponse>, I>>(object: I): QueryEntryResponse {
     const message = createBaseQueryEntryResponse();
     message.entry = object.entry !== undefined && object.entry !== null ? Entry.fromPartial(object.entry) : undefined;
     message.stringData = object.stringData ?? "";

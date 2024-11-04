@@ -5,7 +5,7 @@ import { GenesisStateAmino as GenesisState1Amino } from "../fixationstore/fixati
 import { GenesisStateSDKType as GenesisState1SDKType } from "../fixationstore/fixation";
 import { DelegatorReward, DelegatorRewardAmino, DelegatorRewardSDKType } from "./delegator_reward";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** GenesisState defines the dualstaking module's genesis state. */
@@ -117,7 +117,7 @@ export const GenesisState = {
     }
     return obj;
   },
-  fromPartial(object: Partial<GenesisState>): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     message.delegationsFS = object.delegationsFS !== undefined && object.delegationsFS !== null ? GenesisState1.fromPartial(object.delegationsFS) : undefined;

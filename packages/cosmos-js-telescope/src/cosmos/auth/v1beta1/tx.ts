@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Params, ParamsAmino, ParamsSDKType } from "./auth";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -139,7 +139,7 @@ export const MsgUpdateParams = {
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(object: I): MsgUpdateParams {
     const message = createBaseMsgUpdateParams();
     message.authority = object.authority ?? "";
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
@@ -224,7 +224,7 @@ export const MsgUpdateParamsResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(_: I): MsgUpdateParamsResponse {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
   },

@@ -2,6 +2,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { JsonSafe } from "../../../json-safe";
+import { DeepPartial, Exact } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
  * SendAuthorization allows the grantee to spend up to spend_limit coins from
@@ -123,7 +124,7 @@ export const SendAuthorization = {
     }
     return obj;
   },
-  fromPartial(object: Partial<SendAuthorization>): SendAuthorization {
+  fromPartial<I extends Exact<DeepPartial<SendAuthorization>, I>>(object: I): SendAuthorization {
     const message = createBaseSendAuthorization();
     message.spendLimit = object.spendLimit?.map(e => Coin.fromPartial(e)) || [];
     message.allowList = object.allowList?.map(e => e) || [];

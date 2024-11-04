@@ -1,7 +1,8 @@
 //@ts-nocheck
-import { GeneratedType, Registry } from "@cosmjs/proto-signing";
+import { TelescopeGeneratedType } from "../../../types";
+import { Registry } from "@cosmjs/proto-signing";
 import { MsgDelegate, MsgRedelegate, MsgUnbond, MsgClaimRewards } from "./tx";
-export const registry: ReadonlyArray<[string, GeneratedType]> = [["/lavanet.lava.dualstaking.MsgDelegate", MsgDelegate], ["/lavanet.lava.dualstaking.MsgRedelegate", MsgRedelegate], ["/lavanet.lava.dualstaking.MsgUnbond", MsgUnbond], ["/lavanet.lava.dualstaking.MsgClaimRewards", MsgClaimRewards]];
+export const registry: ReadonlyArray<[string, TelescopeGeneratedType<any, any, any>]> = [["/lavanet.lava.dualstaking.MsgDelegate", MsgDelegate], ["/lavanet.lava.dualstaking.MsgRedelegate", MsgRedelegate], ["/lavanet.lava.dualstaking.MsgUnbond", MsgUnbond], ["/lavanet.lava.dualstaking.MsgClaimRewards", MsgClaimRewards]];
 export const load = (protoRegistry: Registry) => {
   registry.forEach(([typeUrl, mod]) => {
     protoRegistry.register(typeUrl, mod);

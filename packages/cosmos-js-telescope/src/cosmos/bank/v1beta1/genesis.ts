@@ -2,7 +2,7 @@
 import { Params, ParamsAmino, ParamsSDKType, Metadata, MetadataAmino, MetadataSDKType, SendEnabled, SendEnabledAmino, SendEnabledSDKType } from "./bank";
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** GenesisState defines the bank module's genesis state. */
@@ -199,7 +199,7 @@ export const GenesisState = {
     }
     return obj;
   },
-  fromPartial(object: Partial<GenesisState>): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     message.balances = object.balances?.map(e => Balance.fromPartial(e)) || [];
@@ -331,7 +331,7 @@ export const Balance = {
     }
     return obj;
   },
-  fromPartial(object: Partial<Balance>): Balance {
+  fromPartial<I extends Exact<DeepPartial<Balance>, I>>(object: I): Balance {
     const message = createBaseBalance();
     message.address = object.address ?? "";
     message.coins = object.coins?.map(e => Coin.fromPartial(e)) || [];

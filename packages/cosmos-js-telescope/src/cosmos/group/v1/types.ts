@@ -3,7 +3,7 @@ import { Timestamp } from "../../../google/protobuf/timestamp";
 import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { toTimestamp, fromTimestamp, isSet, fromJsonTimestamp } from "../../../helpers";
+import { toTimestamp, fromTimestamp, isSet, fromJsonTimestamp, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** VoteOption enumerates the valid vote options for a given proposal. */
@@ -840,7 +840,7 @@ export const Member = {
     message.addedAt !== undefined && (obj.addedAt = message.addedAt.toISOString());
     return obj;
   },
-  fromPartial(object: Partial<Member>): Member {
+  fromPartial<I extends Exact<DeepPartial<Member>, I>>(object: I): Member {
     const message = createBaseMember();
     message.address = object.address ?? "";
     message.weight = object.weight ?? "";
@@ -950,7 +950,7 @@ export const Members = {
     }
     return obj;
   },
-  fromPartial(object: Partial<Members>): Members {
+  fromPartial<I extends Exact<DeepPartial<Members>, I>>(object: I): Members {
     const message = createBaseMembers();
     message.members = object.members?.map(e => Member.fromPartial(e)) || [];
     return message;
@@ -1053,7 +1053,7 @@ export const ThresholdDecisionPolicy = {
     message.windows !== undefined && (obj.windows = message.windows ? DecisionPolicyWindows.toJSON(message.windows) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<ThresholdDecisionPolicy>): ThresholdDecisionPolicy {
+  fromPartial<I extends Exact<DeepPartial<ThresholdDecisionPolicy>, I>>(object: I): ThresholdDecisionPolicy {
     const message = createBaseThresholdDecisionPolicy();
     message.threshold = object.threshold ?? "";
     message.windows = object.windows !== undefined && object.windows !== null ? DecisionPolicyWindows.fromPartial(object.windows) : undefined;
@@ -1159,7 +1159,7 @@ export const PercentageDecisionPolicy = {
     message.windows !== undefined && (obj.windows = message.windows ? DecisionPolicyWindows.toJSON(message.windows) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<PercentageDecisionPolicy>): PercentageDecisionPolicy {
+  fromPartial<I extends Exact<DeepPartial<PercentageDecisionPolicy>, I>>(object: I): PercentageDecisionPolicy {
     const message = createBasePercentageDecisionPolicy();
     message.percentage = object.percentage ?? "";
     message.windows = object.windows !== undefined && object.windows !== null ? DecisionPolicyWindows.fromPartial(object.windows) : undefined;
@@ -1264,7 +1264,7 @@ export const DecisionPolicyWindows = {
     message.minExecutionPeriod !== undefined && (obj.minExecutionPeriod = message.minExecutionPeriod ? Duration.toJSON(message.minExecutionPeriod) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<DecisionPolicyWindows>): DecisionPolicyWindows {
+  fromPartial<I extends Exact<DeepPartial<DecisionPolicyWindows>, I>>(object: I): DecisionPolicyWindows {
     const message = createBaseDecisionPolicyWindows();
     message.votingPeriod = object.votingPeriod !== undefined && object.votingPeriod !== null ? Duration.fromPartial(object.votingPeriod) : undefined;
     message.minExecutionPeriod = object.minExecutionPeriod !== undefined && object.minExecutionPeriod !== null ? Duration.fromPartial(object.minExecutionPeriod) : undefined;
@@ -1405,7 +1405,7 @@ export const GroupInfo = {
     message.createdAt !== undefined && (obj.createdAt = message.createdAt.toISOString());
     return obj;
   },
-  fromPartial(object: Partial<GroupInfo>): GroupInfo {
+  fromPartial<I extends Exact<DeepPartial<GroupInfo>, I>>(object: I): GroupInfo {
     const message = createBaseGroupInfo();
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.admin = object.admin ?? "";
@@ -1530,7 +1530,7 @@ export const GroupMember = {
     message.member !== undefined && (obj.member = message.member ? Member.toJSON(message.member) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<GroupMember>): GroupMember {
+  fromPartial<I extends Exact<DeepPartial<GroupMember>, I>>(object: I): GroupMember {
     const message = createBaseGroupMember();
     message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     message.member = object.member !== undefined && object.member !== null ? Member.fromPartial(object.member) : undefined;
@@ -1680,7 +1680,7 @@ export const GroupPolicyInfo = {
     message.createdAt !== undefined && (obj.createdAt = message.createdAt.toISOString());
     return obj;
   },
-  fromPartial(object: Partial<GroupPolicyInfo>): GroupPolicyInfo {
+  fromPartial<I extends Exact<DeepPartial<GroupPolicyInfo>, I>>(object: I): GroupPolicyInfo {
     const message = createBaseGroupPolicyInfo();
     message.address = object.address ?? "";
     message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
@@ -1917,7 +1917,7 @@ export const Proposal = {
     }
     return obj;
   },
-  fromPartial(object: Partial<Proposal>): Proposal {
+  fromPartial<I extends Exact<DeepPartial<Proposal>, I>>(object: I): Proposal {
     const message = createBaseProposal();
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.address = object.address ?? "";
@@ -2099,7 +2099,7 @@ export const TallyResult = {
     message.noWithVetoCount !== undefined && (obj.noWithVetoCount = message.noWithVetoCount);
     return obj;
   },
-  fromPartial(object: Partial<TallyResult>): TallyResult {
+  fromPartial<I extends Exact<DeepPartial<TallyResult>, I>>(object: I): TallyResult {
     const message = createBaseTallyResult();
     message.yesCount = object.yesCount ?? "";
     message.abstainCount = object.abstainCount ?? "";
@@ -2241,7 +2241,7 @@ export const Vote = {
     message.submitTime !== undefined && (obj.submitTime = message.submitTime.toISOString());
     return obj;
   },
-  fromPartial(object: Partial<Vote>): Vote {
+  fromPartial<I extends Exact<DeepPartial<Vote>, I>>(object: I): Vote {
     const message = createBaseVote();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.voter = object.voter ?? "";

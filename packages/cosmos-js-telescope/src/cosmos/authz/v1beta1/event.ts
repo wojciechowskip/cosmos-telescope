@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** EventGrant is emitted on Msg/Grant */
@@ -135,7 +135,7 @@ export const EventGrant = {
     message.grantee !== undefined && (obj.grantee = message.grantee);
     return obj;
   },
-  fromPartial(object: Partial<EventGrant>): EventGrant {
+  fromPartial<I extends Exact<DeepPartial<EventGrant>, I>>(object: I): EventGrant {
     const message = createBaseEventGrant();
     message.msgTypeUrl = object.msgTypeUrl ?? "";
     message.granter = object.granter ?? "";
@@ -254,7 +254,7 @@ export const EventRevoke = {
     message.grantee !== undefined && (obj.grantee = message.grantee);
     return obj;
   },
-  fromPartial(object: Partial<EventRevoke>): EventRevoke {
+  fromPartial<I extends Exact<DeepPartial<EventRevoke>, I>>(object: I): EventRevoke {
     const message = createBaseEventRevoke();
     message.msgTypeUrl = object.msgTypeUrl ?? "";
     message.granter = object.granter ?? "";

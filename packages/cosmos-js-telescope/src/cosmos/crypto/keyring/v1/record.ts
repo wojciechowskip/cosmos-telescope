@@ -2,7 +2,7 @@
 import { Any, AnyAmino, AnySDKType } from "../../../../google/protobuf/any";
 import { BIP44Params, BIP44ParamsAmino, BIP44ParamsSDKType } from "../../hd/v1/hd";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
-import { isSet } from "../../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../../helpers";
 import { JsonSafe } from "../../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../../registry";
 /** Record is used for representing a key in the keyring. */
@@ -227,7 +227,7 @@ export const Record = {
     message.offline !== undefined && (obj.offline = message.offline ? Record_Offline.toJSON(message.offline) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<Record>): Record {
+  fromPartial<I extends Exact<DeepPartial<Record>, I>>(object: I): Record {
     const message = createBaseRecord();
     message.name = object.name ?? "";
     message.pubKey = object.pubKey !== undefined && object.pubKey !== null ? Any.fromPartial(object.pubKey) : undefined;
@@ -352,7 +352,7 @@ export const Record_Local = {
     message.privKeyType !== undefined && (obj.privKeyType = message.privKeyType);
     return obj;
   },
-  fromPartial(object: Partial<Record_Local>): Record_Local {
+  fromPartial<I extends Exact<DeepPartial<Record_Local>, I>>(object: I): Record_Local {
     const message = createBaseRecord_Local();
     message.privKey = object.privKey !== undefined && object.privKey !== null ? Any.fromPartial(object.privKey) : undefined;
     message.privKeyType = object.privKeyType ?? "";
@@ -448,7 +448,7 @@ export const Record_Ledger = {
     message.path !== undefined && (obj.path = message.path ? BIP44Params.toJSON(message.path) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<Record_Ledger>): Record_Ledger {
+  fromPartial<I extends Exact<DeepPartial<Record_Ledger>, I>>(object: I): Record_Ledger {
     const message = createBaseRecord_Ledger();
     message.path = object.path !== undefined && object.path !== null ? BIP44Params.fromPartial(object.path) : undefined;
     return message;
@@ -528,7 +528,7 @@ export const Record_Multi = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<Record_Multi>): Record_Multi {
+  fromPartial<I extends Exact<DeepPartial<Record_Multi>, I>>(_: I): Record_Multi {
     const message = createBaseRecord_Multi();
     return message;
   },
@@ -603,7 +603,7 @@ export const Record_Offline = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<Record_Offline>): Record_Offline {
+  fromPartial<I extends Exact<DeepPartial<Record_Offline>, I>>(_: I): Record_Offline {
     const message = createBaseRecord_Offline();
     return message;
   },

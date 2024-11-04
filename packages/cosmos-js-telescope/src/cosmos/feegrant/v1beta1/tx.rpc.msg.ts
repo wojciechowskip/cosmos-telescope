@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Rpc } from "../../../helpers";
+import { TxRpc } from "../../../types";
 import { BinaryReader } from "../../../binary";
 import { MsgGrantAllowance, MsgGrantAllowanceResponse, MsgRevokeAllowance, MsgRevokeAllowanceResponse, MsgPruneAllowances, MsgPruneAllowancesResponse } from "./tx";
 /** Msg defines the feegrant msg service. */
@@ -22,8 +22,8 @@ export interface Msg {
   pruneAllowances(request: MsgPruneAllowances): Promise<MsgPruneAllowancesResponse>;
 }
 export class MsgClientImpl implements Msg {
-  private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly rpc: TxRpc;
+  constructor(rpc: TxRpc) {
     this.rpc = rpc;
     this.grantAllowance = this.grantAllowance.bind(this);
     this.revokeAllowance = this.revokeAllowance.bind(this);

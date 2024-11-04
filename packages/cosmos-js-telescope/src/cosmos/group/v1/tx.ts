@@ -2,7 +2,7 @@
 import { Member, MemberAmino, MemberSDKType, VoteOption, ThresholdDecisionPolicy, ThresholdDecisionPolicyProtoMsg, ThresholdDecisionPolicySDKType, PercentageDecisionPolicy, PercentageDecisionPolicyProtoMsg, PercentageDecisionPolicySDKType, voteOptionFromJSON, voteOptionToJSON } from "./types";
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** Exec defines modes of execution of a proposal on creation or on new vote. */
@@ -861,7 +861,7 @@ export const MsgCreateGroup = {
     message.metadata !== undefined && (obj.metadata = message.metadata);
     return obj;
   },
-  fromPartial(object: Partial<MsgCreateGroup>): MsgCreateGroup {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateGroup>, I>>(object: I): MsgCreateGroup {
     const message = createBaseMsgCreateGroup();
     message.admin = object.admin ?? "";
     message.members = object.members?.map(e => Member.fromPartial(e)) || [];
@@ -964,7 +964,7 @@ export const MsgCreateGroupResponse = {
     message.groupId !== undefined && (obj.groupId = (message.groupId || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<MsgCreateGroupResponse>): MsgCreateGroupResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateGroupResponse>, I>>(object: I): MsgCreateGroupResponse {
     const message = createBaseMsgCreateGroupResponse();
     message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     return message;
@@ -1077,7 +1077,7 @@ export const MsgUpdateGroupMembers = {
     }
     return obj;
   },
-  fromPartial(object: Partial<MsgUpdateGroupMembers>): MsgUpdateGroupMembers {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGroupMembers>, I>>(object: I): MsgUpdateGroupMembers {
     const message = createBaseMsgUpdateGroupMembers();
     message.admin = object.admin ?? "";
     message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
@@ -1169,7 +1169,7 @@ export const MsgUpdateGroupMembersResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgUpdateGroupMembersResponse>): MsgUpdateGroupMembersResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGroupMembersResponse>, I>>(_: I): MsgUpdateGroupMembersResponse {
     const message = createBaseMsgUpdateGroupMembersResponse();
     return message;
   },
@@ -1273,7 +1273,7 @@ export const MsgUpdateGroupAdmin = {
     message.newAdmin !== undefined && (obj.newAdmin = message.newAdmin);
     return obj;
   },
-  fromPartial(object: Partial<MsgUpdateGroupAdmin>): MsgUpdateGroupAdmin {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGroupAdmin>, I>>(object: I): MsgUpdateGroupAdmin {
     const message = createBaseMsgUpdateGroupAdmin();
     message.admin = object.admin ?? "";
     message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
@@ -1363,7 +1363,7 @@ export const MsgUpdateGroupAdminResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgUpdateGroupAdminResponse>): MsgUpdateGroupAdminResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGroupAdminResponse>, I>>(_: I): MsgUpdateGroupAdminResponse {
     const message = createBaseMsgUpdateGroupAdminResponse();
     return message;
   },
@@ -1467,7 +1467,7 @@ export const MsgUpdateGroupMetadata = {
     message.metadata !== undefined && (obj.metadata = message.metadata);
     return obj;
   },
-  fromPartial(object: Partial<MsgUpdateGroupMetadata>): MsgUpdateGroupMetadata {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGroupMetadata>, I>>(object: I): MsgUpdateGroupMetadata {
     const message = createBaseMsgUpdateGroupMetadata();
     message.admin = object.admin ?? "";
     message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
@@ -1557,7 +1557,7 @@ export const MsgUpdateGroupMetadataResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgUpdateGroupMetadataResponse>): MsgUpdateGroupMetadataResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGroupMetadataResponse>, I>>(_: I): MsgUpdateGroupMetadataResponse {
     const message = createBaseMsgUpdateGroupMetadataResponse();
     return message;
   },
@@ -1670,7 +1670,7 @@ export const MsgCreateGroupPolicy = {
     message.decisionPolicy !== undefined && (obj.decisionPolicy = message.decisionPolicy ? GlobalDecoderRegistry.toJSON(message.decisionPolicy) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<MsgCreateGroupPolicy>): MsgCreateGroupPolicy {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateGroupPolicy>, I>>(object: I): MsgCreateGroupPolicy {
     const message = createBaseMsgCreateGroupPolicy();
     message.admin = object.admin ?? "";
     message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
@@ -1776,7 +1776,7 @@ export const MsgCreateGroupPolicyResponse = {
     message.address !== undefined && (obj.address = message.address);
     return obj;
   },
-  fromPartial(object: Partial<MsgCreateGroupPolicyResponse>): MsgCreateGroupPolicyResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateGroupPolicyResponse>, I>>(object: I): MsgCreateGroupPolicyResponse {
     const message = createBaseMsgCreateGroupPolicyResponse();
     message.address = object.address ?? "";
     return message;
@@ -1885,7 +1885,7 @@ export const MsgUpdateGroupPolicyAdmin = {
     message.newAdmin !== undefined && (obj.newAdmin = message.newAdmin);
     return obj;
   },
-  fromPartial(object: Partial<MsgUpdateGroupPolicyAdmin>): MsgUpdateGroupPolicyAdmin {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGroupPolicyAdmin>, I>>(object: I): MsgUpdateGroupPolicyAdmin {
     const message = createBaseMsgUpdateGroupPolicyAdmin();
     message.admin = object.admin ?? "";
     message.address = object.address ?? "";
@@ -2035,7 +2035,7 @@ export const MsgCreateGroupWithPolicy = {
     message.decisionPolicy !== undefined && (obj.decisionPolicy = message.decisionPolicy ? GlobalDecoderRegistry.toJSON(message.decisionPolicy) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<MsgCreateGroupWithPolicy>): MsgCreateGroupWithPolicy {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateGroupWithPolicy>, I>>(object: I): MsgCreateGroupWithPolicy {
     const message = createBaseMsgCreateGroupWithPolicy();
     message.admin = object.admin ?? "";
     message.members = object.members?.map(e => Member.fromPartial(e)) || [];
@@ -2162,7 +2162,7 @@ export const MsgCreateGroupWithPolicyResponse = {
     message.groupPolicyAddress !== undefined && (obj.groupPolicyAddress = message.groupPolicyAddress);
     return obj;
   },
-  fromPartial(object: Partial<MsgCreateGroupWithPolicyResponse>): MsgCreateGroupWithPolicyResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateGroupWithPolicyResponse>, I>>(object: I): MsgCreateGroupWithPolicyResponse {
     const message = createBaseMsgCreateGroupWithPolicyResponse();
     message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     message.groupPolicyAddress = object.groupPolicyAddress ?? "";
@@ -2247,7 +2247,7 @@ export const MsgUpdateGroupPolicyAdminResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgUpdateGroupPolicyAdminResponse>): MsgUpdateGroupPolicyAdminResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGroupPolicyAdminResponse>, I>>(_: I): MsgUpdateGroupPolicyAdminResponse {
     const message = createBaseMsgUpdateGroupPolicyAdminResponse();
     return message;
   },
@@ -2351,7 +2351,7 @@ export const MsgUpdateGroupPolicyDecisionPolicy = {
     message.decisionPolicy !== undefined && (obj.decisionPolicy = message.decisionPolicy ? GlobalDecoderRegistry.toJSON(message.decisionPolicy) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<MsgUpdateGroupPolicyDecisionPolicy>): MsgUpdateGroupPolicyDecisionPolicy {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGroupPolicyDecisionPolicy>, I>>(object: I): MsgUpdateGroupPolicyDecisionPolicy {
     const message = createBaseMsgUpdateGroupPolicyDecisionPolicy();
     message.admin = object.admin ?? "";
     message.address = object.address ?? "";
@@ -2441,7 +2441,7 @@ export const MsgUpdateGroupPolicyDecisionPolicyResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgUpdateGroupPolicyDecisionPolicyResponse>): MsgUpdateGroupPolicyDecisionPolicyResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGroupPolicyDecisionPolicyResponse>, I>>(_: I): MsgUpdateGroupPolicyDecisionPolicyResponse {
     const message = createBaseMsgUpdateGroupPolicyDecisionPolicyResponse();
     return message;
   },
@@ -2545,7 +2545,7 @@ export const MsgUpdateGroupPolicyMetadata = {
     message.metadata !== undefined && (obj.metadata = message.metadata);
     return obj;
   },
-  fromPartial(object: Partial<MsgUpdateGroupPolicyMetadata>): MsgUpdateGroupPolicyMetadata {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGroupPolicyMetadata>, I>>(object: I): MsgUpdateGroupPolicyMetadata {
     const message = createBaseMsgUpdateGroupPolicyMetadata();
     message.admin = object.admin ?? "";
     message.address = object.address ?? "";
@@ -2635,7 +2635,7 @@ export const MsgUpdateGroupPolicyMetadataResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgUpdateGroupPolicyMetadataResponse>): MsgUpdateGroupPolicyMetadataResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateGroupPolicyMetadataResponse>, I>>(_: I): MsgUpdateGroupPolicyMetadataResponse {
     const message = createBaseMsgUpdateGroupPolicyMetadataResponse();
     return message;
   },
@@ -2765,7 +2765,7 @@ export const MsgSubmitProposal = {
     message.exec !== undefined && (obj.exec = execToJSON(message.exec));
     return obj;
   },
-  fromPartial(object: Partial<MsgSubmitProposal>): MsgSubmitProposal {
+  fromPartial<I extends Exact<DeepPartial<MsgSubmitProposal>, I>>(object: I): MsgSubmitProposal {
     const message = createBaseMsgSubmitProposal();
     message.address = object.address ?? "";
     message.proposers = object.proposers?.map(e => e) || [];
@@ -2880,7 +2880,7 @@ export const MsgSubmitProposalResponse = {
     message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<MsgSubmitProposalResponse>): MsgSubmitProposalResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSubmitProposalResponse>, I>>(object: I): MsgSubmitProposalResponse {
     const message = createBaseMsgSubmitProposalResponse();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     return message;
@@ -2980,7 +2980,7 @@ export const MsgWithdrawProposal = {
     message.address !== undefined && (obj.address = message.address);
     return obj;
   },
-  fromPartial(object: Partial<MsgWithdrawProposal>): MsgWithdrawProposal {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawProposal>, I>>(object: I): MsgWithdrawProposal {
     const message = createBaseMsgWithdrawProposal();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.address = object.address ?? "";
@@ -3065,7 +3065,7 @@ export const MsgWithdrawProposalResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgWithdrawProposalResponse>): MsgWithdrawProposalResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawProposalResponse>, I>>(_: I): MsgWithdrawProposalResponse {
     const message = createBaseMsgWithdrawProposalResponse();
     return message;
   },
@@ -3187,7 +3187,7 @@ export const MsgVote = {
     message.exec !== undefined && (obj.exec = execToJSON(message.exec));
     return obj;
   },
-  fromPartial(object: Partial<MsgVote>): MsgVote {
+  fromPartial<I extends Exact<DeepPartial<MsgVote>, I>>(object: I): MsgVote {
     const message = createBaseMsgVote();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.voter = object.voter ?? "";
@@ -3287,7 +3287,7 @@ export const MsgVoteResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgVoteResponse>): MsgVoteResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgVoteResponse>, I>>(_: I): MsgVoteResponse {
     const message = createBaseMsgVoteResponse();
     return message;
   },
@@ -3382,7 +3382,7 @@ export const MsgExec = {
     message.signer !== undefined && (obj.signer = message.signer);
     return obj;
   },
-  fromPartial(object: Partial<MsgExec>): MsgExec {
+  fromPartial<I extends Exact<DeepPartial<MsgExec>, I>>(object: I): MsgExec {
     const message = createBaseMsgExec();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.signer = object.signer ?? "";
@@ -3467,7 +3467,7 @@ export const MsgExecResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgExecResponse>): MsgExecResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgExecResponse>, I>>(_: I): MsgExecResponse {
     const message = createBaseMsgExecResponse();
     return message;
   },
@@ -3562,7 +3562,7 @@ export const MsgLeaveGroup = {
     message.groupId !== undefined && (obj.groupId = (message.groupId || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<MsgLeaveGroup>): MsgLeaveGroup {
+  fromPartial<I extends Exact<DeepPartial<MsgLeaveGroup>, I>>(object: I): MsgLeaveGroup {
     const message = createBaseMsgLeaveGroup();
     message.address = object.address ?? "";
     message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
@@ -3647,7 +3647,7 @@ export const MsgLeaveGroupResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgLeaveGroupResponse>): MsgLeaveGroupResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgLeaveGroupResponse>, I>>(_: I): MsgLeaveGroupResponse {
     const message = createBaseMsgLeaveGroupResponse();
     return message;
   },

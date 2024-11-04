@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet } from "../../helpers";
+import { isSet, DeepPartial, Exact } from "../../helpers";
 import { JsonSafe } from "../../json-safe";
 import { GlobalDecoderRegistry } from "../../registry";
 /**
@@ -131,7 +131,7 @@ export const App = {
     message.software !== undefined && (obj.software = message.software);
     return obj;
   },
-  fromPartial(object: Partial<App>): App {
+  fromPartial<I extends Exact<DeepPartial<App>, I>>(object: I): App {
     const message = createBaseApp();
     message.protocol = object.protocol !== undefined && object.protocol !== null ? BigInt(object.protocol.toString()) : BigInt(0);
     message.software = object.software ?? "";
@@ -228,7 +228,7 @@ export const Consensus = {
     message.app !== undefined && (obj.app = (message.app || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<Consensus>): Consensus {
+  fromPartial<I extends Exact<DeepPartial<Consensus>, I>>(object: I): Consensus {
     const message = createBaseConsensus();
     message.block = object.block !== undefined && object.block !== null ? BigInt(object.block.toString()) : BigInt(0);
     message.app = object.app !== undefined && object.app !== null ? BigInt(object.app.toString()) : BigInt(0);

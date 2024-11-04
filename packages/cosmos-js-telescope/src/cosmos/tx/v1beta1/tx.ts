@@ -4,7 +4,7 @@ import { SignMode, signModeFromJSON, signModeToJSON } from "../signing/v1beta1/s
 import { CompactBitArray, CompactBitArrayAmino, CompactBitArraySDKType } from "../../crypto/multisig/v1beta1/multisig";
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** Tx is the standard type used for broadcasting transactions. */
@@ -832,7 +832,7 @@ export const Tx = {
     }
     return obj;
   },
-  fromPartial(object: Partial<Tx>): Tx {
+  fromPartial<I extends Exact<DeepPartial<Tx>, I>>(object: I): Tx {
     const message = createBaseTx();
     message.body = object.body !== undefined && object.body !== null ? TxBody.fromPartial(object.body) : undefined;
     message.authInfo = object.authInfo !== undefined && object.authInfo !== null ? AuthInfo.fromPartial(object.authInfo) : undefined;
@@ -957,7 +957,7 @@ export const TxRaw = {
     }
     return obj;
   },
-  fromPartial(object: Partial<TxRaw>): TxRaw {
+  fromPartial<I extends Exact<DeepPartial<TxRaw>, I>>(object: I): TxRaw {
     const message = createBaseTxRaw();
     message.bodyBytes = object.bodyBytes ?? new Uint8Array();
     message.authInfoBytes = object.authInfoBytes ?? new Uint8Array();
@@ -1087,7 +1087,7 @@ export const SignDoc = {
     message.accountNumber !== undefined && (obj.accountNumber = (message.accountNumber || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<SignDoc>): SignDoc {
+  fromPartial<I extends Exact<DeepPartial<SignDoc>, I>>(object: I): SignDoc {
     const message = createBaseSignDoc();
     message.bodyBytes = object.bodyBytes ?? new Uint8Array();
     message.authInfoBytes = object.authInfoBytes ?? new Uint8Array();
@@ -1238,7 +1238,7 @@ export const SignDocDirectAux = {
     message.tip !== undefined && (obj.tip = message.tip ? Tip.toJSON(message.tip) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<SignDocDirectAux>): SignDocDirectAux {
+  fromPartial<I extends Exact<DeepPartial<SignDocDirectAux>, I>>(object: I): SignDocDirectAux {
     const message = createBaseSignDocDirectAux();
     message.bodyBytes = object.bodyBytes ?? new Uint8Array();
     message.publicKey = object.publicKey !== undefined && object.publicKey !== null ? Any.fromPartial(object.publicKey) : undefined;
@@ -1402,7 +1402,7 @@ export const TxBody = {
     }
     return obj;
   },
-  fromPartial(object: Partial<TxBody>): TxBody {
+  fromPartial<I extends Exact<DeepPartial<TxBody>, I>>(object: I): TxBody {
     const message = createBaseTxBody();
     message.messages = object.messages?.map(e => Any.fromPartial(e)) || [];
     message.memo = object.memo ?? "";
@@ -1541,7 +1541,7 @@ export const AuthInfo = {
     message.tip !== undefined && (obj.tip = message.tip ? Tip.toJSON(message.tip) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<AuthInfo>): AuthInfo {
+  fromPartial<I extends Exact<DeepPartial<AuthInfo>, I>>(object: I): AuthInfo {
     const message = createBaseAuthInfo();
     message.signerInfos = object.signerInfos?.map(e => SignerInfo.fromPartial(e)) || [];
     message.fee = object.fee !== undefined && object.fee !== null ? Fee.fromPartial(object.fee) : undefined;
@@ -1662,7 +1662,7 @@ export const SignerInfo = {
     message.sequence !== undefined && (obj.sequence = (message.sequence || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<SignerInfo>): SignerInfo {
+  fromPartial<I extends Exact<DeepPartial<SignerInfo>, I>>(object: I): SignerInfo {
     const message = createBaseSignerInfo();
     message.publicKey = object.publicKey !== undefined && object.publicKey !== null ? Any.fromPartial(object.publicKey) : undefined;
     message.modeInfo = object.modeInfo !== undefined && object.modeInfo !== null ? ModeInfo.fromPartial(object.modeInfo) : undefined;
@@ -1772,7 +1772,7 @@ export const ModeInfo = {
     message.multi !== undefined && (obj.multi = message.multi ? ModeInfo_Multi.toJSON(message.multi) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<ModeInfo>): ModeInfo {
+  fromPartial<I extends Exact<DeepPartial<ModeInfo>, I>>(object: I): ModeInfo {
     const message = createBaseModeInfo();
     message.single = object.single !== undefined && object.single !== null ? ModeInfo_Single.fromPartial(object.single) : undefined;
     message.multi = object.multi !== undefined && object.multi !== null ? ModeInfo_Multi.fromPartial(object.multi) : undefined;
@@ -1868,7 +1868,7 @@ export const ModeInfo_Single = {
     message.mode !== undefined && (obj.mode = signModeToJSON(message.mode));
     return obj;
   },
-  fromPartial(object: Partial<ModeInfo_Single>): ModeInfo_Single {
+  fromPartial<I extends Exact<DeepPartial<ModeInfo_Single>, I>>(object: I): ModeInfo_Single {
     const message = createBaseModeInfo_Single();
     message.mode = object.mode ?? 0;
     return message;
@@ -1972,7 +1972,7 @@ export const ModeInfo_Multi = {
     }
     return obj;
   },
-  fromPartial(object: Partial<ModeInfo_Multi>): ModeInfo_Multi {
+  fromPartial<I extends Exact<DeepPartial<ModeInfo_Multi>, I>>(object: I): ModeInfo_Multi {
     const message = createBaseModeInfo_Multi();
     message.bitarray = object.bitarray !== undefined && object.bitarray !== null ? CompactBitArray.fromPartial(object.bitarray) : undefined;
     message.modeInfos = object.modeInfos?.map(e => ModeInfo.fromPartial(e)) || [];
@@ -2101,7 +2101,7 @@ export const Fee = {
     message.granter !== undefined && (obj.granter = message.granter);
     return obj;
   },
-  fromPartial(object: Partial<Fee>): Fee {
+  fromPartial<I extends Exact<DeepPartial<Fee>, I>>(object: I): Fee {
     const message = createBaseFee();
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     message.gasLimit = object.gasLimit !== undefined && object.gasLimit !== null ? BigInt(object.gasLimit.toString()) : BigInt(0);
@@ -2222,7 +2222,7 @@ export const Tip = {
     message.tipper !== undefined && (obj.tipper = message.tipper);
     return obj;
   },
-  fromPartial(object: Partial<Tip>): Tip {
+  fromPartial<I extends Exact<DeepPartial<Tip>, I>>(object: I): Tip {
     const message = createBaseTip();
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     message.tipper = object.tipper ?? "";
@@ -2347,7 +2347,7 @@ export const AuxSignerData = {
     message.sig !== undefined && (obj.sig = base64FromBytes(message.sig !== undefined ? message.sig : new Uint8Array()));
     return obj;
   },
-  fromPartial(object: Partial<AuxSignerData>): AuxSignerData {
+  fromPartial<I extends Exact<DeepPartial<AuxSignerData>, I>>(object: I): AuxSignerData {
     const message = createBaseAuxSignerData();
     message.address = object.address ?? "";
     message.signDoc = object.signDoc !== undefined && object.signDoc !== null ? SignDocDirectAux.fromPartial(object.signDoc) : undefined;

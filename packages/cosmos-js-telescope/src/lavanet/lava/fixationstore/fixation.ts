@@ -3,7 +3,7 @@ import { GenesisState as GenesisState1 } from "../timerstore/timer";
 import { GenesisStateAmino as GenesisState1Amino } from "../timerstore/timer";
 import { GenesisStateSDKType as GenesisState1SDKType } from "../timerstore/timer";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface Entry {
@@ -204,7 +204,7 @@ export const Entry = {
     message.isLatest !== undefined && (obj.isLatest = message.isLatest);
     return obj;
   },
-  fromPartial(object: Partial<Entry>): Entry {
+  fromPartial<I extends Exact<DeepPartial<Entry>, I>>(object: I): Entry {
     const message = createBaseEntry();
     message.index = object.index ?? "";
     message.block = object.block !== undefined && object.block !== null ? BigInt(object.block.toString()) : BigInt(0);
@@ -339,7 +339,7 @@ export const GenesisEntries = {
     }
     return obj;
   },
-  fromPartial(object: Partial<GenesisEntries>): GenesisEntries {
+  fromPartial<I extends Exact<DeepPartial<GenesisEntries>, I>>(object: I): GenesisEntries {
     const message = createBaseGenesisEntries();
     message.index = object.index ?? "";
     message.isLive = object.isLive ?? false;
@@ -456,7 +456,7 @@ export const GenesisState = {
     message.timerstore !== undefined && (obj.timerstore = message.timerstore ? GenesisState1.toJSON(message.timerstore) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<GenesisState>): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
     message.version = object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);
     message.entries = object.entries?.map(e => GenesisEntries.fromPartial(e)) || [];

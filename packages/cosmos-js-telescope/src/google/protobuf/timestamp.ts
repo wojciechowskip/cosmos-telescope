@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, DeepPartial, Exact, fromJsonTimestamp, fromTimestamp } from "../../helpers";
 import { JsonSafe } from "../../json-safe";
 import { GlobalDecoderRegistry } from "../../registry";
 /**
@@ -341,7 +341,7 @@ export const Timestamp = {
     message.nanos !== undefined && (obj.nanos = Math.round(message.nanos));
     return obj;
   },
-  fromPartial(object: Partial<Timestamp>): Timestamp {
+  fromPartial<I extends Exact<DeepPartial<Timestamp>, I>>(object: I): Timestamp {
     const message = createBaseTimestamp();
     message.seconds = object.seconds !== undefined && object.seconds !== null ? BigInt(object.seconds.toString()) : BigInt(0);
     message.nanos = object.nanos ?? 0;

@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -102,7 +102,7 @@ export const LegacyAminoPubKey = {
     }
     return obj;
   },
-  fromPartial(object: Partial<LegacyAminoPubKey>): LegacyAminoPubKey {
+  fromPartial<I extends Exact<DeepPartial<LegacyAminoPubKey>, I>>(object: I): LegacyAminoPubKey {
     const message = createBaseLegacyAminoPubKey();
     message.threshold = object.threshold ?? 0;
     message.publicKeys = object.publicKeys?.map(e => Any.fromPartial(e)) || [];

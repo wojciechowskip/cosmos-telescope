@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** ParameterChangeProposal defines a proposal to change one or more parameters. */
@@ -139,7 +139,7 @@ export const ParameterChangeProposal = {
     }
     return obj;
   },
-  fromPartial(object: Partial<ParameterChangeProposal>): ParameterChangeProposal {
+  fromPartial<I extends Exact<DeepPartial<ParameterChangeProposal>, I>>(object: I): ParameterChangeProposal {
     const message = createBaseParameterChangeProposal();
     message.title = object.title ?? "";
     message.description = object.description ?? "";
@@ -260,7 +260,7 @@ export const ParamChange = {
     message.value !== undefined && (obj.value = message.value);
     return obj;
   },
-  fromPartial(object: Partial<ParamChange>): ParamChange {
+  fromPartial<I extends Exact<DeepPartial<ParamChange>, I>>(object: I): ParamChange {
     const message = createBaseParamChange();
     message.subspace = object.subspace ?? "";
     message.key = object.key ?? "";

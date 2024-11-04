@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface GenesisState {
@@ -154,7 +154,7 @@ export const GenesisState = {
     }
     return obj;
   },
-  fromPartial(object: Partial<GenesisState>): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
     message.version = object.version !== undefined && object.version !== null ? BigInt(object.version.toString()) : BigInt(0);
     message.nextBlockHeight = object.nextBlockHeight !== undefined && object.nextBlockHeight !== null ? BigInt(object.nextBlockHeight.toString()) : BigInt(0);
@@ -279,7 +279,7 @@ export const GenesisTimerEntry = {
     message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
     return obj;
   },
-  fromPartial(object: Partial<GenesisTimerEntry>): GenesisTimerEntry {
+  fromPartial<I extends Exact<DeepPartial<GenesisTimerEntry>, I>>(object: I): GenesisTimerEntry {
     const message = createBaseGenesisTimerEntry();
     message.key = object.key ?? "";
     message.value = object.value !== undefined && object.value !== null ? BigInt(object.value.toString()) : BigInt(0);

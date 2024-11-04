@@ -2,7 +2,7 @@
 import { Grant, GrantAmino, GrantSDKType } from "./authz";
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -244,7 +244,7 @@ export const MsgGrant = {
     message.grant !== undefined && (obj.grant = message.grant ? Grant.toJSON(message.grant) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<MsgGrant>): MsgGrant {
+  fromPartial<I extends Exact<DeepPartial<MsgGrant>, I>>(object: I): MsgGrant {
     const message = createBaseMsgGrant();
     message.granter = object.granter ?? "";
     message.grantee = object.grantee ?? "";
@@ -334,7 +334,7 @@ export const MsgGrantResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgGrantResponse>): MsgGrantResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgGrantResponse>, I>>(_: I): MsgGrantResponse {
     const message = createBaseMsgGrantResponse();
     return message;
   },
@@ -433,7 +433,7 @@ export const MsgExec = {
     }
     return obj;
   },
-  fromPartial(object: Partial<MsgExec>): MsgExec {
+  fromPartial<I extends Exact<DeepPartial<MsgExec>, I>>(object: I): MsgExec {
     const message = createBaseMsgExec();
     message.grantee = object.grantee ?? "";
     message.msgs = object.msgs?.map(e => GlobalDecoderRegistry.fromPartial(e) as any) || [];
@@ -535,7 +535,7 @@ export const MsgExecResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<MsgExecResponse>): MsgExecResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgExecResponse>, I>>(object: I): MsgExecResponse {
     const message = createBaseMsgExecResponse();
     message.results = object.results?.map(e => e) || [];
     return message;
@@ -646,7 +646,7 @@ export const MsgRevoke = {
     message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl);
     return obj;
   },
-  fromPartial(object: Partial<MsgRevoke>): MsgRevoke {
+  fromPartial<I extends Exact<DeepPartial<MsgRevoke>, I>>(object: I): MsgRevoke {
     const message = createBaseMsgRevoke();
     message.granter = object.granter ?? "";
     message.grantee = object.grantee ?? "";
@@ -736,7 +736,7 @@ export const MsgRevokeResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgRevokeResponse>): MsgRevokeResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgRevokeResponse>, I>>(_: I): MsgRevokeResponse {
     const message = createBaseMsgRevokeResponse();
     return message;
   },

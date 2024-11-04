@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../../binary";
-import { bytesFromBase64, base64FromBytes, isSet } from "../../../../helpers";
+import { bytesFromBase64, base64FromBytes, DeepPartial, Exact, isSet } from "../../../../helpers";
 import { JsonSafe } from "../../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../../registry";
 /**
@@ -127,7 +127,7 @@ export const MultiSignature = {
     }
     return obj;
   },
-  fromPartial(object: Partial<MultiSignature>): MultiSignature {
+  fromPartial<I extends Exact<DeepPartial<MultiSignature>, I>>(object: I): MultiSignature {
     const message = createBaseMultiSignature();
     message.signatures = object.signatures?.map(e => e) || [];
     return message;
@@ -229,7 +229,7 @@ export const CompactBitArray = {
     message.elems !== undefined && (obj.elems = base64FromBytes(message.elems !== undefined ? message.elems : new Uint8Array()));
     return obj;
   },
-  fromPartial(object: Partial<CompactBitArray>): CompactBitArray {
+  fromPartial<I extends Exact<DeepPartial<CompactBitArray>, I>>(object: I): CompactBitArray {
     const message = createBaseCompactBitArray();
     message.extraBitsStored = object.extraBitsStored ?? 0;
     message.elems = object.elems ?? new Uint8Array();

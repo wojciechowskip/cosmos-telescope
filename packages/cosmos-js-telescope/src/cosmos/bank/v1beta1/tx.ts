@@ -2,7 +2,7 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { Input, InputAmino, InputSDKType, Output, OutputAmino, OutputSDKType, Params, ParamsAmino, ParamsSDKType, SendEnabled, SendEnabledAmino, SendEnabledSDKType } from "./bank";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** MsgSend represents a message to send coins from one account to another. */
@@ -330,7 +330,7 @@ export const MsgSend = {
     }
     return obj;
   },
-  fromPartial(object: Partial<MsgSend>): MsgSend {
+  fromPartial<I extends Exact<DeepPartial<MsgSend>, I>>(object: I): MsgSend {
     const message = createBaseMsgSend();
     message.fromAddress = object.fromAddress ?? "";
     message.toAddress = object.toAddress ?? "";
@@ -422,7 +422,7 @@ export const MsgSendResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgSendResponse>): MsgSendResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSendResponse>, I>>(_: I): MsgSendResponse {
     const message = createBaseMsgSendResponse();
     return message;
   },
@@ -525,7 +525,7 @@ export const MsgMultiSend = {
     }
     return obj;
   },
-  fromPartial(object: Partial<MsgMultiSend>): MsgMultiSend {
+  fromPartial<I extends Exact<DeepPartial<MsgMultiSend>, I>>(object: I): MsgMultiSend {
     const message = createBaseMsgMultiSend();
     message.inputs = object.inputs?.map(e => Input.fromPartial(e)) || [];
     message.outputs = object.outputs?.map(e => Output.fromPartial(e)) || [];
@@ -614,7 +614,7 @@ export const MsgMultiSendResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgMultiSendResponse>): MsgMultiSendResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgMultiSendResponse>, I>>(_: I): MsgMultiSendResponse {
     const message = createBaseMsgMultiSendResponse();
     return message;
   },
@@ -709,7 +709,7 @@ export const MsgUpdateParams = {
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<MsgUpdateParams>): MsgUpdateParams {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParams>, I>>(object: I): MsgUpdateParams {
     const message = createBaseMsgUpdateParams();
     message.authority = object.authority ?? "";
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
@@ -794,7 +794,7 @@ export const MsgUpdateParamsResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgUpdateParamsResponse>): MsgUpdateParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateParamsResponse>, I>>(_: I): MsgUpdateParamsResponse {
     const message = createBaseMsgUpdateParamsResponse();
     return message;
   },
@@ -906,7 +906,7 @@ export const MsgSetSendEnabled = {
     }
     return obj;
   },
-  fromPartial(object: Partial<MsgSetSendEnabled>): MsgSetSendEnabled {
+  fromPartial<I extends Exact<DeepPartial<MsgSetSendEnabled>, I>>(object: I): MsgSetSendEnabled {
     const message = createBaseMsgSetSendEnabled();
     message.authority = object.authority ?? "";
     message.sendEnabled = object.sendEnabled?.map(e => SendEnabled.fromPartial(e)) || [];
@@ -1000,7 +1000,7 @@ export const MsgSetSendEnabledResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgSetSendEnabledResponse>): MsgSetSendEnabledResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgSetSendEnabledResponse>, I>>(_: I): MsgSetSendEnabledResponse {
     const message = createBaseMsgSetSendEnabledResponse();
     return message;
   },

@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet } from "../../helpers";
+import { isSet, DeepPartial, Exact } from "../../helpers";
 import { JsonSafe } from "../../json-safe";
 import { GlobalDecoderRegistry } from "../../registry";
 /**
@@ -1090,7 +1090,7 @@ export const Http = {
     message.fullyDecodeReservedExpansion !== undefined && (obj.fullyDecodeReservedExpansion = message.fullyDecodeReservedExpansion);
     return obj;
   },
-  fromPartial(object: Partial<Http>): Http {
+  fromPartial<I extends Exact<DeepPartial<Http>, I>>(object: I): Http {
     const message = createBaseHttp();
     message.rules = object.rules?.map(e => HttpRule.fromPartial(e)) || [];
     message.fullyDecodeReservedExpansion = object.fullyDecodeReservedExpansion ?? false;
@@ -1265,7 +1265,7 @@ export const HttpRule = {
     }
     return obj;
   },
-  fromPartial(object: Partial<HttpRule>): HttpRule {
+  fromPartial<I extends Exact<DeepPartial<HttpRule>, I>>(object: I): HttpRule {
     const message = createBaseHttpRule();
     message.selector = object.selector ?? "";
     message.get = object.get ?? undefined;
@@ -1404,7 +1404,7 @@ export const CustomHttpPattern = {
     message.path !== undefined && (obj.path = message.path);
     return obj;
   },
-  fromPartial(object: Partial<CustomHttpPattern>): CustomHttpPattern {
+  fromPartial<I extends Exact<DeepPartial<CustomHttpPattern>, I>>(object: I): CustomHttpPattern {
     const message = createBaseCustomHttpPattern();
     message.kind = object.kind ?? "";
     message.path = object.path ?? "";

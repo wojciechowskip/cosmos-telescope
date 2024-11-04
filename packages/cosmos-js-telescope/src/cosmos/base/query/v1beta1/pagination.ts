@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../../binary";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../../../helpers";
 import { JsonSafe } from "../../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../../registry";
 /**
@@ -260,7 +260,7 @@ export const PageRequest = {
     message.reverse !== undefined && (obj.reverse = message.reverse);
     return obj;
   },
-  fromPartial(object: Partial<PageRequest>): PageRequest {
+  fromPartial<I extends Exact<DeepPartial<PageRequest>, I>>(object: I): PageRequest {
     const message = createBasePageRequest();
     message.key = object.key ?? new Uint8Array();
     message.offset = object.offset !== undefined && object.offset !== null ? BigInt(object.offset.toString()) : BigInt(0);
@@ -380,7 +380,7 @@ export const PageResponse = {
     message.total !== undefined && (obj.total = (message.total || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<PageResponse>): PageResponse {
+  fromPartial<I extends Exact<DeepPartial<PageResponse>, I>>(object: I): PageResponse {
     const message = createBasePageResponse();
     message.nextKey = object.nextKey ?? new Uint8Array();
     message.total = object.total !== undefined && object.total !== null ? BigInt(object.total.toString()) : BigInt(0);

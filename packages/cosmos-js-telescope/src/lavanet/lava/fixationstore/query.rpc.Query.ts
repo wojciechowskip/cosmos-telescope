@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { Rpc } from "../../../helpers";
+import { TxRpc } from "../../../types";
 import { BinaryReader } from "../../../binary";
 import { QueryClient, createProtobufRpcClient } from "@cosmjs/stargate";
 import { QueryAllIndicesRequest, QueryAllIndicesResponse, QueryStoreKeysRequest, QueryStoreKeysResponse, QueryVersionsRequest, QueryVersionsResponse, QueryEntryRequest, QueryEntryResponse } from "./query";
@@ -15,8 +15,8 @@ export interface Query {
   entry(request: QueryEntryRequest): Promise<QueryEntryResponse>;
 }
 export class QueryClientImpl implements Query {
-  private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly rpc: TxRpc;
+  constructor(rpc: TxRpc) {
     this.rpc = rpc;
     this.allIndices = this.allIndices.bind(this);
     this.storeKeys = this.storeKeys.bind(this);

@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Params, ParamsAmino, ParamsSDKType, Validator, ValidatorAmino, ValidatorSDKType, Delegation, DelegationAmino, DelegationSDKType, UnbondingDelegation, UnbondingDelegationAmino, UnbondingDelegationSDKType, Redelegation, RedelegationAmino, RedelegationSDKType } from "./staking";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** GenesisState defines the staking module's genesis state. */
@@ -233,7 +233,7 @@ export const GenesisState = {
     message.exported !== undefined && (obj.exported = message.exported);
     return obj;
   },
-  fromPartial(object: Partial<GenesisState>): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     message.lastTotalPower = object.lastTotalPower ?? new Uint8Array();
@@ -378,7 +378,7 @@ export const LastValidatorPower = {
     message.power !== undefined && (obj.power = (message.power || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<LastValidatorPower>): LastValidatorPower {
+  fromPartial<I extends Exact<DeepPartial<LastValidatorPower>, I>>(object: I): LastValidatorPower {
     const message = createBaseLastValidatorPower();
     message.address = object.address ?? "";
     message.power = object.power !== undefined && object.power !== null ? BigInt(object.power.toString()) : BigInt(0);

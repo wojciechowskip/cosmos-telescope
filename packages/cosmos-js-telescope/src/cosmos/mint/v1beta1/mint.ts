@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { Decimal } from "@cosmjs/math";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** Minter represents the minting state. */
@@ -137,7 +137,7 @@ export const Minter = {
     message.annualProvisions !== undefined && (obj.annualProvisions = message.annualProvisions);
     return obj;
   },
-  fromPartial(object: Partial<Minter>): Minter {
+  fromPartial<I extends Exact<DeepPartial<Minter>, I>>(object: I): Minter {
     const message = createBaseMinter();
     message.inflation = object.inflation ?? "";
     message.annualProvisions = object.annualProvisions ?? "";
@@ -278,7 +278,7 @@ export const Params = {
     message.blocksPerYear !== undefined && (obj.blocksPerYear = (message.blocksPerYear || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<Params>): Params {
+  fromPartial<I extends Exact<DeepPartial<Params>, I>>(object: I): Params {
     const message = createBaseParams();
     message.mintDenom = object.mintDenom ?? "";
     message.inflationRateChange = object.inflationRateChange ?? "";

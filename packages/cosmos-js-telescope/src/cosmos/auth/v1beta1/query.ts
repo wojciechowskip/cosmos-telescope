@@ -3,7 +3,7 @@ import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageRe
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { Params, ParamsAmino, ParamsSDKType, BaseAccount, BaseAccountProtoMsg, BaseAccountAmino, BaseAccountSDKType, ModuleAccount, ModuleAccountProtoMsg, ModuleAccountSDKType } from "./auth";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -667,7 +667,7 @@ export const QueryAccountsRequest = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryAccountsRequest>): QueryAccountsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountsRequest>, I>>(object: I): QueryAccountsRequest {
     const message = createBaseQueryAccountsRequest();
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
     return message;
@@ -771,7 +771,7 @@ export const QueryAccountsResponse = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryAccountsResponse>): QueryAccountsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountsResponse>, I>>(object: I): QueryAccountsResponse {
     const message = createBaseQueryAccountsResponse();
     message.accounts = object.accounts?.map(e => GlobalDecoderRegistry.fromPartial(e) as any) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
@@ -869,7 +869,7 @@ export const QueryAccountRequest = {
     message.address !== undefined && (obj.address = message.address);
     return obj;
   },
-  fromPartial(object: Partial<QueryAccountRequest>): QueryAccountRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountRequest>, I>>(object: I): QueryAccountRequest {
     const message = createBaseQueryAccountRequest();
     message.address = object.address ?? "";
     return message;
@@ -960,7 +960,7 @@ export const QueryAccountResponse = {
     message.account !== undefined && (obj.account = message.account ? GlobalDecoderRegistry.toJSON(message.account) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryAccountResponse>): QueryAccountResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountResponse>, I>>(object: I): QueryAccountResponse {
     const message = createBaseQueryAccountResponse();
     message.account = object.account !== undefined && object.account !== null ? GlobalDecoderRegistry.fromPartial(object.account) : undefined;
     return message;
@@ -1040,7 +1040,7 @@ export const QueryParamsRequest = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<QueryParamsRequest>): QueryParamsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(_: I): QueryParamsRequest {
     const message = createBaseQueryParamsRequest();
     return message;
   },
@@ -1126,7 +1126,7 @@ export const QueryParamsResponse = {
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryParamsResponse>): QueryParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(object: I): QueryParamsResponse {
     const message = createBaseQueryParamsResponse();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
@@ -1206,7 +1206,7 @@ export const QueryModuleAccountsRequest = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<QueryModuleAccountsRequest>): QueryModuleAccountsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryModuleAccountsRequest>, I>>(_: I): QueryModuleAccountsRequest {
     const message = createBaseQueryModuleAccountsRequest();
     return message;
   },
@@ -1296,7 +1296,7 @@ export const QueryModuleAccountsResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<QueryModuleAccountsResponse>): QueryModuleAccountsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryModuleAccountsResponse>, I>>(object: I): QueryModuleAccountsResponse {
     const message = createBaseQueryModuleAccountsResponse();
     message.accounts = object.accounts?.map(e => GlobalDecoderRegistry.fromPartial(e) as any) || [];
     return message;
@@ -1389,7 +1389,7 @@ export const QueryModuleAccountByNameRequest = {
     message.name !== undefined && (obj.name = message.name);
     return obj;
   },
-  fromPartial(object: Partial<QueryModuleAccountByNameRequest>): QueryModuleAccountByNameRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryModuleAccountByNameRequest>, I>>(object: I): QueryModuleAccountByNameRequest {
     const message = createBaseQueryModuleAccountByNameRequest();
     message.name = object.name ?? "";
     return message;
@@ -1480,7 +1480,7 @@ export const QueryModuleAccountByNameResponse = {
     message.account !== undefined && (obj.account = message.account ? GlobalDecoderRegistry.toJSON(message.account) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryModuleAccountByNameResponse>): QueryModuleAccountByNameResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryModuleAccountByNameResponse>, I>>(object: I): QueryModuleAccountByNameResponse {
     const message = createBaseQueryModuleAccountByNameResponse();
     message.account = object.account !== undefined && object.account !== null ? GlobalDecoderRegistry.fromPartial(object.account) : undefined;
     return message;
@@ -1560,7 +1560,7 @@ export const Bech32PrefixRequest = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<Bech32PrefixRequest>): Bech32PrefixRequest {
+  fromPartial<I extends Exact<DeepPartial<Bech32PrefixRequest>, I>>(_: I): Bech32PrefixRequest {
     const message = createBaseBech32PrefixRequest();
     return message;
   },
@@ -1646,7 +1646,7 @@ export const Bech32PrefixResponse = {
     message.bech32Prefix !== undefined && (obj.bech32Prefix = message.bech32Prefix);
     return obj;
   },
-  fromPartial(object: Partial<Bech32PrefixResponse>): Bech32PrefixResponse {
+  fromPartial<I extends Exact<DeepPartial<Bech32PrefixResponse>, I>>(object: I): Bech32PrefixResponse {
     const message = createBaseBech32PrefixResponse();
     message.bech32Prefix = object.bech32Prefix ?? "";
     return message;
@@ -1737,7 +1737,7 @@ export const AddressBytesToStringRequest = {
     message.addressBytes !== undefined && (obj.addressBytes = base64FromBytes(message.addressBytes !== undefined ? message.addressBytes : new Uint8Array()));
     return obj;
   },
-  fromPartial(object: Partial<AddressBytesToStringRequest>): AddressBytesToStringRequest {
+  fromPartial<I extends Exact<DeepPartial<AddressBytesToStringRequest>, I>>(object: I): AddressBytesToStringRequest {
     const message = createBaseAddressBytesToStringRequest();
     message.addressBytes = object.addressBytes ?? new Uint8Array();
     return message;
@@ -1828,7 +1828,7 @@ export const AddressBytesToStringResponse = {
     message.addressString !== undefined && (obj.addressString = message.addressString);
     return obj;
   },
-  fromPartial(object: Partial<AddressBytesToStringResponse>): AddressBytesToStringResponse {
+  fromPartial<I extends Exact<DeepPartial<AddressBytesToStringResponse>, I>>(object: I): AddressBytesToStringResponse {
     const message = createBaseAddressBytesToStringResponse();
     message.addressString = object.addressString ?? "";
     return message;
@@ -1919,7 +1919,7 @@ export const AddressStringToBytesRequest = {
     message.addressString !== undefined && (obj.addressString = message.addressString);
     return obj;
   },
-  fromPartial(object: Partial<AddressStringToBytesRequest>): AddressStringToBytesRequest {
+  fromPartial<I extends Exact<DeepPartial<AddressStringToBytesRequest>, I>>(object: I): AddressStringToBytesRequest {
     const message = createBaseAddressStringToBytesRequest();
     message.addressString = object.addressString ?? "";
     return message;
@@ -2010,7 +2010,7 @@ export const AddressStringToBytesResponse = {
     message.addressBytes !== undefined && (obj.addressBytes = base64FromBytes(message.addressBytes !== undefined ? message.addressBytes : new Uint8Array()));
     return obj;
   },
-  fromPartial(object: Partial<AddressStringToBytesResponse>): AddressStringToBytesResponse {
+  fromPartial<I extends Exact<DeepPartial<AddressStringToBytesResponse>, I>>(object: I): AddressStringToBytesResponse {
     const message = createBaseAddressStringToBytesResponse();
     message.addressBytes = object.addressBytes ?? new Uint8Array();
     return message;
@@ -2110,7 +2110,7 @@ export const QueryAccountAddressByIDRequest = {
     message.accountId !== undefined && (obj.accountId = (message.accountId || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<QueryAccountAddressByIDRequest>): QueryAccountAddressByIDRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountAddressByIDRequest>, I>>(object: I): QueryAccountAddressByIDRequest {
     const message = createBaseQueryAccountAddressByIDRequest();
     message.id = object.id !== undefined && object.id !== null ? BigInt(object.id.toString()) : BigInt(0);
     message.accountId = object.accountId !== undefined && object.accountId !== null ? BigInt(object.accountId.toString()) : BigInt(0);
@@ -2206,7 +2206,7 @@ export const QueryAccountAddressByIDResponse = {
     message.accountAddress !== undefined && (obj.accountAddress = message.accountAddress);
     return obj;
   },
-  fromPartial(object: Partial<QueryAccountAddressByIDResponse>): QueryAccountAddressByIDResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountAddressByIDResponse>, I>>(object: I): QueryAccountAddressByIDResponse {
     const message = createBaseQueryAccountAddressByIDResponse();
     message.accountAddress = object.accountAddress ?? "";
     return message;
@@ -2297,7 +2297,7 @@ export const QueryAccountInfoRequest = {
     message.address !== undefined && (obj.address = message.address);
     return obj;
   },
-  fromPartial(object: Partial<QueryAccountInfoRequest>): QueryAccountInfoRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountInfoRequest>, I>>(object: I): QueryAccountInfoRequest {
     const message = createBaseQueryAccountInfoRequest();
     message.address = object.address ?? "";
     return message;
@@ -2388,7 +2388,7 @@ export const QueryAccountInfoResponse = {
     message.info !== undefined && (obj.info = message.info ? BaseAccount.toJSON(message.info) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryAccountInfoResponse>): QueryAccountInfoResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAccountInfoResponse>, I>>(object: I): QueryAccountInfoResponse {
     const message = createBaseQueryAccountInfoResponse();
     message.info = object.info !== undefined && object.info !== null ? BaseAccount.fromPartial(object.info) : undefined;
     return message;

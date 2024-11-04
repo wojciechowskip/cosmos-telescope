@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** Params defines the parameters for the module. */
@@ -95,7 +95,7 @@ export const Params = {
     message.minSelfDelegation !== undefined && (obj.minSelfDelegation = message.minSelfDelegation ? Coin.toJSON(message.minSelfDelegation) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<Params>): Params {
+  fromPartial<I extends Exact<DeepPartial<Params>, I>>(object: I): Params {
     const message = createBaseParams();
     message.minSelfDelegation = object.minSelfDelegation !== undefined && object.minSelfDelegation !== null ? Coin.fromPartial(object.minSelfDelegation) : undefined;
     return message;
@@ -182,7 +182,7 @@ export const SlashedValidators = {
     }
     return obj;
   },
-  fromPartial(object: Partial<SlashedValidators>): SlashedValidators {
+  fromPartial<I extends Exact<DeepPartial<SlashedValidators>, I>>(object: I): SlashedValidators {
     const message = createBaseSlashedValidators();
     message.validators = object.validators?.map(e => e) || [];
     return message;

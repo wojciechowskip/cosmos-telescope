@@ -2,6 +2,7 @@
 import { GrantAuthorization, GrantAuthorizationAmino, GrantAuthorizationSDKType } from "./authz";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { JsonSafe } from "../../../json-safe";
+import { DeepPartial, Exact } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** GenesisState defines the authz module's genesis state. */
 export interface GenesisState {
@@ -77,7 +78,7 @@ export const GenesisState = {
     }
     return obj;
   },
-  fromPartial(object: Partial<GenesisState>): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
     message.authorization = object.authorization?.map(e => GrantAuthorization.fromPartial(e)) || [];
     return message;

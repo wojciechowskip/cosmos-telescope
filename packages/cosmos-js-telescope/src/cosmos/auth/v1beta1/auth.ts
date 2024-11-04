@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Any, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -230,7 +230,7 @@ export const BaseAccount = {
     message.sequence !== undefined && (obj.sequence = (message.sequence || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<BaseAccount>): BaseAccount {
+  fromPartial<I extends Exact<DeepPartial<BaseAccount>, I>>(object: I): BaseAccount {
     const message = createBaseBaseAccount();
     message.address = object.address ?? "";
     message.pubKey = object.pubKey !== undefined && object.pubKey !== null ? Any.fromPartial(object.pubKey) : undefined;
@@ -359,7 +359,7 @@ export const ModuleAccount = {
     }
     return obj;
   },
-  fromPartial(object: Partial<ModuleAccount>): ModuleAccount {
+  fromPartial<I extends Exact<DeepPartial<ModuleAccount>, I>>(object: I): ModuleAccount {
     const message = createBaseModuleAccount();
     message.baseAccount = object.baseAccount !== undefined && object.baseAccount !== null ? BaseAccount.fromPartial(object.baseAccount) : undefined;
     message.name = object.name ?? "";
@@ -475,7 +475,7 @@ export const ModuleCredential = {
     }
     return obj;
   },
-  fromPartial(object: Partial<ModuleCredential>): ModuleCredential {
+  fromPartial<I extends Exact<DeepPartial<ModuleCredential>, I>>(object: I): ModuleCredential {
     const message = createBaseModuleCredential();
     message.moduleName = object.moduleName ?? "";
     message.derivationKeys = object.derivationKeys?.map(e => e) || [];
@@ -609,7 +609,7 @@ export const Params = {
     message.sigVerifyCostSecp256k1 !== undefined && (obj.sigVerifyCostSecp256k1 = (message.sigVerifyCostSecp256k1 || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<Params>): Params {
+  fromPartial<I extends Exact<DeepPartial<Params>, I>>(object: I): Params {
     const message = createBaseParams();
     message.maxMemoCharacters = object.maxMemoCharacters !== undefined && object.maxMemoCharacters !== null ? BigInt(object.maxMemoCharacters.toString()) : BigInt(0);
     message.txSigLimit = object.txSigLimit !== undefined && object.txSigLimit !== null ? BigInt(object.txSigLimit.toString()) : BigInt(0);

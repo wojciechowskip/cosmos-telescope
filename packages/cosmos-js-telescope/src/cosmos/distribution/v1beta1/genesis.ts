@@ -2,7 +2,7 @@
 import { DecCoin, DecCoinAmino, DecCoinSDKType } from "../../base/v1beta1/coin";
 import { ValidatorAccumulatedCommission, ValidatorAccumulatedCommissionAmino, ValidatorAccumulatedCommissionSDKType, ValidatorHistoricalRewards, ValidatorHistoricalRewardsAmino, ValidatorHistoricalRewardsSDKType, ValidatorCurrentRewards, ValidatorCurrentRewardsAmino, ValidatorCurrentRewardsSDKType, DelegatorStartingInfo, DelegatorStartingInfoAmino, DelegatorStartingInfoSDKType, ValidatorSlashEvent, ValidatorSlashEventAmino, ValidatorSlashEventSDKType, Params, ParamsAmino, ParamsSDKType, FeePool, FeePoolAmino, FeePoolSDKType } from "./distribution";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -370,7 +370,7 @@ export const DelegatorWithdrawInfo = {
     message.withdrawAddress !== undefined && (obj.withdrawAddress = message.withdrawAddress);
     return obj;
   },
-  fromPartial(object: Partial<DelegatorWithdrawInfo>): DelegatorWithdrawInfo {
+  fromPartial<I extends Exact<DeepPartial<DelegatorWithdrawInfo>, I>>(object: I): DelegatorWithdrawInfo {
     const message = createBaseDelegatorWithdrawInfo();
     message.delegatorAddress = object.delegatorAddress ?? "";
     message.withdrawAddress = object.withdrawAddress ?? "";
@@ -479,7 +479,7 @@ export const ValidatorOutstandingRewardsRecord = {
     }
     return obj;
   },
-  fromPartial(object: Partial<ValidatorOutstandingRewardsRecord>): ValidatorOutstandingRewardsRecord {
+  fromPartial<I extends Exact<DeepPartial<ValidatorOutstandingRewardsRecord>, I>>(object: I): ValidatorOutstandingRewardsRecord {
     const message = createBaseValidatorOutstandingRewardsRecord();
     message.validatorAddress = object.validatorAddress ?? "";
     message.outstandingRewards = object.outstandingRewards?.map(e => DecCoin.fromPartial(e)) || [];
@@ -586,7 +586,7 @@ export const ValidatorAccumulatedCommissionRecord = {
     message.accumulated !== undefined && (obj.accumulated = message.accumulated ? ValidatorAccumulatedCommission.toJSON(message.accumulated) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<ValidatorAccumulatedCommissionRecord>): ValidatorAccumulatedCommissionRecord {
+  fromPartial<I extends Exact<DeepPartial<ValidatorAccumulatedCommissionRecord>, I>>(object: I): ValidatorAccumulatedCommissionRecord {
     const message = createBaseValidatorAccumulatedCommissionRecord();
     message.validatorAddress = object.validatorAddress ?? "";
     message.accumulated = object.accumulated !== undefined && object.accumulated !== null ? ValidatorAccumulatedCommission.fromPartial(object.accumulated) : undefined;
@@ -700,7 +700,7 @@ export const ValidatorHistoricalRewardsRecord = {
     message.rewards !== undefined && (obj.rewards = message.rewards ? ValidatorHistoricalRewards.toJSON(message.rewards) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<ValidatorHistoricalRewardsRecord>): ValidatorHistoricalRewardsRecord {
+  fromPartial<I extends Exact<DeepPartial<ValidatorHistoricalRewardsRecord>, I>>(object: I): ValidatorHistoricalRewardsRecord {
     const message = createBaseValidatorHistoricalRewardsRecord();
     message.validatorAddress = object.validatorAddress ?? "";
     message.period = object.period !== undefined && object.period !== null ? BigInt(object.period.toString()) : BigInt(0);
@@ -810,7 +810,7 @@ export const ValidatorCurrentRewardsRecord = {
     message.rewards !== undefined && (obj.rewards = message.rewards ? ValidatorCurrentRewards.toJSON(message.rewards) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<ValidatorCurrentRewardsRecord>): ValidatorCurrentRewardsRecord {
+  fromPartial<I extends Exact<DeepPartial<ValidatorCurrentRewardsRecord>, I>>(object: I): ValidatorCurrentRewardsRecord {
     const message = createBaseValidatorCurrentRewardsRecord();
     message.validatorAddress = object.validatorAddress ?? "";
     message.rewards = object.rewards !== undefined && object.rewards !== null ? ValidatorCurrentRewards.fromPartial(object.rewards) : undefined;
@@ -924,7 +924,7 @@ export const DelegatorStartingInfoRecord = {
     message.startingInfo !== undefined && (obj.startingInfo = message.startingInfo ? DelegatorStartingInfo.toJSON(message.startingInfo) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<DelegatorStartingInfoRecord>): DelegatorStartingInfoRecord {
+  fromPartial<I extends Exact<DeepPartial<DelegatorStartingInfoRecord>, I>>(object: I): DelegatorStartingInfoRecord {
     const message = createBaseDelegatorStartingInfoRecord();
     message.delegatorAddress = object.delegatorAddress ?? "";
     message.validatorAddress = object.validatorAddress ?? "";
@@ -1052,7 +1052,7 @@ export const ValidatorSlashEventRecord = {
     message.validatorSlashEvent !== undefined && (obj.validatorSlashEvent = message.validatorSlashEvent ? ValidatorSlashEvent.toJSON(message.validatorSlashEvent) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<ValidatorSlashEventRecord>): ValidatorSlashEventRecord {
+  fromPartial<I extends Exact<DeepPartial<ValidatorSlashEventRecord>, I>>(object: I): ValidatorSlashEventRecord {
     const message = createBaseValidatorSlashEventRecord();
     message.validatorAddress = object.validatorAddress ?? "";
     message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
@@ -1267,7 +1267,7 @@ export const GenesisState = {
     }
     return obj;
   },
-  fromPartial(object: Partial<GenesisState>): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     message.feePool = object.feePool !== undefined && object.feePool !== null ? FeePool.fromPartial(object.feePool) : undefined;

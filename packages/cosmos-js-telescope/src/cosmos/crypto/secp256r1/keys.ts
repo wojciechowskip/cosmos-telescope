@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** PubKey defines a secp256r1 ECDSA public key. */
@@ -103,7 +103,7 @@ export const PubKey = {
     message.key !== undefined && (obj.key = base64FromBytes(message.key !== undefined ? message.key : new Uint8Array()));
     return obj;
   },
-  fromPartial(object: Partial<PubKey>): PubKey {
+  fromPartial<I extends Exact<DeepPartial<PubKey>, I>>(object: I): PubKey {
     const message = createBasePubKey();
     message.key = object.key ?? new Uint8Array();
     return message;
@@ -194,7 +194,7 @@ export const PrivKey = {
     message.secret !== undefined && (obj.secret = base64FromBytes(message.secret !== undefined ? message.secret : new Uint8Array()));
     return obj;
   },
-  fromPartial(object: Partial<PrivKey>): PrivKey {
+  fromPartial<I extends Exact<DeepPartial<PrivKey>, I>>(object: I): PrivKey {
     const message = createBasePrivKey();
     message.secret = object.secret ?? new Uint8Array();
     return message;

@@ -2,6 +2,7 @@
 import { Grant, GrantAmino, GrantSDKType } from "./feegrant";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { JsonSafe } from "../../../json-safe";
+import { DeepPartial, Exact } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** GenesisState contains a set of fee allowances, persisted from the store */
 export interface GenesisState {
@@ -77,7 +78,7 @@ export const GenesisState = {
     }
     return obj;
   },
-  fromPartial(object: Partial<GenesisState>): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
     message.allowances = object.allowances?.map(e => Grant.fromPartial(e)) || [];
     return message;

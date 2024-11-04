@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 export interface MsgDelegate {
@@ -246,7 +246,7 @@ export const MsgDelegate = {
     message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<MsgDelegate>): MsgDelegate {
+  fromPartial<I extends Exact<DeepPartial<MsgDelegate>, I>>(object: I): MsgDelegate {
     const message = createBaseMsgDelegate();
     message.creator = object.creator ?? "";
     message.validator = object.validator ?? "";
@@ -345,7 +345,7 @@ export const MsgDelegateResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgDelegateResponse>): MsgDelegateResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgDelegateResponse>, I>>(_: I): MsgDelegateResponse {
     const message = createBaseMsgDelegateResponse();
     return message;
   },
@@ -469,7 +469,7 @@ export const MsgRedelegate = {
     message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<MsgRedelegate>): MsgRedelegate {
+  fromPartial<I extends Exact<DeepPartial<MsgRedelegate>, I>>(object: I): MsgRedelegate {
     const message = createBaseMsgRedelegate();
     message.creator = object.creator ?? "";
     message.fromProvider = object.fromProvider ?? "";
@@ -573,7 +573,7 @@ export const MsgRedelegateResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgRedelegateResponse>): MsgRedelegateResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgRedelegateResponse>, I>>(_: I): MsgRedelegateResponse {
     const message = createBaseMsgRedelegateResponse();
     return message;
   },
@@ -688,7 +688,7 @@ export const MsgUnbond = {
     message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<MsgUnbond>): MsgUnbond {
+  fromPartial<I extends Exact<DeepPartial<MsgUnbond>, I>>(object: I): MsgUnbond {
     const message = createBaseMsgUnbond();
     message.creator = object.creator ?? "";
     message.validator = object.validator ?? "";
@@ -787,7 +787,7 @@ export const MsgUnbondResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgUnbondResponse>): MsgUnbondResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUnbondResponse>, I>>(_: I): MsgUnbondResponse {
     const message = createBaseMsgUnbondResponse();
     return message;
   },
@@ -875,7 +875,7 @@ export const MsgClaimRewards = {
     message.provider !== undefined && (obj.provider = message.provider);
     return obj;
   },
-  fromPartial(object: Partial<MsgClaimRewards>): MsgClaimRewards {
+  fromPartial<I extends Exact<DeepPartial<MsgClaimRewards>, I>>(object: I): MsgClaimRewards {
     const message = createBaseMsgClaimRewards();
     message.creator = object.creator ?? "";
     message.provider = object.provider ?? "";
@@ -959,7 +959,7 @@ export const MsgClaimRewardsResponse = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<MsgClaimRewardsResponse>): MsgClaimRewardsResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgClaimRewardsResponse>, I>>(_: I): MsgClaimRewardsResponse {
     const message = createBaseMsgClaimRewardsResponse();
     return message;
   },

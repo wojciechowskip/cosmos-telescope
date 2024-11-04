@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../helpers";
 import { JsonSafe } from "../../json-safe";
 import { GlobalDecoderRegistry } from "../../registry";
 /** PublicKey defines the keys available for use with Tendermint Validators */
@@ -84,7 +84,7 @@ export const PublicKey = {
     message.secp256k1 !== undefined && (obj.secp256k1 = message.secp256k1 !== undefined ? base64FromBytes(message.secp256k1) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<PublicKey>): PublicKey {
+  fromPartial<I extends Exact<DeepPartial<PublicKey>, I>>(object: I): PublicKey {
     const message = createBasePublicKey();
     message.ed25519 = object.ed25519 ?? undefined;
     message.secp256k1 = object.secp256k1 ?? undefined;

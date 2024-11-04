@@ -4,8 +4,8 @@ import { Params, ParamsAmino, ParamsSDKType, ValidatorOutstandingRewards, Valida
 import { DecCoin, DecCoinAmino, DecCoinSDKType } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { JsonSafe } from "../../../json-safe";
+import { DeepPartial, Exact, isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
-import { isSet } from "../../../helpers";
 /** QueryParamsRequest is the request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 export interface QueryParamsRequestProtoMsg {
@@ -597,7 +597,7 @@ export const QueryParamsRequest = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<QueryParamsRequest>): QueryParamsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(_: I): QueryParamsRequest {
     const message = createBaseQueryParamsRequest();
     return message;
   },
@@ -683,7 +683,7 @@ export const QueryParamsResponse = {
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryParamsResponse>): QueryParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(object: I): QueryParamsResponse {
     const message = createBaseQueryParamsResponse();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
@@ -774,7 +774,7 @@ export const QueryValidatorOutstandingRewardsRequest = {
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     return obj;
   },
-  fromPartial(object: Partial<QueryValidatorOutstandingRewardsRequest>): QueryValidatorOutstandingRewardsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryValidatorOutstandingRewardsRequest>, I>>(object: I): QueryValidatorOutstandingRewardsRequest {
     const message = createBaseQueryValidatorOutstandingRewardsRequest();
     message.validatorAddress = object.validatorAddress ?? "";
     return message;
@@ -865,7 +865,7 @@ export const QueryValidatorOutstandingRewardsResponse = {
     message.rewards !== undefined && (obj.rewards = message.rewards ? ValidatorOutstandingRewards.toJSON(message.rewards) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryValidatorOutstandingRewardsResponse>): QueryValidatorOutstandingRewardsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryValidatorOutstandingRewardsResponse>, I>>(object: I): QueryValidatorOutstandingRewardsResponse {
     const message = createBaseQueryValidatorOutstandingRewardsResponse();
     message.rewards = object.rewards !== undefined && object.rewards !== null ? ValidatorOutstandingRewards.fromPartial(object.rewards) : undefined;
     return message;
@@ -956,7 +956,7 @@ export const QueryValidatorCommissionRequest = {
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     return obj;
   },
-  fromPartial(object: Partial<QueryValidatorCommissionRequest>): QueryValidatorCommissionRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryValidatorCommissionRequest>, I>>(object: I): QueryValidatorCommissionRequest {
     const message = createBaseQueryValidatorCommissionRequest();
     message.validatorAddress = object.validatorAddress ?? "";
     return message;
@@ -1047,7 +1047,7 @@ export const QueryValidatorCommissionResponse = {
     message.commission !== undefined && (obj.commission = message.commission ? ValidatorAccumulatedCommission.toJSON(message.commission) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryValidatorCommissionResponse>): QueryValidatorCommissionResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryValidatorCommissionResponse>, I>>(object: I): QueryValidatorCommissionResponse {
     const message = createBaseQueryValidatorCommissionResponse();
     message.commission = object.commission !== undefined && object.commission !== null ? ValidatorAccumulatedCommission.fromPartial(object.commission) : undefined;
     return message;
@@ -1165,7 +1165,7 @@ export const QueryValidatorSlashesRequest = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryValidatorSlashesRequest>): QueryValidatorSlashesRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryValidatorSlashesRequest>, I>>(object: I): QueryValidatorSlashesRequest {
     const message = createBaseQueryValidatorSlashesRequest();
     message.validatorAddress = object.validatorAddress ?? "";
     message.startingHeight = object.startingHeight !== undefined && object.startingHeight !== null ? BigInt(object.startingHeight.toString()) : BigInt(0);
@@ -1284,7 +1284,7 @@ export const QueryValidatorSlashesResponse = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryValidatorSlashesResponse>): QueryValidatorSlashesResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryValidatorSlashesResponse>, I>>(object: I): QueryValidatorSlashesResponse {
     const message = createBaseQueryValidatorSlashesResponse();
     message.slashes = object.slashes?.map(e => ValidatorSlashEvent.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
@@ -1391,7 +1391,7 @@ export const QueryDelegationRewardsRequest = {
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     return obj;
   },
-  fromPartial(object: Partial<QueryDelegationRewardsRequest>): QueryDelegationRewardsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegationRewardsRequest>, I>>(object: I): QueryDelegationRewardsRequest {
     const message = createBaseQueryDelegationRewardsRequest();
     message.delegatorAddress = object.delegatorAddress ?? "";
     message.validatorAddress = object.validatorAddress ?? "";
@@ -1491,7 +1491,7 @@ export const QueryDelegationRewardsResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<QueryDelegationRewardsResponse>): QueryDelegationRewardsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegationRewardsResponse>, I>>(object: I): QueryDelegationRewardsResponse {
     const message = createBaseQueryDelegationRewardsResponse();
     message.rewards = object.rewards?.map(e => DecCoin.fromPartial(e)) || [];
     return message;
@@ -1584,7 +1584,7 @@ export const QueryDelegationTotalRewardsRequest = {
     message.delegatorAddress !== undefined && (obj.delegatorAddress = message.delegatorAddress);
     return obj;
   },
-  fromPartial(object: Partial<QueryDelegationTotalRewardsRequest>): QueryDelegationTotalRewardsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegationTotalRewardsRequest>, I>>(object: I): QueryDelegationTotalRewardsRequest {
     const message = createBaseQueryDelegationTotalRewardsRequest();
     message.delegatorAddress = object.delegatorAddress ?? "";
     return message;
@@ -1692,7 +1692,7 @@ export const QueryDelegationTotalRewardsResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<QueryDelegationTotalRewardsResponse>): QueryDelegationTotalRewardsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegationTotalRewardsResponse>, I>>(object: I): QueryDelegationTotalRewardsResponse {
     const message = createBaseQueryDelegationTotalRewardsResponse();
     message.rewards = object.rewards?.map(e => DelegationDelegatorReward.fromPartial(e)) || [];
     message.total = object.total?.map(e => DecCoin.fromPartial(e)) || [];
@@ -1792,7 +1792,7 @@ export const QueryDelegatorValidatorsRequest = {
     message.delegatorAddress !== undefined && (obj.delegatorAddress = message.delegatorAddress);
     return obj;
   },
-  fromPartial(object: Partial<QueryDelegatorValidatorsRequest>): QueryDelegatorValidatorsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegatorValidatorsRequest>, I>>(object: I): QueryDelegatorValidatorsRequest {
     const message = createBaseQueryDelegatorValidatorsRequest();
     message.delegatorAddress = object.delegatorAddress ?? "";
     return message;
@@ -1887,7 +1887,7 @@ export const QueryDelegatorValidatorsResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<QueryDelegatorValidatorsResponse>): QueryDelegatorValidatorsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegatorValidatorsResponse>, I>>(object: I): QueryDelegatorValidatorsResponse {
     const message = createBaseQueryDelegatorValidatorsResponse();
     message.validators = object.validators?.map(e => e) || [];
     return message;
@@ -1980,7 +1980,7 @@ export const QueryDelegatorWithdrawAddressRequest = {
     message.delegatorAddress !== undefined && (obj.delegatorAddress = message.delegatorAddress);
     return obj;
   },
-  fromPartial(object: Partial<QueryDelegatorWithdrawAddressRequest>): QueryDelegatorWithdrawAddressRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegatorWithdrawAddressRequest>, I>>(object: I): QueryDelegatorWithdrawAddressRequest {
     const message = createBaseQueryDelegatorWithdrawAddressRequest();
     message.delegatorAddress = object.delegatorAddress ?? "";
     return message;
@@ -2071,7 +2071,7 @@ export const QueryDelegatorWithdrawAddressResponse = {
     message.withdrawAddress !== undefined && (obj.withdrawAddress = message.withdrawAddress);
     return obj;
   },
-  fromPartial(object: Partial<QueryDelegatorWithdrawAddressResponse>): QueryDelegatorWithdrawAddressResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegatorWithdrawAddressResponse>, I>>(object: I): QueryDelegatorWithdrawAddressResponse {
     const message = createBaseQueryDelegatorWithdrawAddressResponse();
     message.withdrawAddress = object.withdrawAddress ?? "";
     return message;
@@ -2151,7 +2151,7 @@ export const QueryCommunityPoolRequest = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<QueryCommunityPoolRequest>): QueryCommunityPoolRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryCommunityPoolRequest>, I>>(_: I): QueryCommunityPoolRequest {
     const message = createBaseQueryCommunityPoolRequest();
     return message;
   },
@@ -2241,7 +2241,7 @@ export const QueryCommunityPoolResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<QueryCommunityPoolResponse>): QueryCommunityPoolResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryCommunityPoolResponse>, I>>(object: I): QueryCommunityPoolResponse {
     const message = createBaseQueryCommunityPoolResponse();
     message.pool = object.pool?.map(e => DecCoin.fromPartial(e)) || [];
     return message;

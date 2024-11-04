@@ -2,7 +2,7 @@
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../base/query/v1beta1/pagination";
 import { GroupInfo, GroupInfoAmino, GroupInfoSDKType, GroupPolicyInfo, GroupPolicyInfoAmino, GroupPolicyInfoSDKType, GroupMember, GroupMemberAmino, GroupMemberSDKType, Proposal, ProposalAmino, ProposalSDKType, Vote, VoteAmino, VoteSDKType, TallyResult, TallyResultAmino, TallyResultSDKType } from "./types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** QueryGroupInfoRequest is the Query/GroupInfo request type. */
@@ -712,7 +712,7 @@ export const QueryGroupInfoRequest = {
     message.groupId !== undefined && (obj.groupId = (message.groupId || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupInfoRequest>): QueryGroupInfoRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupInfoRequest>, I>>(object: I): QueryGroupInfoRequest {
     const message = createBaseQueryGroupInfoRequest();
     message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     return message;
@@ -803,7 +803,7 @@ export const QueryGroupInfoResponse = {
     message.info !== undefined && (obj.info = message.info ? GroupInfo.toJSON(message.info) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupInfoResponse>): QueryGroupInfoResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupInfoResponse>, I>>(object: I): QueryGroupInfoResponse {
     const message = createBaseQueryGroupInfoResponse();
     message.info = object.info !== undefined && object.info !== null ? GroupInfo.fromPartial(object.info) : undefined;
     return message;
@@ -894,7 +894,7 @@ export const QueryGroupPolicyInfoRequest = {
     message.address !== undefined && (obj.address = message.address);
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupPolicyInfoRequest>): QueryGroupPolicyInfoRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupPolicyInfoRequest>, I>>(object: I): QueryGroupPolicyInfoRequest {
     const message = createBaseQueryGroupPolicyInfoRequest();
     message.address = object.address ?? "";
     return message;
@@ -985,7 +985,7 @@ export const QueryGroupPolicyInfoResponse = {
     message.info !== undefined && (obj.info = message.info ? GroupPolicyInfo.toJSON(message.info) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupPolicyInfoResponse>): QueryGroupPolicyInfoResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupPolicyInfoResponse>, I>>(object: I): QueryGroupPolicyInfoResponse {
     const message = createBaseQueryGroupPolicyInfoResponse();
     message.info = object.info !== undefined && object.info !== null ? GroupPolicyInfo.fromPartial(object.info) : undefined;
     return message;
@@ -1085,7 +1085,7 @@ export const QueryGroupMembersRequest = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupMembersRequest>): QueryGroupMembersRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupMembersRequest>, I>>(object: I): QueryGroupMembersRequest {
     const message = createBaseQueryGroupMembersRequest();
     message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
@@ -1194,7 +1194,7 @@ export const QueryGroupMembersResponse = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupMembersResponse>): QueryGroupMembersResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupMembersResponse>, I>>(object: I): QueryGroupMembersResponse {
     const message = createBaseQueryGroupMembersResponse();
     message.members = object.members?.map(e => GroupMember.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
@@ -1301,7 +1301,7 @@ export const QueryGroupsByAdminRequest = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupsByAdminRequest>): QueryGroupsByAdminRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupsByAdminRequest>, I>>(object: I): QueryGroupsByAdminRequest {
     const message = createBaseQueryGroupsByAdminRequest();
     message.admin = object.admin ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
@@ -1410,7 +1410,7 @@ export const QueryGroupsByAdminResponse = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupsByAdminResponse>): QueryGroupsByAdminResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupsByAdminResponse>, I>>(object: I): QueryGroupsByAdminResponse {
     const message = createBaseQueryGroupsByAdminResponse();
     message.groups = object.groups?.map(e => GroupInfo.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
@@ -1517,7 +1517,7 @@ export const QueryGroupPoliciesByGroupRequest = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupPoliciesByGroupRequest>): QueryGroupPoliciesByGroupRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupPoliciesByGroupRequest>, I>>(object: I): QueryGroupPoliciesByGroupRequest {
     const message = createBaseQueryGroupPoliciesByGroupRequest();
     message.groupId = object.groupId !== undefined && object.groupId !== null ? BigInt(object.groupId.toString()) : BigInt(0);
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
@@ -1626,7 +1626,7 @@ export const QueryGroupPoliciesByGroupResponse = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupPoliciesByGroupResponse>): QueryGroupPoliciesByGroupResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupPoliciesByGroupResponse>, I>>(object: I): QueryGroupPoliciesByGroupResponse {
     const message = createBaseQueryGroupPoliciesByGroupResponse();
     message.groupPolicies = object.groupPolicies?.map(e => GroupPolicyInfo.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
@@ -1733,7 +1733,7 @@ export const QueryGroupPoliciesByAdminRequest = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupPoliciesByAdminRequest>): QueryGroupPoliciesByAdminRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupPoliciesByAdminRequest>, I>>(object: I): QueryGroupPoliciesByAdminRequest {
     const message = createBaseQueryGroupPoliciesByAdminRequest();
     message.admin = object.admin ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
@@ -1842,7 +1842,7 @@ export const QueryGroupPoliciesByAdminResponse = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupPoliciesByAdminResponse>): QueryGroupPoliciesByAdminResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupPoliciesByAdminResponse>, I>>(object: I): QueryGroupPoliciesByAdminResponse {
     const message = createBaseQueryGroupPoliciesByAdminResponse();
     message.groupPolicies = object.groupPolicies?.map(e => GroupPolicyInfo.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
@@ -1940,7 +1940,7 @@ export const QueryProposalRequest = {
     message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<QueryProposalRequest>): QueryProposalRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryProposalRequest>, I>>(object: I): QueryProposalRequest {
     const message = createBaseQueryProposalRequest();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     return message;
@@ -2031,7 +2031,7 @@ export const QueryProposalResponse = {
     message.proposal !== undefined && (obj.proposal = message.proposal ? Proposal.toJSON(message.proposal) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryProposalResponse>): QueryProposalResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryProposalResponse>, I>>(object: I): QueryProposalResponse {
     const message = createBaseQueryProposalResponse();
     message.proposal = object.proposal !== undefined && object.proposal !== null ? Proposal.fromPartial(object.proposal) : undefined;
     return message;
@@ -2131,7 +2131,7 @@ export const QueryProposalsByGroupPolicyRequest = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryProposalsByGroupPolicyRequest>): QueryProposalsByGroupPolicyRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryProposalsByGroupPolicyRequest>, I>>(object: I): QueryProposalsByGroupPolicyRequest {
     const message = createBaseQueryProposalsByGroupPolicyRequest();
     message.address = object.address ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
@@ -2240,7 +2240,7 @@ export const QueryProposalsByGroupPolicyResponse = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryProposalsByGroupPolicyResponse>): QueryProposalsByGroupPolicyResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryProposalsByGroupPolicyResponse>, I>>(object: I): QueryProposalsByGroupPolicyResponse {
     const message = createBaseQueryProposalsByGroupPolicyResponse();
     message.proposals = object.proposals?.map(e => Proposal.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
@@ -2347,7 +2347,7 @@ export const QueryVoteByProposalVoterRequest = {
     message.voter !== undefined && (obj.voter = message.voter);
     return obj;
   },
-  fromPartial(object: Partial<QueryVoteByProposalVoterRequest>): QueryVoteByProposalVoterRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryVoteByProposalVoterRequest>, I>>(object: I): QueryVoteByProposalVoterRequest {
     const message = createBaseQueryVoteByProposalVoterRequest();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.voter = object.voter ?? "";
@@ -2443,7 +2443,7 @@ export const QueryVoteByProposalVoterResponse = {
     message.vote !== undefined && (obj.vote = message.vote ? Vote.toJSON(message.vote) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryVoteByProposalVoterResponse>): QueryVoteByProposalVoterResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryVoteByProposalVoterResponse>, I>>(object: I): QueryVoteByProposalVoterResponse {
     const message = createBaseQueryVoteByProposalVoterResponse();
     message.vote = object.vote !== undefined && object.vote !== null ? Vote.fromPartial(object.vote) : undefined;
     return message;
@@ -2543,7 +2543,7 @@ export const QueryVotesByProposalRequest = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryVotesByProposalRequest>): QueryVotesByProposalRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryVotesByProposalRequest>, I>>(object: I): QueryVotesByProposalRequest {
     const message = createBaseQueryVotesByProposalRequest();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
@@ -2652,7 +2652,7 @@ export const QueryVotesByProposalResponse = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryVotesByProposalResponse>): QueryVotesByProposalResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryVotesByProposalResponse>, I>>(object: I): QueryVotesByProposalResponse {
     const message = createBaseQueryVotesByProposalResponse();
     message.votes = object.votes?.map(e => Vote.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
@@ -2759,7 +2759,7 @@ export const QueryVotesByVoterRequest = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryVotesByVoterRequest>): QueryVotesByVoterRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryVotesByVoterRequest>, I>>(object: I): QueryVotesByVoterRequest {
     const message = createBaseQueryVotesByVoterRequest();
     message.voter = object.voter ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
@@ -2868,7 +2868,7 @@ export const QueryVotesByVoterResponse = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryVotesByVoterResponse>): QueryVotesByVoterResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryVotesByVoterResponse>, I>>(object: I): QueryVotesByVoterResponse {
     const message = createBaseQueryVotesByVoterResponse();
     message.votes = object.votes?.map(e => Vote.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
@@ -2975,7 +2975,7 @@ export const QueryGroupsByMemberRequest = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupsByMemberRequest>): QueryGroupsByMemberRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupsByMemberRequest>, I>>(object: I): QueryGroupsByMemberRequest {
     const message = createBaseQueryGroupsByMemberRequest();
     message.address = object.address ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
@@ -3084,7 +3084,7 @@ export const QueryGroupsByMemberResponse = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryGroupsByMemberResponse>): QueryGroupsByMemberResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryGroupsByMemberResponse>, I>>(object: I): QueryGroupsByMemberResponse {
     const message = createBaseQueryGroupsByMemberResponse();
     message.groups = object.groups?.map(e => GroupInfo.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
@@ -3182,7 +3182,7 @@ export const QueryTallyResultRequest = {
     message.proposalId !== undefined && (obj.proposalId = (message.proposalId || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<QueryTallyResultRequest>): QueryTallyResultRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryTallyResultRequest>, I>>(object: I): QueryTallyResultRequest {
     const message = createBaseQueryTallyResultRequest();
     message.proposalId = object.proposalId !== undefined && object.proposalId !== null ? BigInt(object.proposalId.toString()) : BigInt(0);
     return message;
@@ -3273,7 +3273,7 @@ export const QueryTallyResultResponse = {
     message.tally !== undefined && (obj.tally = message.tally ? TallyResult.toJSON(message.tally) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryTallyResultResponse>): QueryTallyResultResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryTallyResultResponse>, I>>(object: I): QueryTallyResultResponse {
     const message = createBaseQueryTallyResultResponse();
     message.tally = object.tally !== undefined && object.tally !== null ? TallyResult.fromPartial(object.tally) : undefined;
     return message;

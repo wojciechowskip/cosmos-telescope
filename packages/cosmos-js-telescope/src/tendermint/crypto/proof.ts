@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact } from "../../helpers";
 import { JsonSafe } from "../../json-safe";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface Proof {
@@ -214,7 +214,7 @@ export const Proof = {
     }
     return obj;
   },
-  fromPartial(object: Partial<Proof>): Proof {
+  fromPartial<I extends Exact<DeepPartial<Proof>, I>>(object: I): Proof {
     const message = createBaseProof();
     message.total = object.total !== undefined && object.total !== null ? BigInt(object.total.toString()) : BigInt(0);
     message.index = object.index !== undefined && object.index !== null ? BigInt(object.index.toString()) : BigInt(0);
@@ -323,7 +323,7 @@ export const ValueOp = {
     message.proof !== undefined && (obj.proof = message.proof ? Proof.toJSON(message.proof) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<ValueOp>): ValueOp {
+  fromPartial<I extends Exact<DeepPartial<ValueOp>, I>>(object: I): ValueOp {
     const message = createBaseValueOp();
     message.key = object.key ?? new Uint8Array();
     message.proof = object.proof !== undefined && object.proof !== null ? Proof.fromPartial(object.proof) : undefined;
@@ -429,7 +429,7 @@ export const DominoOp = {
     message.output !== undefined && (obj.output = message.output);
     return obj;
   },
-  fromPartial(object: Partial<DominoOp>): DominoOp {
+  fromPartial<I extends Exact<DeepPartial<DominoOp>, I>>(object: I): DominoOp {
     const message = createBaseDominoOp();
     message.key = object.key ?? "";
     message.input = object.input ?? "";
@@ -540,7 +540,7 @@ export const ProofOp = {
     message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
     return obj;
   },
-  fromPartial(object: Partial<ProofOp>): ProofOp {
+  fromPartial<I extends Exact<DeepPartial<ProofOp>, I>>(object: I): ProofOp {
     const message = createBaseProofOp();
     message.type = object.type ?? "";
     message.key = object.key ?? new Uint8Array();
@@ -637,7 +637,7 @@ export const ProofOps = {
     }
     return obj;
   },
-  fromPartial(object: Partial<ProofOps>): ProofOps {
+  fromPartial<I extends Exact<DeepPartial<ProofOps>, I>>(object: I): ProofOps {
     const message = createBaseProofOps();
     message.ops = object.ops?.map(e => ProofOp.fromPartial(e)) || [];
     return message;

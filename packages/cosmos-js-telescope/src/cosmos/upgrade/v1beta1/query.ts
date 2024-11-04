@@ -2,8 +2,8 @@
 import { Plan, PlanAmino, PlanSDKType, ModuleVersion, ModuleVersionAmino, ModuleVersionSDKType } from "./upgrade";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { JsonSafe } from "../../../json-safe";
+import { DeepPartial, Exact, isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
-import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
 /**
  * QueryCurrentPlanRequest is the request type for the Query/CurrentPlan RPC
  * method.
@@ -373,7 +373,7 @@ export const QueryCurrentPlanRequest = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<QueryCurrentPlanRequest>): QueryCurrentPlanRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryCurrentPlanRequest>, I>>(_: I): QueryCurrentPlanRequest {
     const message = createBaseQueryCurrentPlanRequest();
     return message;
   },
@@ -459,7 +459,7 @@ export const QueryCurrentPlanResponse = {
     message.plan !== undefined && (obj.plan = message.plan ? Plan.toJSON(message.plan) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryCurrentPlanResponse>): QueryCurrentPlanResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryCurrentPlanResponse>, I>>(object: I): QueryCurrentPlanResponse {
     const message = createBaseQueryCurrentPlanResponse();
     message.plan = object.plan !== undefined && object.plan !== null ? Plan.fromPartial(object.plan) : undefined;
     return message;
@@ -550,7 +550,7 @@ export const QueryAppliedPlanRequest = {
     message.name !== undefined && (obj.name = message.name);
     return obj;
   },
-  fromPartial(object: Partial<QueryAppliedPlanRequest>): QueryAppliedPlanRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAppliedPlanRequest>, I>>(object: I): QueryAppliedPlanRequest {
     const message = createBaseQueryAppliedPlanRequest();
     message.name = object.name ?? "";
     return message;
@@ -641,7 +641,7 @@ export const QueryAppliedPlanResponse = {
     message.height !== undefined && (obj.height = (message.height || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<QueryAppliedPlanResponse>): QueryAppliedPlanResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAppliedPlanResponse>, I>>(object: I): QueryAppliedPlanResponse {
     const message = createBaseQueryAppliedPlanResponse();
     message.height = object.height !== undefined && object.height !== null ? BigInt(object.height.toString()) : BigInt(0);
     return message;
@@ -732,7 +732,7 @@ export const QueryUpgradedConsensusStateRequest = {
     message.lastHeight !== undefined && (obj.lastHeight = (message.lastHeight || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<QueryUpgradedConsensusStateRequest>): QueryUpgradedConsensusStateRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryUpgradedConsensusStateRequest>, I>>(object: I): QueryUpgradedConsensusStateRequest {
     const message = createBaseQueryUpgradedConsensusStateRequest();
     message.lastHeight = object.lastHeight !== undefined && object.lastHeight !== null ? BigInt(object.lastHeight.toString()) : BigInt(0);
     return message;
@@ -823,7 +823,7 @@ export const QueryUpgradedConsensusStateResponse = {
     message.upgradedConsensusState !== undefined && (obj.upgradedConsensusState = base64FromBytes(message.upgradedConsensusState !== undefined ? message.upgradedConsensusState : new Uint8Array()));
     return obj;
   },
-  fromPartial(object: Partial<QueryUpgradedConsensusStateResponse>): QueryUpgradedConsensusStateResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryUpgradedConsensusStateResponse>, I>>(object: I): QueryUpgradedConsensusStateResponse {
     const message = createBaseQueryUpgradedConsensusStateResponse();
     message.upgradedConsensusState = object.upgradedConsensusState ?? new Uint8Array();
     return message;
@@ -914,7 +914,7 @@ export const QueryModuleVersionsRequest = {
     message.moduleName !== undefined && (obj.moduleName = message.moduleName);
     return obj;
   },
-  fromPartial(object: Partial<QueryModuleVersionsRequest>): QueryModuleVersionsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryModuleVersionsRequest>, I>>(object: I): QueryModuleVersionsRequest {
     const message = createBaseQueryModuleVersionsRequest();
     message.moduleName = object.moduleName ?? "";
     return message;
@@ -1009,7 +1009,7 @@ export const QueryModuleVersionsResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<QueryModuleVersionsResponse>): QueryModuleVersionsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryModuleVersionsResponse>, I>>(object: I): QueryModuleVersionsResponse {
     const message = createBaseQueryModuleVersionsResponse();
     message.moduleVersions = object.moduleVersions?.map(e => ModuleVersion.fromPartial(e)) || [];
     return message;
@@ -1091,7 +1091,7 @@ export const QueryAuthorityRequest = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<QueryAuthorityRequest>): QueryAuthorityRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAuthorityRequest>, I>>(_: I): QueryAuthorityRequest {
     const message = createBaseQueryAuthorityRequest();
     return message;
   },
@@ -1177,7 +1177,7 @@ export const QueryAuthorityResponse = {
     message.address !== undefined && (obj.address = message.address);
     return obj;
   },
-  fromPartial(object: Partial<QueryAuthorityResponse>): QueryAuthorityResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAuthorityResponse>, I>>(object: I): QueryAuthorityResponse {
     const message = createBaseQueryAuthorityResponse();
     message.address = object.address ?? "";
     return message;

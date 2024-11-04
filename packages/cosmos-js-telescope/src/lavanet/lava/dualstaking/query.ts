@@ -4,8 +4,8 @@ import { Delegation, DelegationAmino, DelegationSDKType } from "./delegate";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
 import { JsonSafe } from "../../../json-safe";
+import { DeepPartial, Exact, isSet } from "../../../helpers";
 import { GlobalDecoderRegistry } from "../../../registry";
-import { isSet } from "../../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 export interface QueryParamsRequestProtoMsg {
@@ -217,7 +217,7 @@ export const QueryParamsRequest = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<QueryParamsRequest>): QueryParamsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsRequest>, I>>(_: I): QueryParamsRequest {
     const message = createBaseQueryParamsRequest();
     return message;
   },
@@ -295,7 +295,7 @@ export const QueryParamsResponse = {
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryParamsResponse>): QueryParamsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryParamsResponse>, I>>(object: I): QueryParamsResponse {
     const message = createBaseQueryParamsResponse();
     message.params = object.params !== undefined && object.params !== null ? Params.fromPartial(object.params) : undefined;
     return message;
@@ -387,7 +387,7 @@ export const QueryDelegatorProvidersRequest = {
     message.withPending !== undefined && (obj.withPending = message.withPending);
     return obj;
   },
-  fromPartial(object: Partial<QueryDelegatorProvidersRequest>): QueryDelegatorProvidersRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegatorProvidersRequest>, I>>(object: I): QueryDelegatorProvidersRequest {
     const message = createBaseQueryDelegatorProvidersRequest();
     message.delegator = object.delegator ?? "";
     message.withPending = object.withPending ?? false;
@@ -479,7 +479,7 @@ export const QueryDelegatorProvidersResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<QueryDelegatorProvidersResponse>): QueryDelegatorProvidersResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegatorProvidersResponse>, I>>(object: I): QueryDelegatorProvidersResponse {
     const message = createBaseQueryDelegatorProvidersResponse();
     message.delegations = object.delegations?.map(e => Delegation.fromPartial(e)) || [];
     return message;
@@ -573,7 +573,7 @@ export const QueryProviderDelegatorsRequest = {
     message.withPending !== undefined && (obj.withPending = message.withPending);
     return obj;
   },
-  fromPartial(object: Partial<QueryProviderDelegatorsRequest>): QueryProviderDelegatorsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryProviderDelegatorsRequest>, I>>(object: I): QueryProviderDelegatorsRequest {
     const message = createBaseQueryProviderDelegatorsRequest();
     message.provider = object.provider ?? "";
     message.withPending = object.withPending ?? false;
@@ -665,7 +665,7 @@ export const QueryProviderDelegatorsResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<QueryProviderDelegatorsResponse>): QueryProviderDelegatorsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryProviderDelegatorsResponse>, I>>(object: I): QueryProviderDelegatorsResponse {
     const message = createBaseQueryProviderDelegatorsResponse();
     message.delegations = object.delegations?.map(e => Delegation.fromPartial(e)) || [];
     return message;
@@ -768,7 +768,7 @@ export const QueryDelegatorRewardsRequest = {
     message.chainId !== undefined && (obj.chainId = message.chainId);
     return obj;
   },
-  fromPartial(object: Partial<QueryDelegatorRewardsRequest>): QueryDelegatorRewardsRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegatorRewardsRequest>, I>>(object: I): QueryDelegatorRewardsRequest {
     const message = createBaseQueryDelegatorRewardsRequest();
     message.delegator = object.delegator ?? "";
     message.provider = object.provider ?? "";
@@ -865,7 +865,7 @@ export const QueryDelegatorRewardsResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<QueryDelegatorRewardsResponse>): QueryDelegatorRewardsResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryDelegatorRewardsResponse>, I>>(object: I): QueryDelegatorRewardsResponse {
     const message = createBaseQueryDelegatorRewardsResponse();
     message.rewards = object.rewards?.map(e => DelegatorRewardInfo.fromPartial(e)) || [];
     return message;
@@ -972,7 +972,7 @@ export const DelegatorRewardInfo = {
     }
     return obj;
   },
-  fromPartial(object: Partial<DelegatorRewardInfo>): DelegatorRewardInfo {
+  fromPartial<I extends Exact<DeepPartial<DelegatorRewardInfo>, I>>(object: I): DelegatorRewardInfo {
     const message = createBaseDelegatorRewardInfo();
     message.provider = object.provider ?? "";
     message.chainId = object.chainId ?? "";

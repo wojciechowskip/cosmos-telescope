@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../binary";
 import { JsonSafe } from "../../json-safe";
+import { DeepPartial, Exact } from "../../helpers";
 import { GlobalDecoderRegistry } from "../../registry";
 /**
  * A generic empty message that you can re-use to avoid defining duplicated
@@ -84,7 +85,7 @@ export const Empty = {
     const obj: any = {};
     return obj;
   },
-  fromPartial(_: Partial<Empty>): Empty {
+  fromPartial<I extends Exact<DeepPartial<Empty>, I>>(_: I): Empty {
     const message = createBaseEmpty();
     return message;
   },

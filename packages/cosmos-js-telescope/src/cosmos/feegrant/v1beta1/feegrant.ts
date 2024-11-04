@@ -4,7 +4,7 @@ import { Timestamp } from "../../../google/protobuf/timestamp";
 import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { toTimestamp, fromTimestamp, isSet, fromJsonTimestamp } from "../../../helpers";
+import { toTimestamp, fromTimestamp, isSet, fromJsonTimestamp, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -257,7 +257,7 @@ export const BasicAllowance = {
     message.expiration !== undefined && (obj.expiration = message.expiration.toISOString());
     return obj;
   },
-  fromPartial(object: Partial<BasicAllowance>): BasicAllowance {
+  fromPartial<I extends Exact<DeepPartial<BasicAllowance>, I>>(object: I): BasicAllowance {
     const message = createBaseBasicAllowance();
     message.spendLimit = object.spendLimit?.map(e => Coin.fromPartial(e)) || [];
     message.expiration = object.expiration ?? undefined;
@@ -400,7 +400,7 @@ export const PeriodicAllowance = {
     message.periodReset !== undefined && (obj.periodReset = message.periodReset.toISOString());
     return obj;
   },
-  fromPartial(object: Partial<PeriodicAllowance>): PeriodicAllowance {
+  fromPartial<I extends Exact<DeepPartial<PeriodicAllowance>, I>>(object: I): PeriodicAllowance {
     const message = createBasePeriodicAllowance();
     message.basic = object.basic !== undefined && object.basic !== null ? BasicAllowance.fromPartial(object.basic) : undefined;
     message.period = object.period !== undefined && object.period !== null ? Duration.fromPartial(object.period) : undefined;
@@ -529,7 +529,7 @@ export const AllowedMsgAllowance = {
     }
     return obj;
   },
-  fromPartial(object: Partial<AllowedMsgAllowance>): AllowedMsgAllowance {
+  fromPartial<I extends Exact<DeepPartial<AllowedMsgAllowance>, I>>(object: I): AllowedMsgAllowance {
     const message = createBaseAllowedMsgAllowance();
     message.allowance = object.allowance !== undefined && object.allowance !== null ? GlobalDecoderRegistry.fromPartial(object.allowance) : undefined;
     message.allowedMessages = object.allowedMessages?.map(e => e) || [];
@@ -645,7 +645,7 @@ export const Grant = {
     message.allowance !== undefined && (obj.allowance = message.allowance ? GlobalDecoderRegistry.toJSON(message.allowance) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<Grant>): Grant {
+  fromPartial<I extends Exact<DeepPartial<Grant>, I>>(object: I): Grant {
     const message = createBaseGrant();
     message.granter = object.granter ?? "";
     message.grantee = object.grantee ?? "";

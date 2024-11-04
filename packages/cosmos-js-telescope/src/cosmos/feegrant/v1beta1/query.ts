@@ -2,7 +2,7 @@
 import { PageRequest, PageRequestAmino, PageRequestSDKType, PageResponse, PageResponseAmino, PageResponseSDKType } from "../../base/query/v1beta1/pagination";
 import { Grant, GrantAmino, GrantSDKType } from "./feegrant";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet } from "../../../helpers";
+import { isSet, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** QueryAllowanceRequest is the request type for the Query/Allowance RPC method. */
@@ -241,7 +241,7 @@ export const QueryAllowanceRequest = {
     message.grantee !== undefined && (obj.grantee = message.grantee);
     return obj;
   },
-  fromPartial(object: Partial<QueryAllowanceRequest>): QueryAllowanceRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAllowanceRequest>, I>>(object: I): QueryAllowanceRequest {
     const message = createBaseQueryAllowanceRequest();
     message.granter = object.granter ?? "";
     message.grantee = object.grantee ?? "";
@@ -337,7 +337,7 @@ export const QueryAllowanceResponse = {
     message.allowance !== undefined && (obj.allowance = message.allowance ? Grant.toJSON(message.allowance) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryAllowanceResponse>): QueryAllowanceResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAllowanceResponse>, I>>(object: I): QueryAllowanceResponse {
     const message = createBaseQueryAllowanceResponse();
     message.allowance = object.allowance !== undefined && object.allowance !== null ? Grant.fromPartial(object.allowance) : undefined;
     return message;
@@ -437,7 +437,7 @@ export const QueryAllowancesRequest = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryAllowancesRequest>): QueryAllowancesRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAllowancesRequest>, I>>(object: I): QueryAllowancesRequest {
     const message = createBaseQueryAllowancesRequest();
     message.grantee = object.grantee ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
@@ -546,7 +546,7 @@ export const QueryAllowancesResponse = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryAllowancesResponse>): QueryAllowancesResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAllowancesResponse>, I>>(object: I): QueryAllowancesResponse {
     const message = createBaseQueryAllowancesResponse();
     message.allowances = object.allowances?.map(e => Grant.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;
@@ -653,7 +653,7 @@ export const QueryAllowancesByGranterRequest = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryAllowancesByGranterRequest>): QueryAllowancesByGranterRequest {
+  fromPartial<I extends Exact<DeepPartial<QueryAllowancesByGranterRequest>, I>>(object: I): QueryAllowancesByGranterRequest {
     const message = createBaseQueryAllowancesByGranterRequest();
     message.granter = object.granter ?? "";
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageRequest.fromPartial(object.pagination) : undefined;
@@ -762,7 +762,7 @@ export const QueryAllowancesByGranterResponse = {
     message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<QueryAllowancesByGranterResponse>): QueryAllowancesByGranterResponse {
+  fromPartial<I extends Exact<DeepPartial<QueryAllowancesByGranterResponse>, I>>(object: I): QueryAllowancesByGranterResponse {
     const message = createBaseQueryAllowancesByGranterResponse();
     message.allowances = object.allowances?.map(e => Grant.fromPartial(e)) || [];
     message.pagination = object.pagination !== undefined && object.pagination !== null ? PageResponse.fromPartial(object.pagination) : undefined;

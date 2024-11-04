@@ -6,7 +6,7 @@ import { Duration, DurationAmino, DurationSDKType } from "../../../google/protob
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { ValidatorUpdate, ValidatorUpdateAmino, ValidatorUpdateSDKType } from "../../../tendermint/abci/types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, toTimestamp, fromTimestamp, fromJsonTimestamp } from "../../../helpers";
+import { isSet, DeepPartial, Exact, toTimestamp, fromTimestamp, fromJsonTimestamp } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
@@ -1004,7 +1004,7 @@ export const HistoricalInfo = {
     }
     return obj;
   },
-  fromPartial(object: Partial<HistoricalInfo>): HistoricalInfo {
+  fromPartial<I extends Exact<DeepPartial<HistoricalInfo>, I>>(object: I): HistoricalInfo {
     const message = createBaseHistoricalInfo();
     message.header = object.header !== undefined && object.header !== null ? Header.fromPartial(object.header) : undefined;
     message.valset = object.valset?.map(e => Validator.fromPartial(e)) || [];
@@ -1120,7 +1120,7 @@ export const CommissionRates = {
     message.maxChangeRate !== undefined && (obj.maxChangeRate = message.maxChangeRate);
     return obj;
   },
-  fromPartial(object: Partial<CommissionRates>): CommissionRates {
+  fromPartial<I extends Exact<DeepPartial<CommissionRates>, I>>(object: I): CommissionRates {
     const message = createBaseCommissionRates();
     message.rate = object.rate ?? "";
     message.maxRate = object.maxRate ?? "";
@@ -1230,7 +1230,7 @@ export const Commission = {
     message.updateTime !== undefined && (obj.updateTime = message.updateTime.toISOString());
     return obj;
   },
-  fromPartial(object: Partial<Commission>): Commission {
+  fromPartial<I extends Exact<DeepPartial<Commission>, I>>(object: I): Commission {
     const message = createBaseCommission();
     message.commissionRates = object.commissionRates !== undefined && object.commissionRates !== null ? CommissionRates.fromPartial(object.commissionRates) : undefined;
     message.updateTime = object.updateTime ?? undefined;
@@ -1362,7 +1362,7 @@ export const Description = {
     message.details !== undefined && (obj.details = message.details);
     return obj;
   },
-  fromPartial(object: Partial<Description>): Description {
+  fromPartial<I extends Exact<DeepPartial<Description>, I>>(object: I): Description {
     const message = createBaseDescription();
     message.moniker = object.moniker ?? "";
     message.identity = object.identity ?? "";
@@ -1594,7 +1594,7 @@ export const Validator = {
     }
     return obj;
   },
-  fromPartial(object: Partial<Validator>): Validator {
+  fromPartial<I extends Exact<DeepPartial<Validator>, I>>(object: I): Validator {
     const message = createBaseValidator();
     message.operatorAddress = object.operatorAddress ?? "";
     message.consensusPubkey = object.consensusPubkey !== undefined && object.consensusPubkey !== null ? GlobalDecoderRegistry.fromPartial(object.consensusPubkey) : undefined;
@@ -1751,7 +1751,7 @@ export const ValAddresses = {
     }
     return obj;
   },
-  fromPartial(object: Partial<ValAddresses>): ValAddresses {
+  fromPartial<I extends Exact<DeepPartial<ValAddresses>, I>>(object: I): ValAddresses {
     const message = createBaseValAddresses();
     message.addresses = object.addresses?.map(e => e) || [];
     return message;
@@ -1853,7 +1853,7 @@ export const DVPair = {
     message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
     return obj;
   },
-  fromPartial(object: Partial<DVPair>): DVPair {
+  fromPartial<I extends Exact<DeepPartial<DVPair>, I>>(object: I): DVPair {
     const message = createBaseDVPair();
     message.delegatorAddress = object.delegatorAddress ?? "";
     message.validatorAddress = object.validatorAddress ?? "";
@@ -1953,7 +1953,7 @@ export const DVPairs = {
     }
     return obj;
   },
-  fromPartial(object: Partial<DVPairs>): DVPairs {
+  fromPartial<I extends Exact<DeepPartial<DVPairs>, I>>(object: I): DVPairs {
     const message = createBaseDVPairs();
     message.pairs = object.pairs?.map(e => DVPair.fromPartial(e)) || [];
     return message;
@@ -2064,7 +2064,7 @@ export const DVVTriplet = {
     message.validatorDstAddress !== undefined && (obj.validatorDstAddress = message.validatorDstAddress);
     return obj;
   },
-  fromPartial(object: Partial<DVVTriplet>): DVVTriplet {
+  fromPartial<I extends Exact<DeepPartial<DVVTriplet>, I>>(object: I): DVVTriplet {
     const message = createBaseDVVTriplet();
     message.delegatorAddress = object.delegatorAddress ?? "";
     message.validatorSrcAddress = object.validatorSrcAddress ?? "";
@@ -2169,7 +2169,7 @@ export const DVVTriplets = {
     }
     return obj;
   },
-  fromPartial(object: Partial<DVVTriplets>): DVVTriplets {
+  fromPartial<I extends Exact<DeepPartial<DVVTriplets>, I>>(object: I): DVVTriplets {
     const message = createBaseDVVTriplets();
     message.triplets = object.triplets?.map(e => DVVTriplet.fromPartial(e)) || [];
     return message;
@@ -2280,7 +2280,7 @@ export const Delegation = {
     message.shares !== undefined && (obj.shares = message.shares);
     return obj;
   },
-  fromPartial(object: Partial<Delegation>): Delegation {
+  fromPartial<I extends Exact<DeepPartial<Delegation>, I>>(object: I): Delegation {
     const message = createBaseDelegation();
     message.delegatorAddress = object.delegatorAddress ?? "";
     message.validatorAddress = object.validatorAddress ?? "";
@@ -2403,7 +2403,7 @@ export const UnbondingDelegation = {
     }
     return obj;
   },
-  fromPartial(object: Partial<UnbondingDelegation>): UnbondingDelegation {
+  fromPartial<I extends Exact<DeepPartial<UnbondingDelegation>, I>>(object: I): UnbondingDelegation {
     const message = createBaseUnbondingDelegation();
     message.delegatorAddress = object.delegatorAddress ?? "";
     message.validatorAddress = object.validatorAddress ?? "";
@@ -2551,7 +2551,7 @@ export const UnbondingDelegationEntry = {
     message.unbondingOnHoldRefCount !== undefined && (obj.unbondingOnHoldRefCount = (message.unbondingOnHoldRefCount || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<UnbondingDelegationEntry>): UnbondingDelegationEntry {
+  fromPartial<I extends Exact<DeepPartial<UnbondingDelegationEntry>, I>>(object: I): UnbondingDelegationEntry {
     const message = createBaseUnbondingDelegationEntry();
     message.creationHeight = object.creationHeight !== undefined && object.creationHeight !== null ? BigInt(object.creationHeight.toString()) : BigInt(0);
     message.completionTime = object.completionTime ?? undefined;
@@ -2712,7 +2712,7 @@ export const RedelegationEntry = {
     message.unbondingOnHoldRefCount !== undefined && (obj.unbondingOnHoldRefCount = (message.unbondingOnHoldRefCount || BigInt(0)).toString());
     return obj;
   },
-  fromPartial(object: Partial<RedelegationEntry>): RedelegationEntry {
+  fromPartial<I extends Exact<DeepPartial<RedelegationEntry>, I>>(object: I): RedelegationEntry {
     const message = createBaseRedelegationEntry();
     message.creationHeight = object.creationHeight !== undefined && object.creationHeight !== null ? BigInt(object.creationHeight.toString()) : BigInt(0);
     message.completionTime = object.completionTime ?? undefined;
@@ -2859,7 +2859,7 @@ export const Redelegation = {
     }
     return obj;
   },
-  fromPartial(object: Partial<Redelegation>): Redelegation {
+  fromPartial<I extends Exact<DeepPartial<Redelegation>, I>>(object: I): Redelegation {
     const message = createBaseRedelegation();
     message.delegatorAddress = object.delegatorAddress ?? "";
     message.validatorSrcAddress = object.validatorSrcAddress ?? "";
@@ -3012,7 +3012,7 @@ export const Params = {
     message.minCommissionRate !== undefined && (obj.minCommissionRate = message.minCommissionRate);
     return obj;
   },
-  fromPartial(object: Partial<Params>): Params {
+  fromPartial<I extends Exact<DeepPartial<Params>, I>>(object: I): Params {
     const message = createBaseParams();
     message.unbondingTime = object.unbondingTime !== undefined && object.unbondingTime !== null ? Duration.fromPartial(object.unbondingTime) : undefined;
     message.maxValidators = object.maxValidators ?? 0;
@@ -3137,7 +3137,7 @@ export const DelegationResponse = {
     message.balance !== undefined && (obj.balance = message.balance ? Coin.toJSON(message.balance) : undefined);
     return obj;
   },
-  fromPartial(object: Partial<DelegationResponse>): DelegationResponse {
+  fromPartial<I extends Exact<DeepPartial<DelegationResponse>, I>>(object: I): DelegationResponse {
     const message = createBaseDelegationResponse();
     message.delegation = object.delegation !== undefined && object.delegation !== null ? Delegation.fromPartial(object.delegation) : undefined;
     message.balance = object.balance !== undefined && object.balance !== null ? Coin.fromPartial(object.balance) : undefined;
@@ -3242,7 +3242,7 @@ export const RedelegationEntryResponse = {
     message.balance !== undefined && (obj.balance = message.balance);
     return obj;
   },
-  fromPartial(object: Partial<RedelegationEntryResponse>): RedelegationEntryResponse {
+  fromPartial<I extends Exact<DeepPartial<RedelegationEntryResponse>, I>>(object: I): RedelegationEntryResponse {
     const message = createBaseRedelegationEntryResponse();
     message.redelegationEntry = object.redelegationEntry !== undefined && object.redelegationEntry !== null ? RedelegationEntry.fromPartial(object.redelegationEntry) : undefined;
     message.balance = object.balance ?? "";
@@ -3351,7 +3351,7 @@ export const RedelegationResponse = {
     }
     return obj;
   },
-  fromPartial(object: Partial<RedelegationResponse>): RedelegationResponse {
+  fromPartial<I extends Exact<DeepPartial<RedelegationResponse>, I>>(object: I): RedelegationResponse {
     const message = createBaseRedelegationResponse();
     message.redelegation = object.redelegation !== undefined && object.redelegation !== null ? Redelegation.fromPartial(object.redelegation) : undefined;
     message.entries = object.entries?.map(e => RedelegationEntryResponse.fromPartial(e)) || [];
@@ -3458,7 +3458,7 @@ export const Pool = {
     message.bondedTokens !== undefined && (obj.bondedTokens = message.bondedTokens);
     return obj;
   },
-  fromPartial(object: Partial<Pool>): Pool {
+  fromPartial<I extends Exact<DeepPartial<Pool>, I>>(object: I): Pool {
     const message = createBasePool();
     message.notBondedTokens = object.notBondedTokens ?? "";
     message.bondedTokens = object.bondedTokens ?? "";
@@ -3558,7 +3558,7 @@ export const ValidatorUpdates = {
     }
     return obj;
   },
-  fromPartial(object: Partial<ValidatorUpdates>): ValidatorUpdates {
+  fromPartial<I extends Exact<DeepPartial<ValidatorUpdates>, I>>(object: I): ValidatorUpdates {
     const message = createBaseValidatorUpdates();
     message.updates = object.updates?.map(e => ValidatorUpdate.fromPartial(e)) || [];
     return message;
