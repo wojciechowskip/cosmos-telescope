@@ -2,6 +2,9 @@
 import { Header, HeaderAmino, HeaderSDKType, Data, DataAmino, DataSDKType, Commit, CommitAmino, CommitSDKType } from "./types";
 import { EvidenceList, EvidenceListAmino, EvidenceListSDKType } from "./evidence";
 import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet } from "../../helpers";
+import { JsonSafe } from "../../json-safe";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface Block {
   header: Header;
   data: Data;
@@ -38,6 +41,15 @@ function createBaseBlock(): Block {
 }
 export const Block = {
   typeUrl: "/tendermint.types.Block",
+  is(o: any): o is Block {
+    return o && (o.$typeUrl === Block.typeUrl || Header.is(o.header) && Data.is(o.data) && EvidenceList.is(o.evidence));
+  },
+  isSDK(o: any): o is BlockSDKType {
+    return o && (o.$typeUrl === Block.typeUrl || Header.isSDK(o.header) && Data.isSDK(o.data) && EvidenceList.isSDK(o.evidence));
+  },
+  isAmino(o: any): o is BlockAmino {
+    return o && (o.$typeUrl === Block.typeUrl || Header.isAmino(o.header) && Data.isAmino(o.data) && EvidenceList.isAmino(o.evidence));
+  },
   encode(message: Block, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.header !== undefined) {
       Header.encode(message.header, writer.uint32(10).fork()).ldelim();
@@ -78,6 +90,22 @@ export const Block = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Block {
+    return {
+      header: isSet(object.header) ? Header.fromJSON(object.header) : undefined,
+      data: isSet(object.data) ? Data.fromJSON(object.data) : undefined,
+      evidence: isSet(object.evidence) ? EvidenceList.fromJSON(object.evidence) : undefined,
+      lastCommit: isSet(object.lastCommit) ? Commit.fromJSON(object.lastCommit) : undefined
+    };
+  },
+  toJSON(message: Block): JsonSafe<Block> {
+    const obj: any = {};
+    message.header !== undefined && (obj.header = message.header ? Header.toJSON(message.header) : undefined);
+    message.data !== undefined && (obj.data = message.data ? Data.toJSON(message.data) : undefined);
+    message.evidence !== undefined && (obj.evidence = message.evidence ? EvidenceList.toJSON(message.evidence) : undefined);
+    message.lastCommit !== undefined && (obj.lastCommit = message.lastCommit ? Commit.toJSON(message.lastCommit) : undefined);
+    return obj;
   },
   fromPartial(object: Partial<Block>): Block {
     const message = createBaseBlock();
@@ -127,3 +155,4 @@ export const Block = {
     };
   }
 };
+GlobalDecoderRegistry.register(Block.typeUrl, Block);

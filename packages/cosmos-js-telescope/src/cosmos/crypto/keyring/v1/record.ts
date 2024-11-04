@@ -2,6 +2,9 @@
 import { Any, AnyAmino, AnySDKType } from "../../../../google/protobuf/any";
 import { BIP44Params, BIP44ParamsAmino, BIP44ParamsSDKType } from "../../hd/v1/hd";
 import { BinaryReader, BinaryWriter } from "../../../../binary";
+import { isSet } from "../../../../helpers";
+import { JsonSafe } from "../../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../../registry";
 /** Record is used for representing a key in the keyring. */
 export interface Record {
   /** name represents a name of Record */
@@ -141,6 +144,16 @@ function createBaseRecord(): Record {
 }
 export const Record = {
   typeUrl: "/cosmos.crypto.keyring.v1.Record",
+  aminoType: "cosmos-sdk/Record",
+  is(o: any): o is Record {
+    return o && (o.$typeUrl === Record.typeUrl || typeof o.name === "string");
+  },
+  isSDK(o: any): o is RecordSDKType {
+    return o && (o.$typeUrl === Record.typeUrl || typeof o.name === "string");
+  },
+  isAmino(o: any): o is RecordAmino {
+    return o && (o.$typeUrl === Record.typeUrl || typeof o.name === "string");
+  },
   encode(message: Record, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -193,6 +206,26 @@ export const Record = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Record {
+    return {
+      name: isSet(object.name) ? String(object.name) : "",
+      pubKey: isSet(object.pubKey) ? Any.fromJSON(object.pubKey) : undefined,
+      local: isSet(object.local) ? Record_Local.fromJSON(object.local) : undefined,
+      ledger: isSet(object.ledger) ? Record_Ledger.fromJSON(object.ledger) : undefined,
+      multi: isSet(object.multi) ? Record_Multi.fromJSON(object.multi) : undefined,
+      offline: isSet(object.offline) ? Record_Offline.fromJSON(object.offline) : undefined
+    };
+  },
+  toJSON(message: Record): JsonSafe<Record> {
+    const obj: any = {};
+    message.name !== undefined && (obj.name = message.name);
+    message.pubKey !== undefined && (obj.pubKey = message.pubKey ? Any.toJSON(message.pubKey) : undefined);
+    message.local !== undefined && (obj.local = message.local ? Record_Local.toJSON(message.local) : undefined);
+    message.ledger !== undefined && (obj.ledger = message.ledger ? Record_Ledger.toJSON(message.ledger) : undefined);
+    message.multi !== undefined && (obj.multi = message.multi ? Record_Multi.toJSON(message.multi) : undefined);
+    message.offline !== undefined && (obj.offline = message.offline ? Record_Offline.toJSON(message.offline) : undefined);
+    return obj;
   },
   fromPartial(object: Partial<Record>): Record {
     const message = createBaseRecord();
@@ -258,6 +291,8 @@ export const Record = {
     };
   }
 };
+GlobalDecoderRegistry.register(Record.typeUrl, Record);
+GlobalDecoderRegistry.registerAminoProtoMapping(Record.aminoType, Record.typeUrl);
 function createBaseRecord_Local(): Record_Local {
   return {
     privKey: undefined,
@@ -266,6 +301,16 @@ function createBaseRecord_Local(): Record_Local {
 }
 export const Record_Local = {
   typeUrl: "/cosmos.crypto.keyring.v1.Local",
+  aminoType: "cosmos-sdk/Local",
+  is(o: any): o is Record_Local {
+    return o && (o.$typeUrl === Record_Local.typeUrl || typeof o.privKeyType === "string");
+  },
+  isSDK(o: any): o is Record_LocalSDKType {
+    return o && (o.$typeUrl === Record_Local.typeUrl || typeof o.priv_key_type === "string");
+  },
+  isAmino(o: any): o is Record_LocalAmino {
+    return o && (o.$typeUrl === Record_Local.typeUrl || typeof o.priv_key_type === "string");
+  },
   encode(message: Record_Local, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.privKey !== undefined) {
       Any.encode(message.privKey, writer.uint32(10).fork()).ldelim();
@@ -294,6 +339,18 @@ export const Record_Local = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Record_Local {
+    return {
+      privKey: isSet(object.privKey) ? Any.fromJSON(object.privKey) : undefined,
+      privKeyType: isSet(object.privKeyType) ? String(object.privKeyType) : ""
+    };
+  },
+  toJSON(message: Record_Local): JsonSafe<Record_Local> {
+    const obj: any = {};
+    message.privKey !== undefined && (obj.privKey = message.privKey ? Any.toJSON(message.privKey) : undefined);
+    message.privKeyType !== undefined && (obj.privKeyType = message.privKeyType);
+    return obj;
   },
   fromPartial(object: Partial<Record_Local>): Record_Local {
     const message = createBaseRecord_Local();
@@ -339,6 +396,8 @@ export const Record_Local = {
     };
   }
 };
+GlobalDecoderRegistry.register(Record_Local.typeUrl, Record_Local);
+GlobalDecoderRegistry.registerAminoProtoMapping(Record_Local.aminoType, Record_Local.typeUrl);
 function createBaseRecord_Ledger(): Record_Ledger {
   return {
     path: undefined
@@ -346,6 +405,16 @@ function createBaseRecord_Ledger(): Record_Ledger {
 }
 export const Record_Ledger = {
   typeUrl: "/cosmos.crypto.keyring.v1.Ledger",
+  aminoType: "cosmos-sdk/Ledger",
+  is(o: any): o is Record_Ledger {
+    return o && o.$typeUrl === Record_Ledger.typeUrl;
+  },
+  isSDK(o: any): o is Record_LedgerSDKType {
+    return o && o.$typeUrl === Record_Ledger.typeUrl;
+  },
+  isAmino(o: any): o is Record_LedgerAmino {
+    return o && o.$typeUrl === Record_Ledger.typeUrl;
+  },
   encode(message: Record_Ledger, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.path !== undefined) {
       BIP44Params.encode(message.path, writer.uint32(10).fork()).ldelim();
@@ -368,6 +437,16 @@ export const Record_Ledger = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Record_Ledger {
+    return {
+      path: isSet(object.path) ? BIP44Params.fromJSON(object.path) : undefined
+    };
+  },
+  toJSON(message: Record_Ledger): JsonSafe<Record_Ledger> {
+    const obj: any = {};
+    message.path !== undefined && (obj.path = message.path ? BIP44Params.toJSON(message.path) : undefined);
+    return obj;
   },
   fromPartial(object: Partial<Record_Ledger>): Record_Ledger {
     const message = createBaseRecord_Ledger();
@@ -408,11 +487,23 @@ export const Record_Ledger = {
     };
   }
 };
+GlobalDecoderRegistry.register(Record_Ledger.typeUrl, Record_Ledger);
+GlobalDecoderRegistry.registerAminoProtoMapping(Record_Ledger.aminoType, Record_Ledger.typeUrl);
 function createBaseRecord_Multi(): Record_Multi {
   return {};
 }
 export const Record_Multi = {
   typeUrl: "/cosmos.crypto.keyring.v1.Multi",
+  aminoType: "cosmos-sdk/Multi",
+  is(o: any): o is Record_Multi {
+    return o && o.$typeUrl === Record_Multi.typeUrl;
+  },
+  isSDK(o: any): o is Record_MultiSDKType {
+    return o && o.$typeUrl === Record_Multi.typeUrl;
+  },
+  isAmino(o: any): o is Record_MultiAmino {
+    return o && o.$typeUrl === Record_Multi.typeUrl;
+  },
   encode(_: Record_Multi, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -429,6 +520,13 @@ export const Record_Multi = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): Record_Multi {
+    return {};
+  },
+  toJSON(_: Record_Multi): JsonSafe<Record_Multi> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<Record_Multi>): Record_Multi {
     const message = createBaseRecord_Multi();
@@ -464,11 +562,23 @@ export const Record_Multi = {
     };
   }
 };
+GlobalDecoderRegistry.register(Record_Multi.typeUrl, Record_Multi);
+GlobalDecoderRegistry.registerAminoProtoMapping(Record_Multi.aminoType, Record_Multi.typeUrl);
 function createBaseRecord_Offline(): Record_Offline {
   return {};
 }
 export const Record_Offline = {
   typeUrl: "/cosmos.crypto.keyring.v1.Offline",
+  aminoType: "cosmos-sdk/Offline",
+  is(o: any): o is Record_Offline {
+    return o && o.$typeUrl === Record_Offline.typeUrl;
+  },
+  isSDK(o: any): o is Record_OfflineSDKType {
+    return o && o.$typeUrl === Record_Offline.typeUrl;
+  },
+  isAmino(o: any): o is Record_OfflineAmino {
+    return o && o.$typeUrl === Record_Offline.typeUrl;
+  },
   encode(_: Record_Offline, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -485,6 +595,13 @@ export const Record_Offline = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): Record_Offline {
+    return {};
+  },
+  toJSON(_: Record_Offline): JsonSafe<Record_Offline> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<Record_Offline>): Record_Offline {
     const message = createBaseRecord_Offline();
@@ -520,3 +637,5 @@ export const Record_Offline = {
     };
   }
 };
+GlobalDecoderRegistry.register(Record_Offline.typeUrl, Record_Offline);
+GlobalDecoderRegistry.registerAminoProtoMapping(Record_Offline.aminoType, Record_Offline.typeUrl);

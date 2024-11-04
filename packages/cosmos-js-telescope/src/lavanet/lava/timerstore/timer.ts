@@ -1,6 +1,8 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface GenesisState {
   version: bigint;
   nextBlockHeight: bigint;
@@ -70,6 +72,15 @@ function createBaseGenesisState(): GenesisState {
 }
 export const GenesisState = {
   typeUrl: "/lavanet.lava.timerstore.GenesisState",
+  is(o: any): o is GenesisState {
+    return o && (o.$typeUrl === GenesisState.typeUrl || typeof o.version === "bigint" && typeof o.nextBlockHeight === "bigint" && typeof o.nextBlockTime === "bigint" && Array.isArray(o.timeEntries) && (!o.timeEntries.length || GenesisTimerEntry.is(o.timeEntries[0])) && Array.isArray(o.blockEntries) && (!o.blockEntries.length || GenesisTimerEntry.is(o.blockEntries[0])));
+  },
+  isSDK(o: any): o is GenesisStateSDKType {
+    return o && (o.$typeUrl === GenesisState.typeUrl || typeof o.version === "bigint" && typeof o.next_block_height === "bigint" && typeof o.next_block_time === "bigint" && Array.isArray(o.time_entries) && (!o.time_entries.length || GenesisTimerEntry.isSDK(o.time_entries[0])) && Array.isArray(o.block_entries) && (!o.block_entries.length || GenesisTimerEntry.isSDK(o.block_entries[0])));
+  },
+  isAmino(o: any): o is GenesisStateAmino {
+    return o && (o.$typeUrl === GenesisState.typeUrl || typeof o.version === "bigint" && typeof o.next_block_height === "bigint" && typeof o.next_block_time === "bigint" && Array.isArray(o.time_entries) && (!o.time_entries.length || GenesisTimerEntry.isAmino(o.time_entries[0])) && Array.isArray(o.block_entries) && (!o.block_entries.length || GenesisTimerEntry.isAmino(o.block_entries[0])));
+  },
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.version !== BigInt(0)) {
       writer.uint32(8).uint64(message.version);
@@ -116,6 +127,32 @@ export const GenesisState = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): GenesisState {
+    return {
+      version: isSet(object.version) ? BigInt(object.version.toString()) : BigInt(0),
+      nextBlockHeight: isSet(object.nextBlockHeight) ? BigInt(object.nextBlockHeight.toString()) : BigInt(0),
+      nextBlockTime: isSet(object.nextBlockTime) ? BigInt(object.nextBlockTime.toString()) : BigInt(0),
+      timeEntries: Array.isArray(object?.timeEntries) ? object.timeEntries.map((e: any) => GenesisTimerEntry.fromJSON(e)) : [],
+      blockEntries: Array.isArray(object?.blockEntries) ? object.blockEntries.map((e: any) => GenesisTimerEntry.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
+    const obj: any = {};
+    message.version !== undefined && (obj.version = (message.version || BigInt(0)).toString());
+    message.nextBlockHeight !== undefined && (obj.nextBlockHeight = (message.nextBlockHeight || BigInt(0)).toString());
+    message.nextBlockTime !== undefined && (obj.nextBlockTime = (message.nextBlockTime || BigInt(0)).toString());
+    if (message.timeEntries) {
+      obj.timeEntries = message.timeEntries.map(e => e ? GenesisTimerEntry.toJSON(e) : undefined);
+    } else {
+      obj.timeEntries = [];
+    }
+    if (message.blockEntries) {
+      obj.blockEntries = message.blockEntries.map(e => e ? GenesisTimerEntry.toJSON(e) : undefined);
+    } else {
+      obj.blockEntries = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
     const message = createBaseGenesisState();
@@ -174,6 +211,7 @@ export const GenesisState = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisState.typeUrl, GenesisState);
 function createBaseGenesisTimerEntry(): GenesisTimerEntry {
   return {
     key: "",
@@ -183,6 +221,15 @@ function createBaseGenesisTimerEntry(): GenesisTimerEntry {
 }
 export const GenesisTimerEntry = {
   typeUrl: "/lavanet.lava.timerstore.GenesisTimerEntry",
+  is(o: any): o is GenesisTimerEntry {
+    return o && (o.$typeUrl === GenesisTimerEntry.typeUrl || typeof o.key === "string" && typeof o.value === "bigint" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isSDK(o: any): o is GenesisTimerEntrySDKType {
+    return o && (o.$typeUrl === GenesisTimerEntry.typeUrl || typeof o.key === "string" && typeof o.value === "bigint" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isAmino(o: any): o is GenesisTimerEntryAmino {
+    return o && (o.$typeUrl === GenesisTimerEntry.typeUrl || typeof o.key === "string" && typeof o.value === "bigint" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
   encode(message: GenesisTimerEntry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
@@ -217,6 +264,20 @@ export const GenesisTimerEntry = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): GenesisTimerEntry {
+    return {
+      key: isSet(object.key) ? String(object.key) : "",
+      value: isSet(object.value) ? BigInt(object.value.toString()) : BigInt(0),
+      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array()
+    };
+  },
+  toJSON(message: GenesisTimerEntry): JsonSafe<GenesisTimerEntry> {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = (message.value || BigInt(0)).toString());
+    message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+    return obj;
   },
   fromPartial(object: Partial<GenesisTimerEntry>): GenesisTimerEntry {
     const message = createBaseGenesisTimerEntry();
@@ -261,3 +322,4 @@ export const GenesisTimerEntry = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisTimerEntry.typeUrl, GenesisTimerEntry);

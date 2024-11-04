@@ -1,6 +1,9 @@
 //@ts-nocheck
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { isSet } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface MsgDelegate {
   creator: string;
   validator: string;
@@ -168,6 +171,16 @@ function createBaseMsgDelegate(): MsgDelegate {
 }
 export const MsgDelegate = {
   typeUrl: "/lavanet.lava.dualstaking.MsgDelegate",
+  aminoType: "dualstaking/Delegate",
+  is(o: any): o is MsgDelegate {
+    return o && (o.$typeUrl === MsgDelegate.typeUrl || typeof o.creator === "string" && typeof o.validator === "string" && typeof o.provider === "string" && typeof o.chainID === "string" && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is MsgDelegateSDKType {
+    return o && (o.$typeUrl === MsgDelegate.typeUrl || typeof o.creator === "string" && typeof o.validator === "string" && typeof o.provider === "string" && typeof o.chainID === "string" && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is MsgDelegateAmino {
+    return o && (o.$typeUrl === MsgDelegate.typeUrl || typeof o.creator === "string" && typeof o.validator === "string" && typeof o.provider === "string" && typeof o.chainID === "string" && Coin.isAmino(o.amount));
+  },
   encode(message: MsgDelegate, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -214,6 +227,24 @@ export const MsgDelegate = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): MsgDelegate {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      validator: isSet(object.validator) ? String(object.validator) : "",
+      provider: isSet(object.provider) ? String(object.provider) : "",
+      chainID: isSet(object.chainID) ? String(object.chainID) : "",
+      amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined
+    };
+  },
+  toJSON(message: MsgDelegate): JsonSafe<MsgDelegate> {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.validator !== undefined && (obj.validator = message.validator);
+    message.provider !== undefined && (obj.provider = message.provider);
+    message.chainID !== undefined && (obj.chainID = message.chainID);
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    return obj;
   },
   fromPartial(object: Partial<MsgDelegate>): MsgDelegate {
     const message = createBaseMsgDelegate();
@@ -274,11 +305,22 @@ export const MsgDelegate = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgDelegate.typeUrl, MsgDelegate);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgDelegate.aminoType, MsgDelegate.typeUrl);
 function createBaseMsgDelegateResponse(): MsgDelegateResponse {
   return {};
 }
 export const MsgDelegateResponse = {
   typeUrl: "/lavanet.lava.dualstaking.MsgDelegateResponse",
+  is(o: any): o is MsgDelegateResponse {
+    return o && o.$typeUrl === MsgDelegateResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgDelegateResponseSDKType {
+    return o && o.$typeUrl === MsgDelegateResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgDelegateResponseAmino {
+    return o && o.$typeUrl === MsgDelegateResponse.typeUrl;
+  },
   encode(_: MsgDelegateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -295,6 +337,13 @@ export const MsgDelegateResponse = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): MsgDelegateResponse {
+    return {};
+  },
+  toJSON(_: MsgDelegateResponse): JsonSafe<MsgDelegateResponse> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<MsgDelegateResponse>): MsgDelegateResponse {
     const message = createBaseMsgDelegateResponse();
@@ -324,6 +373,7 @@ export const MsgDelegateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgDelegateResponse.typeUrl, MsgDelegateResponse);
 function createBaseMsgRedelegate(): MsgRedelegate {
   return {
     creator: "",
@@ -336,6 +386,16 @@ function createBaseMsgRedelegate(): MsgRedelegate {
 }
 export const MsgRedelegate = {
   typeUrl: "/lavanet.lava.dualstaking.MsgRedelegate",
+  aminoType: "dualstaking/Redelegate",
+  is(o: any): o is MsgRedelegate {
+    return o && (o.$typeUrl === MsgRedelegate.typeUrl || typeof o.creator === "string" && typeof o.fromProvider === "string" && typeof o.toProvider === "string" && typeof o.fromChainID === "string" && typeof o.toChainID === "string" && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is MsgRedelegateSDKType {
+    return o && (o.$typeUrl === MsgRedelegate.typeUrl || typeof o.creator === "string" && typeof o.from_provider === "string" && typeof o.to_provider === "string" && typeof o.from_chainID === "string" && typeof o.to_chainID === "string" && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is MsgRedelegateAmino {
+    return o && (o.$typeUrl === MsgRedelegate.typeUrl || typeof o.creator === "string" && typeof o.from_provider === "string" && typeof o.to_provider === "string" && typeof o.from_chainID === "string" && typeof o.to_chainID === "string" && Coin.isAmino(o.amount));
+  },
   encode(message: MsgRedelegate, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -388,6 +448,26 @@ export const MsgRedelegate = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): MsgRedelegate {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      fromProvider: isSet(object.fromProvider) ? String(object.fromProvider) : "",
+      toProvider: isSet(object.toProvider) ? String(object.toProvider) : "",
+      fromChainID: isSet(object.fromChainID) ? String(object.fromChainID) : "",
+      toChainID: isSet(object.toChainID) ? String(object.toChainID) : "",
+      amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined
+    };
+  },
+  toJSON(message: MsgRedelegate): JsonSafe<MsgRedelegate> {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.fromProvider !== undefined && (obj.fromProvider = message.fromProvider);
+    message.toProvider !== undefined && (obj.toProvider = message.toProvider);
+    message.fromChainID !== undefined && (obj.fromChainID = message.fromChainID);
+    message.toChainID !== undefined && (obj.toChainID = message.toChainID);
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    return obj;
   },
   fromPartial(object: Partial<MsgRedelegate>): MsgRedelegate {
     const message = createBaseMsgRedelegate();
@@ -453,11 +533,22 @@ export const MsgRedelegate = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRedelegate.typeUrl, MsgRedelegate);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgRedelegate.aminoType, MsgRedelegate.typeUrl);
 function createBaseMsgRedelegateResponse(): MsgRedelegateResponse {
   return {};
 }
 export const MsgRedelegateResponse = {
   typeUrl: "/lavanet.lava.dualstaking.MsgRedelegateResponse",
+  is(o: any): o is MsgRedelegateResponse {
+    return o && o.$typeUrl === MsgRedelegateResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgRedelegateResponseSDKType {
+    return o && o.$typeUrl === MsgRedelegateResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgRedelegateResponseAmino {
+    return o && o.$typeUrl === MsgRedelegateResponse.typeUrl;
+  },
   encode(_: MsgRedelegateResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -474,6 +565,13 @@ export const MsgRedelegateResponse = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): MsgRedelegateResponse {
+    return {};
+  },
+  toJSON(_: MsgRedelegateResponse): JsonSafe<MsgRedelegateResponse> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<MsgRedelegateResponse>): MsgRedelegateResponse {
     const message = createBaseMsgRedelegateResponse();
@@ -503,6 +601,7 @@ export const MsgRedelegateResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgRedelegateResponse.typeUrl, MsgRedelegateResponse);
 function createBaseMsgUnbond(): MsgUnbond {
   return {
     creator: "",
@@ -514,6 +613,16 @@ function createBaseMsgUnbond(): MsgUnbond {
 }
 export const MsgUnbond = {
   typeUrl: "/lavanet.lava.dualstaking.MsgUnbond",
+  aminoType: "dualstaking/Unbond",
+  is(o: any): o is MsgUnbond {
+    return o && (o.$typeUrl === MsgUnbond.typeUrl || typeof o.creator === "string" && typeof o.validator === "string" && typeof o.provider === "string" && typeof o.chainID === "string" && Coin.is(o.amount));
+  },
+  isSDK(o: any): o is MsgUnbondSDKType {
+    return o && (o.$typeUrl === MsgUnbond.typeUrl || typeof o.creator === "string" && typeof o.validator === "string" && typeof o.provider === "string" && typeof o.chainID === "string" && Coin.isSDK(o.amount));
+  },
+  isAmino(o: any): o is MsgUnbondAmino {
+    return o && (o.$typeUrl === MsgUnbond.typeUrl || typeof o.creator === "string" && typeof o.validator === "string" && typeof o.provider === "string" && typeof o.chainID === "string" && Coin.isAmino(o.amount));
+  },
   encode(message: MsgUnbond, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -560,6 +669,24 @@ export const MsgUnbond = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): MsgUnbond {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      validator: isSet(object.validator) ? String(object.validator) : "",
+      provider: isSet(object.provider) ? String(object.provider) : "",
+      chainID: isSet(object.chainID) ? String(object.chainID) : "",
+      amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined
+    };
+  },
+  toJSON(message: MsgUnbond): JsonSafe<MsgUnbond> {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.validator !== undefined && (obj.validator = message.validator);
+    message.provider !== undefined && (obj.provider = message.provider);
+    message.chainID !== undefined && (obj.chainID = message.chainID);
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    return obj;
   },
   fromPartial(object: Partial<MsgUnbond>): MsgUnbond {
     const message = createBaseMsgUnbond();
@@ -620,11 +747,22 @@ export const MsgUnbond = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUnbond.typeUrl, MsgUnbond);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgUnbond.aminoType, MsgUnbond.typeUrl);
 function createBaseMsgUnbondResponse(): MsgUnbondResponse {
   return {};
 }
 export const MsgUnbondResponse = {
   typeUrl: "/lavanet.lava.dualstaking.MsgUnbondResponse",
+  is(o: any): o is MsgUnbondResponse {
+    return o && o.$typeUrl === MsgUnbondResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgUnbondResponseSDKType {
+    return o && o.$typeUrl === MsgUnbondResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgUnbondResponseAmino {
+    return o && o.$typeUrl === MsgUnbondResponse.typeUrl;
+  },
   encode(_: MsgUnbondResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -641,6 +779,13 @@ export const MsgUnbondResponse = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): MsgUnbondResponse {
+    return {};
+  },
+  toJSON(_: MsgUnbondResponse): JsonSafe<MsgUnbondResponse> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<MsgUnbondResponse>): MsgUnbondResponse {
     const message = createBaseMsgUnbondResponse();
@@ -670,6 +815,7 @@ export const MsgUnbondResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgUnbondResponse.typeUrl, MsgUnbondResponse);
 function createBaseMsgClaimRewards(): MsgClaimRewards {
   return {
     creator: "",
@@ -678,6 +824,16 @@ function createBaseMsgClaimRewards(): MsgClaimRewards {
 }
 export const MsgClaimRewards = {
   typeUrl: "/lavanet.lava.dualstaking.MsgClaimRewards",
+  aminoType: "dualstaking/MsgClaimRewards",
+  is(o: any): o is MsgClaimRewards {
+    return o && (o.$typeUrl === MsgClaimRewards.typeUrl || typeof o.creator === "string" && typeof o.provider === "string");
+  },
+  isSDK(o: any): o is MsgClaimRewardsSDKType {
+    return o && (o.$typeUrl === MsgClaimRewards.typeUrl || typeof o.creator === "string" && typeof o.provider === "string");
+  },
+  isAmino(o: any): o is MsgClaimRewardsAmino {
+    return o && (o.$typeUrl === MsgClaimRewards.typeUrl || typeof o.creator === "string" && typeof o.provider === "string");
+  },
   encode(message: MsgClaimRewards, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
@@ -706,6 +862,18 @@ export const MsgClaimRewards = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): MsgClaimRewards {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      provider: isSet(object.provider) ? String(object.provider) : ""
+    };
+  },
+  toJSON(message: MsgClaimRewards): JsonSafe<MsgClaimRewards> {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.provider !== undefined && (obj.provider = message.provider);
+    return obj;
   },
   fromPartial(object: Partial<MsgClaimRewards>): MsgClaimRewards {
     const message = createBaseMsgClaimRewards();
@@ -751,11 +919,22 @@ export const MsgClaimRewards = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgClaimRewards.typeUrl, MsgClaimRewards);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgClaimRewards.aminoType, MsgClaimRewards.typeUrl);
 function createBaseMsgClaimRewardsResponse(): MsgClaimRewardsResponse {
   return {};
 }
 export const MsgClaimRewardsResponse = {
   typeUrl: "/lavanet.lava.dualstaking.MsgClaimRewardsResponse",
+  is(o: any): o is MsgClaimRewardsResponse {
+    return o && o.$typeUrl === MsgClaimRewardsResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgClaimRewardsResponseSDKType {
+    return o && o.$typeUrl === MsgClaimRewardsResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgClaimRewardsResponseAmino {
+    return o && o.$typeUrl === MsgClaimRewardsResponse.typeUrl;
+  },
   encode(_: MsgClaimRewardsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -772,6 +951,13 @@ export const MsgClaimRewardsResponse = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): MsgClaimRewardsResponse {
+    return {};
+  },
+  toJSON(_: MsgClaimRewardsResponse): JsonSafe<MsgClaimRewardsResponse> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<MsgClaimRewardsResponse>): MsgClaimRewardsResponse {
     const message = createBaseMsgClaimRewardsResponse();
@@ -801,3 +987,4 @@ export const MsgClaimRewardsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgClaimRewardsResponse.typeUrl, MsgClaimRewardsResponse);

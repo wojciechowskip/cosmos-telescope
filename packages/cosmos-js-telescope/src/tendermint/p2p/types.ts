@@ -1,7 +1,9 @@
 //@ts-nocheck
 import { Timestamp } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { bytesFromBase64, base64FromBytes, toTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes, toTimestamp, fromTimestamp, fromJsonTimestamp } from "../../helpers";
+import { JsonSafe } from "../../json-safe";
+import { GlobalDecoderRegistry } from "../../registry";
 export interface ProtocolVersion {
   p2p: bigint;
   block: bigint;
@@ -141,6 +143,15 @@ function createBaseProtocolVersion(): ProtocolVersion {
 }
 export const ProtocolVersion = {
   typeUrl: "/tendermint.p2p.ProtocolVersion",
+  is(o: any): o is ProtocolVersion {
+    return o && (o.$typeUrl === ProtocolVersion.typeUrl || typeof o.p2p === "bigint" && typeof o.block === "bigint" && typeof o.app === "bigint");
+  },
+  isSDK(o: any): o is ProtocolVersionSDKType {
+    return o && (o.$typeUrl === ProtocolVersion.typeUrl || typeof o.p2p === "bigint" && typeof o.block === "bigint" && typeof o.app === "bigint");
+  },
+  isAmino(o: any): o is ProtocolVersionAmino {
+    return o && (o.$typeUrl === ProtocolVersion.typeUrl || typeof o.p2p === "bigint" && typeof o.block === "bigint" && typeof o.app === "bigint");
+  },
   encode(message: ProtocolVersion, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.p2p !== BigInt(0)) {
       writer.uint32(8).uint64(message.p2p);
@@ -175,6 +186,20 @@ export const ProtocolVersion = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): ProtocolVersion {
+    return {
+      p2p: isSet(object.p2p) ? BigInt(object.p2p.toString()) : BigInt(0),
+      block: isSet(object.block) ? BigInt(object.block.toString()) : BigInt(0),
+      app: isSet(object.app) ? BigInt(object.app.toString()) : BigInt(0)
+    };
+  },
+  toJSON(message: ProtocolVersion): JsonSafe<ProtocolVersion> {
+    const obj: any = {};
+    message.p2p !== undefined && (obj.p2p = (message.p2p || BigInt(0)).toString());
+    message.block !== undefined && (obj.block = (message.block || BigInt(0)).toString());
+    message.app !== undefined && (obj.app = (message.app || BigInt(0)).toString());
+    return obj;
   },
   fromPartial(object: Partial<ProtocolVersion>): ProtocolVersion {
     const message = createBaseProtocolVersion();
@@ -219,6 +244,7 @@ export const ProtocolVersion = {
     };
   }
 };
+GlobalDecoderRegistry.register(ProtocolVersion.typeUrl, ProtocolVersion);
 function createBaseNodeInfo(): NodeInfo {
   return {
     protocolVersion: ProtocolVersion.fromPartial({}),
@@ -233,6 +259,15 @@ function createBaseNodeInfo(): NodeInfo {
 }
 export const NodeInfo = {
   typeUrl: "/tendermint.p2p.NodeInfo",
+  is(o: any): o is NodeInfo {
+    return o && (o.$typeUrl === NodeInfo.typeUrl || ProtocolVersion.is(o.protocolVersion) && typeof o.nodeId === "string" && typeof o.listenAddr === "string" && typeof o.network === "string" && typeof o.version === "string" && (o.channels instanceof Uint8Array || typeof o.channels === "string") && typeof o.moniker === "string" && NodeInfoOther.is(o.other));
+  },
+  isSDK(o: any): o is NodeInfoSDKType {
+    return o && (o.$typeUrl === NodeInfo.typeUrl || ProtocolVersion.isSDK(o.protocol_version) && typeof o.node_id === "string" && typeof o.listen_addr === "string" && typeof o.network === "string" && typeof o.version === "string" && (o.channels instanceof Uint8Array || typeof o.channels === "string") && typeof o.moniker === "string" && NodeInfoOther.isSDK(o.other));
+  },
+  isAmino(o: any): o is NodeInfoAmino {
+    return o && (o.$typeUrl === NodeInfo.typeUrl || ProtocolVersion.isAmino(o.protocol_version) && typeof o.node_id === "string" && typeof o.listen_addr === "string" && typeof o.network === "string" && typeof o.version === "string" && (o.channels instanceof Uint8Array || typeof o.channels === "string") && typeof o.moniker === "string" && NodeInfoOther.isAmino(o.other));
+  },
   encode(message: NodeInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.protocolVersion !== undefined) {
       ProtocolVersion.encode(message.protocolVersion, writer.uint32(10).fork()).ldelim();
@@ -297,6 +332,30 @@ export const NodeInfo = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): NodeInfo {
+    return {
+      protocolVersion: isSet(object.protocolVersion) ? ProtocolVersion.fromJSON(object.protocolVersion) : undefined,
+      nodeId: isSet(object.nodeId) ? String(object.nodeId) : "",
+      listenAddr: isSet(object.listenAddr) ? String(object.listenAddr) : "",
+      network: isSet(object.network) ? String(object.network) : "",
+      version: isSet(object.version) ? String(object.version) : "",
+      channels: isSet(object.channels) ? bytesFromBase64(object.channels) : new Uint8Array(),
+      moniker: isSet(object.moniker) ? String(object.moniker) : "",
+      other: isSet(object.other) ? NodeInfoOther.fromJSON(object.other) : undefined
+    };
+  },
+  toJSON(message: NodeInfo): JsonSafe<NodeInfo> {
+    const obj: any = {};
+    message.protocolVersion !== undefined && (obj.protocolVersion = message.protocolVersion ? ProtocolVersion.toJSON(message.protocolVersion) : undefined);
+    message.nodeId !== undefined && (obj.nodeId = message.nodeId);
+    message.listenAddr !== undefined && (obj.listenAddr = message.listenAddr);
+    message.network !== undefined && (obj.network = message.network);
+    message.version !== undefined && (obj.version = message.version);
+    message.channels !== undefined && (obj.channels = base64FromBytes(message.channels !== undefined ? message.channels : new Uint8Array()));
+    message.moniker !== undefined && (obj.moniker = message.moniker);
+    message.other !== undefined && (obj.other = message.other ? NodeInfoOther.toJSON(message.other) : undefined);
+    return obj;
   },
   fromPartial(object: Partial<NodeInfo>): NodeInfo {
     const message = createBaseNodeInfo();
@@ -366,6 +425,7 @@ export const NodeInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(NodeInfo.typeUrl, NodeInfo);
 function createBaseNodeInfoOther(): NodeInfoOther {
   return {
     txIndex: "",
@@ -374,6 +434,15 @@ function createBaseNodeInfoOther(): NodeInfoOther {
 }
 export const NodeInfoOther = {
   typeUrl: "/tendermint.p2p.NodeInfoOther",
+  is(o: any): o is NodeInfoOther {
+    return o && (o.$typeUrl === NodeInfoOther.typeUrl || typeof o.txIndex === "string" && typeof o.rpcAddress === "string");
+  },
+  isSDK(o: any): o is NodeInfoOtherSDKType {
+    return o && (o.$typeUrl === NodeInfoOther.typeUrl || typeof o.tx_index === "string" && typeof o.rpc_address === "string");
+  },
+  isAmino(o: any): o is NodeInfoOtherAmino {
+    return o && (o.$typeUrl === NodeInfoOther.typeUrl || typeof o.tx_index === "string" && typeof o.rpc_address === "string");
+  },
   encode(message: NodeInfoOther, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.txIndex !== "") {
       writer.uint32(10).string(message.txIndex);
@@ -402,6 +471,18 @@ export const NodeInfoOther = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): NodeInfoOther {
+    return {
+      txIndex: isSet(object.txIndex) ? String(object.txIndex) : "",
+      rpcAddress: isSet(object.rpcAddress) ? String(object.rpcAddress) : ""
+    };
+  },
+  toJSON(message: NodeInfoOther): JsonSafe<NodeInfoOther> {
+    const obj: any = {};
+    message.txIndex !== undefined && (obj.txIndex = message.txIndex);
+    message.rpcAddress !== undefined && (obj.rpcAddress = message.rpcAddress);
+    return obj;
   },
   fromPartial(object: Partial<NodeInfoOther>): NodeInfoOther {
     const message = createBaseNodeInfoOther();
@@ -441,6 +522,7 @@ export const NodeInfoOther = {
     };
   }
 };
+GlobalDecoderRegistry.register(NodeInfoOther.typeUrl, NodeInfoOther);
 function createBasePeerInfo(): PeerInfo {
   return {
     id: "",
@@ -450,6 +532,15 @@ function createBasePeerInfo(): PeerInfo {
 }
 export const PeerInfo = {
   typeUrl: "/tendermint.p2p.PeerInfo",
+  is(o: any): o is PeerInfo {
+    return o && (o.$typeUrl === PeerInfo.typeUrl || typeof o.id === "string" && Array.isArray(o.addressInfo) && (!o.addressInfo.length || PeerAddressInfo.is(o.addressInfo[0])));
+  },
+  isSDK(o: any): o is PeerInfoSDKType {
+    return o && (o.$typeUrl === PeerInfo.typeUrl || typeof o.id === "string" && Array.isArray(o.address_info) && (!o.address_info.length || PeerAddressInfo.isSDK(o.address_info[0])));
+  },
+  isAmino(o: any): o is PeerInfoAmino {
+    return o && (o.$typeUrl === PeerInfo.typeUrl || typeof o.id === "string" && Array.isArray(o.address_info) && (!o.address_info.length || PeerAddressInfo.isAmino(o.address_info[0])));
+  },
   encode(message: PeerInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
@@ -484,6 +575,24 @@ export const PeerInfo = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): PeerInfo {
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      addressInfo: Array.isArray(object?.addressInfo) ? object.addressInfo.map((e: any) => PeerAddressInfo.fromJSON(e)) : [],
+      lastConnected: isSet(object.lastConnected) ? fromJsonTimestamp(object.lastConnected) : undefined
+    };
+  },
+  toJSON(message: PeerInfo): JsonSafe<PeerInfo> {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    if (message.addressInfo) {
+      obj.addressInfo = message.addressInfo.map(e => e ? PeerAddressInfo.toJSON(e) : undefined);
+    } else {
+      obj.addressInfo = [];
+    }
+    message.lastConnected !== undefined && (obj.lastConnected = message.lastConnected.toISOString());
+    return obj;
   },
   fromPartial(object: Partial<PeerInfo>): PeerInfo {
     const message = createBasePeerInfo();
@@ -530,6 +639,7 @@ export const PeerInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(PeerInfo.typeUrl, PeerInfo);
 function createBasePeerAddressInfo(): PeerAddressInfo {
   return {
     address: "",
@@ -540,6 +650,15 @@ function createBasePeerAddressInfo(): PeerAddressInfo {
 }
 export const PeerAddressInfo = {
   typeUrl: "/tendermint.p2p.PeerAddressInfo",
+  is(o: any): o is PeerAddressInfo {
+    return o && (o.$typeUrl === PeerAddressInfo.typeUrl || typeof o.address === "string" && typeof o.dialFailures === "number");
+  },
+  isSDK(o: any): o is PeerAddressInfoSDKType {
+    return o && (o.$typeUrl === PeerAddressInfo.typeUrl || typeof o.address === "string" && typeof o.dial_failures === "number");
+  },
+  isAmino(o: any): o is PeerAddressInfoAmino {
+    return o && (o.$typeUrl === PeerAddressInfo.typeUrl || typeof o.address === "string" && typeof o.dial_failures === "number");
+  },
   encode(message: PeerAddressInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.address !== "") {
       writer.uint32(10).string(message.address);
@@ -580,6 +699,22 @@ export const PeerAddressInfo = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): PeerAddressInfo {
+    return {
+      address: isSet(object.address) ? String(object.address) : "",
+      lastDialSuccess: isSet(object.lastDialSuccess) ? fromJsonTimestamp(object.lastDialSuccess) : undefined,
+      lastDialFailure: isSet(object.lastDialFailure) ? fromJsonTimestamp(object.lastDialFailure) : undefined,
+      dialFailures: isSet(object.dialFailures) ? Number(object.dialFailures) : 0
+    };
+  },
+  toJSON(message: PeerAddressInfo): JsonSafe<PeerAddressInfo> {
+    const obj: any = {};
+    message.address !== undefined && (obj.address = message.address);
+    message.lastDialSuccess !== undefined && (obj.lastDialSuccess = message.lastDialSuccess.toISOString());
+    message.lastDialFailure !== undefined && (obj.lastDialFailure = message.lastDialFailure.toISOString());
+    message.dialFailures !== undefined && (obj.dialFailures = Math.round(message.dialFailures));
+    return obj;
   },
   fromPartial(object: Partial<PeerAddressInfo>): PeerAddressInfo {
     const message = createBasePeerAddressInfo();
@@ -629,3 +764,4 @@ export const PeerAddressInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(PeerAddressInfo.typeUrl, PeerAddressInfo);

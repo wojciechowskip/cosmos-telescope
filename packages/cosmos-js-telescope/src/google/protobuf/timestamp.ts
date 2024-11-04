@@ -1,6 +1,8 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, fromJsonTimestamp, fromTimestamp } from "../../helpers";
+import { JsonSafe } from "../../json-safe";
+import { GlobalDecoderRegistry } from "../../registry";
 /**
  * A Timestamp represents a point in time independent of any time zone or local
  * calendar, encoded as a count of seconds and fractions of seconds at
@@ -289,6 +291,15 @@ function createBaseTimestamp(): Timestamp {
 }
 export const Timestamp = {
   typeUrl: "/google.protobuf.Timestamp",
+  is(o: any): o is Timestamp {
+    return o && (o.$typeUrl === Timestamp.typeUrl || typeof o.seconds === "bigint" && typeof o.nanos === "number");
+  },
+  isSDK(o: any): o is TimestampSDKType {
+    return o && (o.$typeUrl === Timestamp.typeUrl || typeof o.seconds === "bigint" && typeof o.nanos === "number");
+  },
+  isAmino(o: any): o is TimestampAmino {
+    return o && (o.$typeUrl === Timestamp.typeUrl || typeof o.seconds === "bigint" && typeof o.nanos === "number");
+  },
   encode(message: Timestamp, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.seconds !== BigInt(0)) {
       writer.uint32(8).int64(message.seconds);
@@ -318,6 +329,18 @@ export const Timestamp = {
     }
     return message;
   },
+  fromJSON(object: any): Timestamp {
+    return {
+      seconds: isSet(object.seconds) ? BigInt(object.seconds.toString()) : BigInt(0),
+      nanos: isSet(object.nanos) ? Number(object.nanos) : 0
+    };
+  },
+  toJSON(message: Timestamp): JsonSafe<Timestamp> {
+    const obj: any = {};
+    message.seconds !== undefined && (obj.seconds = (message.seconds || BigInt(0)).toString());
+    message.nanos !== undefined && (obj.nanos = Math.round(message.nanos));
+    return obj;
+  },
   fromPartial(object: Partial<Timestamp>): Timestamp {
     const message = createBaseTimestamp();
     message.seconds = object.seconds !== undefined && object.seconds !== null ? BigInt(object.seconds.toString()) : BigInt(0);
@@ -346,3 +369,4 @@ export const Timestamp = {
     };
   }
 };
+GlobalDecoderRegistry.register(Timestamp.typeUrl, Timestamp);

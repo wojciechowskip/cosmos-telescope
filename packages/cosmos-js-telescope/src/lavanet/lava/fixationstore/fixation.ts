@@ -3,7 +3,9 @@ import { GenesisState as GenesisState1 } from "../timerstore/timer";
 import { GenesisStateAmino as GenesisState1Amino } from "../timerstore/timer";
 import { GenesisStateSDKType as GenesisState1SDKType } from "../timerstore/timer";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface Entry {
   /** unique entry index (i.e. list key) */
   index: string;
@@ -112,6 +114,15 @@ function createBaseEntry(): Entry {
 }
 export const Entry = {
   typeUrl: "/lavanet.lava.fixationstore.Entry",
+  is(o: any): o is Entry {
+    return o && (o.$typeUrl === Entry.typeUrl || typeof o.index === "string" && typeof o.block === "bigint" && typeof o.staleAt === "bigint" && typeof o.refcount === "bigint" && (o.data instanceof Uint8Array || typeof o.data === "string") && typeof o.deleteAt === "bigint" && typeof o.isLatest === "boolean");
+  },
+  isSDK(o: any): o is EntrySDKType {
+    return o && (o.$typeUrl === Entry.typeUrl || typeof o.index === "string" && typeof o.block === "bigint" && typeof o.stale_at === "bigint" && typeof o.refcount === "bigint" && (o.data instanceof Uint8Array || typeof o.data === "string") && typeof o.delete_at === "bigint" && typeof o.is_latest === "boolean");
+  },
+  isAmino(o: any): o is EntryAmino {
+    return o && (o.$typeUrl === Entry.typeUrl || typeof o.index === "string" && typeof o.block === "bigint" && typeof o.stale_at === "bigint" && typeof o.refcount === "bigint" && (o.data instanceof Uint8Array || typeof o.data === "string") && typeof o.delete_at === "bigint" && typeof o.is_latest === "boolean");
+  },
   encode(message: Entry, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.index !== "") {
       writer.uint32(10).string(message.index);
@@ -170,6 +181,28 @@ export const Entry = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Entry {
+    return {
+      index: isSet(object.index) ? String(object.index) : "",
+      block: isSet(object.block) ? BigInt(object.block.toString()) : BigInt(0),
+      staleAt: isSet(object.staleAt) ? BigInt(object.staleAt.toString()) : BigInt(0),
+      refcount: isSet(object.refcount) ? BigInt(object.refcount.toString()) : BigInt(0),
+      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array(),
+      deleteAt: isSet(object.deleteAt) ? BigInt(object.deleteAt.toString()) : BigInt(0),
+      isLatest: isSet(object.isLatest) ? Boolean(object.isLatest) : false
+    };
+  },
+  toJSON(message: Entry): JsonSafe<Entry> {
+    const obj: any = {};
+    message.index !== undefined && (obj.index = message.index);
+    message.block !== undefined && (obj.block = (message.block || BigInt(0)).toString());
+    message.staleAt !== undefined && (obj.staleAt = (message.staleAt || BigInt(0)).toString());
+    message.refcount !== undefined && (obj.refcount = (message.refcount || BigInt(0)).toString());
+    message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+    message.deleteAt !== undefined && (obj.deleteAt = (message.deleteAt || BigInt(0)).toString());
+    message.isLatest !== undefined && (obj.isLatest = message.isLatest);
+    return obj;
   },
   fromPartial(object: Partial<Entry>): Entry {
     const message = createBaseEntry();
@@ -234,6 +267,7 @@ export const Entry = {
     };
   }
 };
+GlobalDecoderRegistry.register(Entry.typeUrl, Entry);
 function createBaseGenesisEntries(): GenesisEntries {
   return {
     index: "",
@@ -243,6 +277,15 @@ function createBaseGenesisEntries(): GenesisEntries {
 }
 export const GenesisEntries = {
   typeUrl: "/lavanet.lava.fixationstore.GenesisEntries",
+  is(o: any): o is GenesisEntries {
+    return o && (o.$typeUrl === GenesisEntries.typeUrl || typeof o.index === "string" && typeof o.isLive === "boolean" && Array.isArray(o.entries) && (!o.entries.length || Entry.is(o.entries[0])));
+  },
+  isSDK(o: any): o is GenesisEntriesSDKType {
+    return o && (o.$typeUrl === GenesisEntries.typeUrl || typeof o.index === "string" && typeof o.is_live === "boolean" && Array.isArray(o.entries) && (!o.entries.length || Entry.isSDK(o.entries[0])));
+  },
+  isAmino(o: any): o is GenesisEntriesAmino {
+    return o && (o.$typeUrl === GenesisEntries.typeUrl || typeof o.index === "string" && typeof o.is_live === "boolean" && Array.isArray(o.entries) && (!o.entries.length || Entry.isAmino(o.entries[0])));
+  },
   encode(message: GenesisEntries, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.index !== "") {
       writer.uint32(10).string(message.index);
@@ -277,6 +320,24 @@ export const GenesisEntries = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): GenesisEntries {
+    return {
+      index: isSet(object.index) ? String(object.index) : "",
+      isLive: isSet(object.isLive) ? Boolean(object.isLive) : false,
+      entries: Array.isArray(object?.entries) ? object.entries.map((e: any) => Entry.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: GenesisEntries): JsonSafe<GenesisEntries> {
+    const obj: any = {};
+    message.index !== undefined && (obj.index = message.index);
+    message.isLive !== undefined && (obj.isLive = message.isLive);
+    if (message.entries) {
+      obj.entries = message.entries.map(e => e ? Entry.toJSON(e) : undefined);
+    } else {
+      obj.entries = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<GenesisEntries>): GenesisEntries {
     const message = createBaseGenesisEntries();
@@ -323,6 +384,7 @@ export const GenesisEntries = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisEntries.typeUrl, GenesisEntries);
 function createBaseGenesisState(): GenesisState {
   return {
     version: BigInt(0),
@@ -332,6 +394,15 @@ function createBaseGenesisState(): GenesisState {
 }
 export const GenesisState = {
   typeUrl: "/lavanet.lava.fixationstore.GenesisState",
+  is(o: any): o is GenesisState {
+    return o && (o.$typeUrl === GenesisState.typeUrl || typeof o.version === "bigint" && Array.isArray(o.entries) && (!o.entries.length || GenesisEntries.is(o.entries[0])) && GenesisState1.is(o.timerstore));
+  },
+  isSDK(o: any): o is GenesisStateSDKType {
+    return o && (o.$typeUrl === GenesisState.typeUrl || typeof o.version === "bigint" && Array.isArray(o.entries) && (!o.entries.length || GenesisEntries.isSDK(o.entries[0])) && GenesisState1.isSDK(o.timerstore));
+  },
+  isAmino(o: any): o is GenesisStateAmino {
+    return o && (o.$typeUrl === GenesisState.typeUrl || typeof o.version === "bigint" && Array.isArray(o.entries) && (!o.entries.length || GenesisEntries.isAmino(o.entries[0])) && GenesisState1.isAmino(o.timerstore));
+  },
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.version !== BigInt(0)) {
       writer.uint32(8).uint64(message.version);
@@ -366,6 +437,24 @@ export const GenesisState = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): GenesisState {
+    return {
+      version: isSet(object.version) ? BigInt(object.version.toString()) : BigInt(0),
+      entries: Array.isArray(object?.entries) ? object.entries.map((e: any) => GenesisEntries.fromJSON(e)) : [],
+      timerstore: isSet(object.timerstore) ? GenesisState1.fromJSON(object.timerstore) : undefined
+    };
+  },
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
+    const obj: any = {};
+    message.version !== undefined && (obj.version = (message.version || BigInt(0)).toString());
+    if (message.entries) {
+      obj.entries = message.entries.map(e => e ? GenesisEntries.toJSON(e) : undefined);
+    } else {
+      obj.entries = [];
+    }
+    message.timerstore !== undefined && (obj.timerstore = message.timerstore ? GenesisState1.toJSON(message.timerstore) : undefined);
+    return obj;
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
     const message = createBaseGenesisState();
@@ -412,3 +501,4 @@ export const GenesisState = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisState.typeUrl, GenesisState);

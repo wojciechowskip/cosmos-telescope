@@ -48,6 +48,46 @@ export const MessageComposer = {
       };
     }
   },
+  toJSON: {
+    grantAllowance(value: MsgGrantAllowance) {
+      return {
+        typeUrl: "/cosmos.feegrant.v1beta1.MsgGrantAllowance",
+        value: MsgGrantAllowance.toJSON(value)
+      };
+    },
+    revokeAllowance(value: MsgRevokeAllowance) {
+      return {
+        typeUrl: "/cosmos.feegrant.v1beta1.MsgRevokeAllowance",
+        value: MsgRevokeAllowance.toJSON(value)
+      };
+    },
+    pruneAllowances(value: MsgPruneAllowances) {
+      return {
+        typeUrl: "/cosmos.feegrant.v1beta1.MsgPruneAllowances",
+        value: MsgPruneAllowances.toJSON(value)
+      };
+    }
+  },
+  fromJSON: {
+    grantAllowance(value: any) {
+      return {
+        typeUrl: "/cosmos.feegrant.v1beta1.MsgGrantAllowance",
+        value: MsgGrantAllowance.fromJSON(value)
+      };
+    },
+    revokeAllowance(value: any) {
+      return {
+        typeUrl: "/cosmos.feegrant.v1beta1.MsgRevokeAllowance",
+        value: MsgRevokeAllowance.fromJSON(value)
+      };
+    },
+    pruneAllowances(value: any) {
+      return {
+        typeUrl: "/cosmos.feegrant.v1beta1.MsgPruneAllowances",
+        value: MsgPruneAllowances.fromJSON(value)
+      };
+    }
+  },
   fromPartial: {
     grantAllowance(value: MsgGrantAllowance) {
       return {

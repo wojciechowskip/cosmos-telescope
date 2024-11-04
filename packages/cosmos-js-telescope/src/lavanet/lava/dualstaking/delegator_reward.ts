@@ -1,6 +1,9 @@
 //@ts-nocheck
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { isSet } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface DelegatorReward {
   delegator: string;
   provider: string;
@@ -37,6 +40,15 @@ function createBaseDelegatorReward(): DelegatorReward {
 }
 export const DelegatorReward = {
   typeUrl: "/lavanet.lava.dualstaking.DelegatorReward",
+  is(o: any): o is DelegatorReward {
+    return o && (o.$typeUrl === DelegatorReward.typeUrl || typeof o.delegator === "string" && typeof o.provider === "string" && typeof o.chainId === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])));
+  },
+  isSDK(o: any): o is DelegatorRewardSDKType {
+    return o && (o.$typeUrl === DelegatorReward.typeUrl || typeof o.delegator === "string" && typeof o.provider === "string" && typeof o.chain_id === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])));
+  },
+  isAmino(o: any): o is DelegatorRewardAmino {
+    return o && (o.$typeUrl === DelegatorReward.typeUrl || typeof o.delegator === "string" && typeof o.provider === "string" && typeof o.chain_id === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])));
+  },
   encode(message: DelegatorReward, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegator !== "") {
       writer.uint32(10).string(message.delegator);
@@ -77,6 +89,26 @@ export const DelegatorReward = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): DelegatorReward {
+    return {
+      delegator: isSet(object.delegator) ? String(object.delegator) : "",
+      provider: isSet(object.provider) ? String(object.provider) : "",
+      chainId: isSet(object.chainId) ? String(object.chainId) : "",
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: DelegatorReward): JsonSafe<DelegatorReward> {
+    const obj: any = {};
+    message.delegator !== undefined && (obj.delegator = message.delegator);
+    message.provider !== undefined && (obj.provider = message.provider);
+    message.chainId !== undefined && (obj.chainId = message.chainId);
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<DelegatorReward>): DelegatorReward {
     const message = createBaseDelegatorReward();
@@ -128,3 +160,4 @@ export const DelegatorReward = {
     };
   }
 };
+GlobalDecoderRegistry.register(DelegatorReward.typeUrl, DelegatorReward);

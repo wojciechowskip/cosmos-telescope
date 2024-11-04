@@ -1,5 +1,8 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../binary";
+import { isSet } from "../helpers";
+import { JsonSafe } from "../json-safe";
+import { GlobalDecoderRegistry } from "../registry";
 export enum ScalarType {
   SCALAR_TYPE_UNSPECIFIED = 0,
   SCALAR_TYPE_STRING = 1,
@@ -182,6 +185,15 @@ function createBaseInterfaceDescriptor(): InterfaceDescriptor {
 }
 export const InterfaceDescriptor = {
   typeUrl: "/cosmos_proto.InterfaceDescriptor",
+  is(o: any): o is InterfaceDescriptor {
+    return o && (o.$typeUrl === InterfaceDescriptor.typeUrl || typeof o.name === "string" && typeof o.description === "string");
+  },
+  isSDK(o: any): o is InterfaceDescriptorSDKType {
+    return o && (o.$typeUrl === InterfaceDescriptor.typeUrl || typeof o.name === "string" && typeof o.description === "string");
+  },
+  isAmino(o: any): o is InterfaceDescriptorAmino {
+    return o && (o.$typeUrl === InterfaceDescriptor.typeUrl || typeof o.name === "string" && typeof o.description === "string");
+  },
   encode(message: InterfaceDescriptor, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -210,6 +222,18 @@ export const InterfaceDescriptor = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): InterfaceDescriptor {
+    return {
+      name: isSet(object.name) ? String(object.name) : "",
+      description: isSet(object.description) ? String(object.description) : ""
+    };
+  },
+  toJSON(message: InterfaceDescriptor): JsonSafe<InterfaceDescriptor> {
+    const obj: any = {};
+    message.name !== undefined && (obj.name = message.name);
+    message.description !== undefined && (obj.description = message.description);
+    return obj;
   },
   fromPartial(object: Partial<InterfaceDescriptor>): InterfaceDescriptor {
     const message = createBaseInterfaceDescriptor();
@@ -249,6 +273,7 @@ export const InterfaceDescriptor = {
     };
   }
 };
+GlobalDecoderRegistry.register(InterfaceDescriptor.typeUrl, InterfaceDescriptor);
 function createBaseScalarDescriptor(): ScalarDescriptor {
   return {
     name: "",
@@ -258,6 +283,15 @@ function createBaseScalarDescriptor(): ScalarDescriptor {
 }
 export const ScalarDescriptor = {
   typeUrl: "/cosmos_proto.ScalarDescriptor",
+  is(o: any): o is ScalarDescriptor {
+    return o && (o.$typeUrl === ScalarDescriptor.typeUrl || typeof o.name === "string" && typeof o.description === "string" && Array.isArray(o.fieldType));
+  },
+  isSDK(o: any): o is ScalarDescriptorSDKType {
+    return o && (o.$typeUrl === ScalarDescriptor.typeUrl || typeof o.name === "string" && typeof o.description === "string" && Array.isArray(o.field_type));
+  },
+  isAmino(o: any): o is ScalarDescriptorAmino {
+    return o && (o.$typeUrl === ScalarDescriptor.typeUrl || typeof o.name === "string" && typeof o.description === "string" && Array.isArray(o.field_type));
+  },
   encode(message: ScalarDescriptor, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
@@ -301,6 +335,24 @@ export const ScalarDescriptor = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): ScalarDescriptor {
+    return {
+      name: isSet(object.name) ? String(object.name) : "",
+      description: isSet(object.description) ? String(object.description) : "",
+      fieldType: Array.isArray(object?.fieldType) ? object.fieldType.map((e: any) => scalarTypeFromJSON(e)) : []
+    };
+  },
+  toJSON(message: ScalarDescriptor): JsonSafe<ScalarDescriptor> {
+    const obj: any = {};
+    message.name !== undefined && (obj.name = message.name);
+    message.description !== undefined && (obj.description = message.description);
+    if (message.fieldType) {
+      obj.fieldType = message.fieldType.map(e => scalarTypeToJSON(e));
+    } else {
+      obj.fieldType = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<ScalarDescriptor>): ScalarDescriptor {
     const message = createBaseScalarDescriptor();
@@ -347,3 +399,4 @@ export const ScalarDescriptor = {
     };
   }
 };
+GlobalDecoderRegistry.register(ScalarDescriptor.typeUrl, ScalarDescriptor);

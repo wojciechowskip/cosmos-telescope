@@ -1,6 +1,9 @@
 //@ts-nocheck
 import { Entry, EntryAmino, EntrySDKType } from "./fixation";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { isSet } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryAllIndicesRequest {
   storeKey: string;
   prefix: string;
@@ -188,6 +191,15 @@ function createBaseQueryAllIndicesRequest(): QueryAllIndicesRequest {
 }
 export const QueryAllIndicesRequest = {
   typeUrl: "/lavanet.lava.fixationstore.QueryAllIndicesRequest",
+  is(o: any): o is QueryAllIndicesRequest {
+    return o && (o.$typeUrl === QueryAllIndicesRequest.typeUrl || typeof o.storeKey === "string" && typeof o.prefix === "string");
+  },
+  isSDK(o: any): o is QueryAllIndicesRequestSDKType {
+    return o && (o.$typeUrl === QueryAllIndicesRequest.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string");
+  },
+  isAmino(o: any): o is QueryAllIndicesRequestAmino {
+    return o && (o.$typeUrl === QueryAllIndicesRequest.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string");
+  },
   encode(message: QueryAllIndicesRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.storeKey !== "") {
       writer.uint32(10).string(message.storeKey);
@@ -216,6 +228,18 @@ export const QueryAllIndicesRequest = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryAllIndicesRequest {
+    return {
+      storeKey: isSet(object.storeKey) ? String(object.storeKey) : "",
+      prefix: isSet(object.prefix) ? String(object.prefix) : ""
+    };
+  },
+  toJSON(message: QueryAllIndicesRequest): JsonSafe<QueryAllIndicesRequest> {
+    const obj: any = {};
+    message.storeKey !== undefined && (obj.storeKey = message.storeKey);
+    message.prefix !== undefined && (obj.prefix = message.prefix);
+    return obj;
   },
   fromPartial(object: Partial<QueryAllIndicesRequest>): QueryAllIndicesRequest {
     const message = createBaseQueryAllIndicesRequest();
@@ -255,6 +279,7 @@ export const QueryAllIndicesRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllIndicesRequest.typeUrl, QueryAllIndicesRequest);
 function createBaseQueryAllIndicesResponse(): QueryAllIndicesResponse {
   return {
     indices: []
@@ -262,6 +287,15 @@ function createBaseQueryAllIndicesResponse(): QueryAllIndicesResponse {
 }
 export const QueryAllIndicesResponse = {
   typeUrl: "/lavanet.lava.fixationstore.QueryAllIndicesResponse",
+  is(o: any): o is QueryAllIndicesResponse {
+    return o && (o.$typeUrl === QueryAllIndicesResponse.typeUrl || Array.isArray(o.indices) && (!o.indices.length || typeof o.indices[0] === "string"));
+  },
+  isSDK(o: any): o is QueryAllIndicesResponseSDKType {
+    return o && (o.$typeUrl === QueryAllIndicesResponse.typeUrl || Array.isArray(o.indices) && (!o.indices.length || typeof o.indices[0] === "string"));
+  },
+  isAmino(o: any): o is QueryAllIndicesResponseAmino {
+    return o && (o.$typeUrl === QueryAllIndicesResponse.typeUrl || Array.isArray(o.indices) && (!o.indices.length || typeof o.indices[0] === "string"));
+  },
   encode(message: QueryAllIndicesResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.indices) {
       writer.uint32(10).string(v!);
@@ -284,6 +318,20 @@ export const QueryAllIndicesResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryAllIndicesResponse {
+    return {
+      indices: Array.isArray(object?.indices) ? object.indices.map((e: any) => String(e)) : []
+    };
+  },
+  toJSON(message: QueryAllIndicesResponse): JsonSafe<QueryAllIndicesResponse> {
+    const obj: any = {};
+    if (message.indices) {
+      obj.indices = message.indices.map(e => e);
+    } else {
+      obj.indices = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<QueryAllIndicesResponse>): QueryAllIndicesResponse {
     const message = createBaseQueryAllIndicesResponse();
@@ -320,11 +368,21 @@ export const QueryAllIndicesResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllIndicesResponse.typeUrl, QueryAllIndicesResponse);
 function createBaseQueryStoreKeysRequest(): QueryStoreKeysRequest {
   return {};
 }
 export const QueryStoreKeysRequest = {
   typeUrl: "/lavanet.lava.fixationstore.QueryStoreKeysRequest",
+  is(o: any): o is QueryStoreKeysRequest {
+    return o && o.$typeUrl === QueryStoreKeysRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryStoreKeysRequestSDKType {
+    return o && o.$typeUrl === QueryStoreKeysRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryStoreKeysRequestAmino {
+    return o && o.$typeUrl === QueryStoreKeysRequest.typeUrl;
+  },
   encode(_: QueryStoreKeysRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -341,6 +399,13 @@ export const QueryStoreKeysRequest = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): QueryStoreKeysRequest {
+    return {};
+  },
+  toJSON(_: QueryStoreKeysRequest): JsonSafe<QueryStoreKeysRequest> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<QueryStoreKeysRequest>): QueryStoreKeysRequest {
     const message = createBaseQueryStoreKeysRequest();
@@ -370,6 +435,7 @@ export const QueryStoreKeysRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryStoreKeysRequest.typeUrl, QueryStoreKeysRequest);
 function createBaseStoreKeyAndPrefix(): StoreKeyAndPrefix {
   return {
     storeKey: "",
@@ -378,6 +444,15 @@ function createBaseStoreKeyAndPrefix(): StoreKeyAndPrefix {
 }
 export const StoreKeyAndPrefix = {
   typeUrl: "/lavanet.lava.fixationstore.StoreKeyAndPrefix",
+  is(o: any): o is StoreKeyAndPrefix {
+    return o && (o.$typeUrl === StoreKeyAndPrefix.typeUrl || typeof o.storeKey === "string" && typeof o.prefix === "string");
+  },
+  isSDK(o: any): o is StoreKeyAndPrefixSDKType {
+    return o && (o.$typeUrl === StoreKeyAndPrefix.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string");
+  },
+  isAmino(o: any): o is StoreKeyAndPrefixAmino {
+    return o && (o.$typeUrl === StoreKeyAndPrefix.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string");
+  },
   encode(message: StoreKeyAndPrefix, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.storeKey !== "") {
       writer.uint32(10).string(message.storeKey);
@@ -406,6 +481,18 @@ export const StoreKeyAndPrefix = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): StoreKeyAndPrefix {
+    return {
+      storeKey: isSet(object.storeKey) ? String(object.storeKey) : "",
+      prefix: isSet(object.prefix) ? String(object.prefix) : ""
+    };
+  },
+  toJSON(message: StoreKeyAndPrefix): JsonSafe<StoreKeyAndPrefix> {
+    const obj: any = {};
+    message.storeKey !== undefined && (obj.storeKey = message.storeKey);
+    message.prefix !== undefined && (obj.prefix = message.prefix);
+    return obj;
   },
   fromPartial(object: Partial<StoreKeyAndPrefix>): StoreKeyAndPrefix {
     const message = createBaseStoreKeyAndPrefix();
@@ -445,6 +532,7 @@ export const StoreKeyAndPrefix = {
     };
   }
 };
+GlobalDecoderRegistry.register(StoreKeyAndPrefix.typeUrl, StoreKeyAndPrefix);
 function createBaseQueryStoreKeysResponse(): QueryStoreKeysResponse {
   return {
     keys: []
@@ -452,6 +540,15 @@ function createBaseQueryStoreKeysResponse(): QueryStoreKeysResponse {
 }
 export const QueryStoreKeysResponse = {
   typeUrl: "/lavanet.lava.fixationstore.QueryStoreKeysResponse",
+  is(o: any): o is QueryStoreKeysResponse {
+    return o && (o.$typeUrl === QueryStoreKeysResponse.typeUrl || Array.isArray(o.keys) && (!o.keys.length || StoreKeyAndPrefix.is(o.keys[0])));
+  },
+  isSDK(o: any): o is QueryStoreKeysResponseSDKType {
+    return o && (o.$typeUrl === QueryStoreKeysResponse.typeUrl || Array.isArray(o.keys) && (!o.keys.length || StoreKeyAndPrefix.isSDK(o.keys[0])));
+  },
+  isAmino(o: any): o is QueryStoreKeysResponseAmino {
+    return o && (o.$typeUrl === QueryStoreKeysResponse.typeUrl || Array.isArray(o.keys) && (!o.keys.length || StoreKeyAndPrefix.isAmino(o.keys[0])));
+  },
   encode(message: QueryStoreKeysResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.keys) {
       StoreKeyAndPrefix.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -474,6 +571,20 @@ export const QueryStoreKeysResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryStoreKeysResponse {
+    return {
+      keys: Array.isArray(object?.keys) ? object.keys.map((e: any) => StoreKeyAndPrefix.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: QueryStoreKeysResponse): JsonSafe<QueryStoreKeysResponse> {
+    const obj: any = {};
+    if (message.keys) {
+      obj.keys = message.keys.map(e => e ? StoreKeyAndPrefix.toJSON(e) : undefined);
+    } else {
+      obj.keys = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<QueryStoreKeysResponse>): QueryStoreKeysResponse {
     const message = createBaseQueryStoreKeysResponse();
@@ -510,6 +621,7 @@ export const QueryStoreKeysResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryStoreKeysResponse.typeUrl, QueryStoreKeysResponse);
 function createBaseQueryVersionsRequest(): QueryVersionsRequest {
   return {
     storeKey: "",
@@ -519,6 +631,15 @@ function createBaseQueryVersionsRequest(): QueryVersionsRequest {
 }
 export const QueryVersionsRequest = {
   typeUrl: "/lavanet.lava.fixationstore.QueryVersionsRequest",
+  is(o: any): o is QueryVersionsRequest {
+    return o && (o.$typeUrl === QueryVersionsRequest.typeUrl || typeof o.storeKey === "string" && typeof o.prefix === "string" && typeof o.key === "string");
+  },
+  isSDK(o: any): o is QueryVersionsRequestSDKType {
+    return o && (o.$typeUrl === QueryVersionsRequest.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string" && typeof o.key === "string");
+  },
+  isAmino(o: any): o is QueryVersionsRequestAmino {
+    return o && (o.$typeUrl === QueryVersionsRequest.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string" && typeof o.key === "string");
+  },
   encode(message: QueryVersionsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.storeKey !== "") {
       writer.uint32(10).string(message.storeKey);
@@ -553,6 +674,20 @@ export const QueryVersionsRequest = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryVersionsRequest {
+    return {
+      storeKey: isSet(object.storeKey) ? String(object.storeKey) : "",
+      prefix: isSet(object.prefix) ? String(object.prefix) : "",
+      key: isSet(object.key) ? String(object.key) : ""
+    };
+  },
+  toJSON(message: QueryVersionsRequest): JsonSafe<QueryVersionsRequest> {
+    const obj: any = {};
+    message.storeKey !== undefined && (obj.storeKey = message.storeKey);
+    message.prefix !== undefined && (obj.prefix = message.prefix);
+    message.key !== undefined && (obj.key = message.key);
+    return obj;
   },
   fromPartial(object: Partial<QueryVersionsRequest>): QueryVersionsRequest {
     const message = createBaseQueryVersionsRequest();
@@ -597,6 +732,7 @@ export const QueryVersionsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryVersionsRequest.typeUrl, QueryVersionsRequest);
 function createBaseQueryVersionsResponse(): QueryVersionsResponse {
   return {
     entries: []
@@ -604,6 +740,15 @@ function createBaseQueryVersionsResponse(): QueryVersionsResponse {
 }
 export const QueryVersionsResponse = {
   typeUrl: "/lavanet.lava.fixationstore.QueryVersionsResponse",
+  is(o: any): o is QueryVersionsResponse {
+    return o && (o.$typeUrl === QueryVersionsResponse.typeUrl || Array.isArray(o.entries) && (!o.entries.length || Entry.is(o.entries[0])));
+  },
+  isSDK(o: any): o is QueryVersionsResponseSDKType {
+    return o && (o.$typeUrl === QueryVersionsResponse.typeUrl || Array.isArray(o.entries) && (!o.entries.length || Entry.isSDK(o.entries[0])));
+  },
+  isAmino(o: any): o is QueryVersionsResponseAmino {
+    return o && (o.$typeUrl === QueryVersionsResponse.typeUrl || Array.isArray(o.entries) && (!o.entries.length || Entry.isAmino(o.entries[0])));
+  },
   encode(message: QueryVersionsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.entries) {
       Entry.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -626,6 +771,20 @@ export const QueryVersionsResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryVersionsResponse {
+    return {
+      entries: Array.isArray(object?.entries) ? object.entries.map((e: any) => Entry.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: QueryVersionsResponse): JsonSafe<QueryVersionsResponse> {
+    const obj: any = {};
+    if (message.entries) {
+      obj.entries = message.entries.map(e => e ? Entry.toJSON(e) : undefined);
+    } else {
+      obj.entries = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<QueryVersionsResponse>): QueryVersionsResponse {
     const message = createBaseQueryVersionsResponse();
@@ -662,6 +821,7 @@ export const QueryVersionsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryVersionsResponse.typeUrl, QueryVersionsResponse);
 function createBaseQueryEntryRequest(): QueryEntryRequest {
   return {
     storeKey: "",
@@ -674,6 +834,15 @@ function createBaseQueryEntryRequest(): QueryEntryRequest {
 }
 export const QueryEntryRequest = {
   typeUrl: "/lavanet.lava.fixationstore.QueryEntryRequest",
+  is(o: any): o is QueryEntryRequest {
+    return o && (o.$typeUrl === QueryEntryRequest.typeUrl || typeof o.storeKey === "string" && typeof o.prefix === "string" && typeof o.key === "string" && typeof o.block === "bigint" && typeof o.hideData === "boolean" && typeof o.stringData === "boolean");
+  },
+  isSDK(o: any): o is QueryEntryRequestSDKType {
+    return o && (o.$typeUrl === QueryEntryRequest.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string" && typeof o.key === "string" && typeof o.block === "bigint" && typeof o.hide_data === "boolean" && typeof o.string_data === "boolean");
+  },
+  isAmino(o: any): o is QueryEntryRequestAmino {
+    return o && (o.$typeUrl === QueryEntryRequest.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string" && typeof o.key === "string" && typeof o.block === "bigint" && typeof o.hide_data === "boolean" && typeof o.string_data === "boolean");
+  },
   encode(message: QueryEntryRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.storeKey !== "") {
       writer.uint32(10).string(message.storeKey);
@@ -726,6 +895,26 @@ export const QueryEntryRequest = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryEntryRequest {
+    return {
+      storeKey: isSet(object.storeKey) ? String(object.storeKey) : "",
+      prefix: isSet(object.prefix) ? String(object.prefix) : "",
+      key: isSet(object.key) ? String(object.key) : "",
+      block: isSet(object.block) ? BigInt(object.block.toString()) : BigInt(0),
+      hideData: isSet(object.hideData) ? Boolean(object.hideData) : false,
+      stringData: isSet(object.stringData) ? Boolean(object.stringData) : false
+    };
+  },
+  toJSON(message: QueryEntryRequest): JsonSafe<QueryEntryRequest> {
+    const obj: any = {};
+    message.storeKey !== undefined && (obj.storeKey = message.storeKey);
+    message.prefix !== undefined && (obj.prefix = message.prefix);
+    message.key !== undefined && (obj.key = message.key);
+    message.block !== undefined && (obj.block = (message.block || BigInt(0)).toString());
+    message.hideData !== undefined && (obj.hideData = message.hideData);
+    message.stringData !== undefined && (obj.stringData = message.stringData);
+    return obj;
   },
   fromPartial(object: Partial<QueryEntryRequest>): QueryEntryRequest {
     const message = createBaseQueryEntryRequest();
@@ -785,6 +974,7 @@ export const QueryEntryRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryEntryRequest.typeUrl, QueryEntryRequest);
 function createBaseQueryEntryResponse(): QueryEntryResponse {
   return {
     entry: undefined,
@@ -793,6 +983,15 @@ function createBaseQueryEntryResponse(): QueryEntryResponse {
 }
 export const QueryEntryResponse = {
   typeUrl: "/lavanet.lava.fixationstore.QueryEntryResponse",
+  is(o: any): o is QueryEntryResponse {
+    return o && (o.$typeUrl === QueryEntryResponse.typeUrl || typeof o.stringData === "string");
+  },
+  isSDK(o: any): o is QueryEntryResponseSDKType {
+    return o && (o.$typeUrl === QueryEntryResponse.typeUrl || typeof o.string_data === "string");
+  },
+  isAmino(o: any): o is QueryEntryResponseAmino {
+    return o && (o.$typeUrl === QueryEntryResponse.typeUrl || typeof o.string_data === "string");
+  },
   encode(message: QueryEntryResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.entry !== undefined) {
       Entry.encode(message.entry, writer.uint32(10).fork()).ldelim();
@@ -821,6 +1020,18 @@ export const QueryEntryResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryEntryResponse {
+    return {
+      entry: isSet(object.entry) ? Entry.fromJSON(object.entry) : undefined,
+      stringData: isSet(object.stringData) ? String(object.stringData) : ""
+    };
+  },
+  toJSON(message: QueryEntryResponse): JsonSafe<QueryEntryResponse> {
+    const obj: any = {};
+    message.entry !== undefined && (obj.entry = message.entry ? Entry.toJSON(message.entry) : undefined);
+    message.stringData !== undefined && (obj.stringData = message.stringData);
+    return obj;
   },
   fromPartial(object: Partial<QueryEntryResponse>): QueryEntryResponse {
     const message = createBaseQueryEntryResponse();
@@ -860,3 +1071,4 @@ export const QueryEntryResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryEntryResponse.typeUrl, QueryEntryResponse);

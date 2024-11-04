@@ -1,6 +1,9 @@
 //@ts-nocheck
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { isSet } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
 /**
  * MsgSetWithdrawAddress sets the withdraw address for
  * a delegator (or validator self-delegation).
@@ -202,6 +205,16 @@ function createBaseMsgSetWithdrawAddress(): MsgSetWithdrawAddress {
 }
 export const MsgSetWithdrawAddress = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgSetWithdrawAddress",
+  aminoType: "cosmos-sdk/MsgModifyWithdrawAddress",
+  is(o: any): o is MsgSetWithdrawAddress {
+    return o && (o.$typeUrl === MsgSetWithdrawAddress.typeUrl || typeof o.delegatorAddress === "string" && typeof o.withdrawAddress === "string");
+  },
+  isSDK(o: any): o is MsgSetWithdrawAddressSDKType {
+    return o && (o.$typeUrl === MsgSetWithdrawAddress.typeUrl || typeof o.delegator_address === "string" && typeof o.withdraw_address === "string");
+  },
+  isAmino(o: any): o is MsgSetWithdrawAddressAmino {
+    return o && (o.$typeUrl === MsgSetWithdrawAddress.typeUrl || typeof o.delegator_address === "string" && typeof o.withdraw_address === "string");
+  },
   encode(message: MsgSetWithdrawAddress, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -230,6 +243,18 @@ export const MsgSetWithdrawAddress = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): MsgSetWithdrawAddress {
+    return {
+      delegatorAddress: isSet(object.delegatorAddress) ? String(object.delegatorAddress) : "",
+      withdrawAddress: isSet(object.withdrawAddress) ? String(object.withdrawAddress) : ""
+    };
+  },
+  toJSON(message: MsgSetWithdrawAddress): JsonSafe<MsgSetWithdrawAddress> {
+    const obj: any = {};
+    message.delegatorAddress !== undefined && (obj.delegatorAddress = message.delegatorAddress);
+    message.withdrawAddress !== undefined && (obj.withdrawAddress = message.withdrawAddress);
+    return obj;
   },
   fromPartial(object: Partial<MsgSetWithdrawAddress>): MsgSetWithdrawAddress {
     const message = createBaseMsgSetWithdrawAddress();
@@ -275,11 +300,23 @@ export const MsgSetWithdrawAddress = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetWithdrawAddress.typeUrl, MsgSetWithdrawAddress);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetWithdrawAddress.aminoType, MsgSetWithdrawAddress.typeUrl);
 function createBaseMsgSetWithdrawAddressResponse(): MsgSetWithdrawAddressResponse {
   return {};
 }
 export const MsgSetWithdrawAddressResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgSetWithdrawAddressResponse",
+  aminoType: "cosmos-sdk/MsgSetWithdrawAddressResponse",
+  is(o: any): o is MsgSetWithdrawAddressResponse {
+    return o && o.$typeUrl === MsgSetWithdrawAddressResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgSetWithdrawAddressResponseSDKType {
+    return o && o.$typeUrl === MsgSetWithdrawAddressResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgSetWithdrawAddressResponseAmino {
+    return o && o.$typeUrl === MsgSetWithdrawAddressResponse.typeUrl;
+  },
   encode(_: MsgSetWithdrawAddressResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -296,6 +333,13 @@ export const MsgSetWithdrawAddressResponse = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): MsgSetWithdrawAddressResponse {
+    return {};
+  },
+  toJSON(_: MsgSetWithdrawAddressResponse): JsonSafe<MsgSetWithdrawAddressResponse> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<MsgSetWithdrawAddressResponse>): MsgSetWithdrawAddressResponse {
     const message = createBaseMsgSetWithdrawAddressResponse();
@@ -331,6 +375,8 @@ export const MsgSetWithdrawAddressResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgSetWithdrawAddressResponse.typeUrl, MsgSetWithdrawAddressResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgSetWithdrawAddressResponse.aminoType, MsgSetWithdrawAddressResponse.typeUrl);
 function createBaseMsgWithdrawDelegatorReward(): MsgWithdrawDelegatorReward {
   return {
     delegatorAddress: "",
@@ -339,6 +385,16 @@ function createBaseMsgWithdrawDelegatorReward(): MsgWithdrawDelegatorReward {
 }
 export const MsgWithdrawDelegatorReward = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward",
+  aminoType: "cosmos-sdk/MsgWithdrawDelegationReward",
+  is(o: any): o is MsgWithdrawDelegatorReward {
+    return o && (o.$typeUrl === MsgWithdrawDelegatorReward.typeUrl || typeof o.delegatorAddress === "string" && typeof o.validatorAddress === "string");
+  },
+  isSDK(o: any): o is MsgWithdrawDelegatorRewardSDKType {
+    return o && (o.$typeUrl === MsgWithdrawDelegatorReward.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string");
+  },
+  isAmino(o: any): o is MsgWithdrawDelegatorRewardAmino {
+    return o && (o.$typeUrl === MsgWithdrawDelegatorReward.typeUrl || typeof o.delegator_address === "string" && typeof o.validator_address === "string");
+  },
   encode(message: MsgWithdrawDelegatorReward, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegatorAddress !== "") {
       writer.uint32(10).string(message.delegatorAddress);
@@ -367,6 +423,18 @@ export const MsgWithdrawDelegatorReward = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): MsgWithdrawDelegatorReward {
+    return {
+      delegatorAddress: isSet(object.delegatorAddress) ? String(object.delegatorAddress) : "",
+      validatorAddress: isSet(object.validatorAddress) ? String(object.validatorAddress) : ""
+    };
+  },
+  toJSON(message: MsgWithdrawDelegatorReward): JsonSafe<MsgWithdrawDelegatorReward> {
+    const obj: any = {};
+    message.delegatorAddress !== undefined && (obj.delegatorAddress = message.delegatorAddress);
+    message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
+    return obj;
   },
   fromPartial(object: Partial<MsgWithdrawDelegatorReward>): MsgWithdrawDelegatorReward {
     const message = createBaseMsgWithdrawDelegatorReward();
@@ -412,6 +480,8 @@ export const MsgWithdrawDelegatorReward = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgWithdrawDelegatorReward.typeUrl, MsgWithdrawDelegatorReward);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgWithdrawDelegatorReward.aminoType, MsgWithdrawDelegatorReward.typeUrl);
 function createBaseMsgWithdrawDelegatorRewardResponse(): MsgWithdrawDelegatorRewardResponse {
   return {
     amount: []
@@ -419,6 +489,16 @@ function createBaseMsgWithdrawDelegatorRewardResponse(): MsgWithdrawDelegatorRew
 }
 export const MsgWithdrawDelegatorRewardResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorRewardResponse",
+  aminoType: "cosmos-sdk/MsgWithdrawDelegatorRewardResponse",
+  is(o: any): o is MsgWithdrawDelegatorRewardResponse {
+    return o && (o.$typeUrl === MsgWithdrawDelegatorRewardResponse.typeUrl || Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])));
+  },
+  isSDK(o: any): o is MsgWithdrawDelegatorRewardResponseSDKType {
+    return o && (o.$typeUrl === MsgWithdrawDelegatorRewardResponse.typeUrl || Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])));
+  },
+  isAmino(o: any): o is MsgWithdrawDelegatorRewardResponseAmino {
+    return o && (o.$typeUrl === MsgWithdrawDelegatorRewardResponse.typeUrl || Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])));
+  },
   encode(message: MsgWithdrawDelegatorRewardResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.amount) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -441,6 +521,20 @@ export const MsgWithdrawDelegatorRewardResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): MsgWithdrawDelegatorRewardResponse {
+    return {
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: MsgWithdrawDelegatorRewardResponse): JsonSafe<MsgWithdrawDelegatorRewardResponse> {
+    const obj: any = {};
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<MsgWithdrawDelegatorRewardResponse>): MsgWithdrawDelegatorRewardResponse {
     const message = createBaseMsgWithdrawDelegatorRewardResponse();
@@ -483,6 +577,8 @@ export const MsgWithdrawDelegatorRewardResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgWithdrawDelegatorRewardResponse.typeUrl, MsgWithdrawDelegatorRewardResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgWithdrawDelegatorRewardResponse.aminoType, MsgWithdrawDelegatorRewardResponse.typeUrl);
 function createBaseMsgWithdrawValidatorCommission(): MsgWithdrawValidatorCommission {
   return {
     validatorAddress: ""
@@ -490,6 +586,16 @@ function createBaseMsgWithdrawValidatorCommission(): MsgWithdrawValidatorCommiss
 }
 export const MsgWithdrawValidatorCommission = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission",
+  aminoType: "cosmos-sdk/MsgWithdrawValidatorCommission",
+  is(o: any): o is MsgWithdrawValidatorCommission {
+    return o && (o.$typeUrl === MsgWithdrawValidatorCommission.typeUrl || typeof o.validatorAddress === "string");
+  },
+  isSDK(o: any): o is MsgWithdrawValidatorCommissionSDKType {
+    return o && (o.$typeUrl === MsgWithdrawValidatorCommission.typeUrl || typeof o.validator_address === "string");
+  },
+  isAmino(o: any): o is MsgWithdrawValidatorCommissionAmino {
+    return o && (o.$typeUrl === MsgWithdrawValidatorCommission.typeUrl || typeof o.validator_address === "string");
+  },
   encode(message: MsgWithdrawValidatorCommission, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.validatorAddress !== "") {
       writer.uint32(10).string(message.validatorAddress);
@@ -512,6 +618,16 @@ export const MsgWithdrawValidatorCommission = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): MsgWithdrawValidatorCommission {
+    return {
+      validatorAddress: isSet(object.validatorAddress) ? String(object.validatorAddress) : ""
+    };
+  },
+  toJSON(message: MsgWithdrawValidatorCommission): JsonSafe<MsgWithdrawValidatorCommission> {
+    const obj: any = {};
+    message.validatorAddress !== undefined && (obj.validatorAddress = message.validatorAddress);
+    return obj;
   },
   fromPartial(object: Partial<MsgWithdrawValidatorCommission>): MsgWithdrawValidatorCommission {
     const message = createBaseMsgWithdrawValidatorCommission();
@@ -552,6 +668,8 @@ export const MsgWithdrawValidatorCommission = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgWithdrawValidatorCommission.typeUrl, MsgWithdrawValidatorCommission);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgWithdrawValidatorCommission.aminoType, MsgWithdrawValidatorCommission.typeUrl);
 function createBaseMsgWithdrawValidatorCommissionResponse(): MsgWithdrawValidatorCommissionResponse {
   return {
     amount: []
@@ -559,6 +677,16 @@ function createBaseMsgWithdrawValidatorCommissionResponse(): MsgWithdrawValidato
 }
 export const MsgWithdrawValidatorCommissionResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommissionResponse",
+  aminoType: "cosmos-sdk/MsgWithdrawValidatorCommissionResponse",
+  is(o: any): o is MsgWithdrawValidatorCommissionResponse {
+    return o && (o.$typeUrl === MsgWithdrawValidatorCommissionResponse.typeUrl || Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])));
+  },
+  isSDK(o: any): o is MsgWithdrawValidatorCommissionResponseSDKType {
+    return o && (o.$typeUrl === MsgWithdrawValidatorCommissionResponse.typeUrl || Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])));
+  },
+  isAmino(o: any): o is MsgWithdrawValidatorCommissionResponseAmino {
+    return o && (o.$typeUrl === MsgWithdrawValidatorCommissionResponse.typeUrl || Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])));
+  },
   encode(message: MsgWithdrawValidatorCommissionResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.amount) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -581,6 +709,20 @@ export const MsgWithdrawValidatorCommissionResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): MsgWithdrawValidatorCommissionResponse {
+    return {
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: MsgWithdrawValidatorCommissionResponse): JsonSafe<MsgWithdrawValidatorCommissionResponse> {
+    const obj: any = {};
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<MsgWithdrawValidatorCommissionResponse>): MsgWithdrawValidatorCommissionResponse {
     const message = createBaseMsgWithdrawValidatorCommissionResponse();
@@ -623,6 +765,8 @@ export const MsgWithdrawValidatorCommissionResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgWithdrawValidatorCommissionResponse.typeUrl, MsgWithdrawValidatorCommissionResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgWithdrawValidatorCommissionResponse.aminoType, MsgWithdrawValidatorCommissionResponse.typeUrl);
 function createBaseMsgFundCommunityPool(): MsgFundCommunityPool {
   return {
     amount: [],
@@ -631,6 +775,16 @@ function createBaseMsgFundCommunityPool(): MsgFundCommunityPool {
 }
 export const MsgFundCommunityPool = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgFundCommunityPool",
+  aminoType: "cosmos-sdk/MsgFundCommunityPool",
+  is(o: any): o is MsgFundCommunityPool {
+    return o && (o.$typeUrl === MsgFundCommunityPool.typeUrl || Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])) && typeof o.depositor === "string");
+  },
+  isSDK(o: any): o is MsgFundCommunityPoolSDKType {
+    return o && (o.$typeUrl === MsgFundCommunityPool.typeUrl || Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])) && typeof o.depositor === "string");
+  },
+  isAmino(o: any): o is MsgFundCommunityPoolAmino {
+    return o && (o.$typeUrl === MsgFundCommunityPool.typeUrl || Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])) && typeof o.depositor === "string");
+  },
   encode(message: MsgFundCommunityPool, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.amount) {
       Coin.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -659,6 +813,22 @@ export const MsgFundCommunityPool = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): MsgFundCommunityPool {
+    return {
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      depositor: isSet(object.depositor) ? String(object.depositor) : ""
+    };
+  },
+  toJSON(message: MsgFundCommunityPool): JsonSafe<MsgFundCommunityPool> {
+    const obj: any = {};
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    message.depositor !== undefined && (obj.depositor = message.depositor);
+    return obj;
   },
   fromPartial(object: Partial<MsgFundCommunityPool>): MsgFundCommunityPool {
     const message = createBaseMsgFundCommunityPool();
@@ -706,11 +876,23 @@ export const MsgFundCommunityPool = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgFundCommunityPool.typeUrl, MsgFundCommunityPool);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgFundCommunityPool.aminoType, MsgFundCommunityPool.typeUrl);
 function createBaseMsgFundCommunityPoolResponse(): MsgFundCommunityPoolResponse {
   return {};
 }
 export const MsgFundCommunityPoolResponse = {
   typeUrl: "/cosmos.distribution.v1beta1.MsgFundCommunityPoolResponse",
+  aminoType: "cosmos-sdk/MsgFundCommunityPoolResponse",
+  is(o: any): o is MsgFundCommunityPoolResponse {
+    return o && o.$typeUrl === MsgFundCommunityPoolResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgFundCommunityPoolResponseSDKType {
+    return o && o.$typeUrl === MsgFundCommunityPoolResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgFundCommunityPoolResponseAmino {
+    return o && o.$typeUrl === MsgFundCommunityPoolResponse.typeUrl;
+  },
   encode(_: MsgFundCommunityPoolResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -727,6 +909,13 @@ export const MsgFundCommunityPoolResponse = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): MsgFundCommunityPoolResponse {
+    return {};
+  },
+  toJSON(_: MsgFundCommunityPoolResponse): JsonSafe<MsgFundCommunityPoolResponse> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<MsgFundCommunityPoolResponse>): MsgFundCommunityPoolResponse {
     const message = createBaseMsgFundCommunityPoolResponse();
@@ -762,3 +951,5 @@ export const MsgFundCommunityPoolResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgFundCommunityPoolResponse.typeUrl, MsgFundCommunityPoolResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgFundCommunityPoolResponse.aminoType, MsgFundCommunityPoolResponse.typeUrl);

@@ -3,6 +3,9 @@ import { Params, ParamsAmino, ParamsSDKType } from "./params";
 import { Delegation, DelegationAmino, DelegationSDKType } from "./delegate";
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
+import { isSet } from "../../../helpers";
 /** QueryParamsRequest is request type for the Query/Params RPC method. */
 export interface QueryParamsRequest {}
 export interface QueryParamsRequestProtoMsg {
@@ -181,6 +184,15 @@ function createBaseQueryParamsRequest(): QueryParamsRequest {
 }
 export const QueryParamsRequest = {
   typeUrl: "/lavanet.lava.dualstaking.QueryParamsRequest",
+  is(o: any): o is QueryParamsRequest {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryParamsRequestSDKType {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryParamsRequestAmino {
+    return o && o.$typeUrl === QueryParamsRequest.typeUrl;
+  },
   encode(_: QueryParamsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -197,6 +209,13 @@ export const QueryParamsRequest = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): QueryParamsRequest {
+    return {};
+  },
+  toJSON(_: QueryParamsRequest): JsonSafe<QueryParamsRequest> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<QueryParamsRequest>): QueryParamsRequest {
     const message = createBaseQueryParamsRequest();
@@ -226,6 +245,7 @@ export const QueryParamsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsRequest.typeUrl, QueryParamsRequest);
 function createBaseQueryParamsResponse(): QueryParamsResponse {
   return {
     params: Params.fromPartial({})
@@ -233,6 +253,15 @@ function createBaseQueryParamsResponse(): QueryParamsResponse {
 }
 export const QueryParamsResponse = {
   typeUrl: "/lavanet.lava.dualstaking.QueryParamsResponse",
+  is(o: any): o is QueryParamsResponse {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.is(o.params));
+  },
+  isSDK(o: any): o is QueryParamsResponseSDKType {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isSDK(o.params));
+  },
+  isAmino(o: any): o is QueryParamsResponseAmino {
+    return o && (o.$typeUrl === QueryParamsResponse.typeUrl || Params.isAmino(o.params));
+  },
   encode(message: QueryParamsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -255,6 +284,16 @@ export const QueryParamsResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryParamsResponse {
+    return {
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined
+    };
+  },
+  toJSON(message: QueryParamsResponse): JsonSafe<QueryParamsResponse> {
+    const obj: any = {};
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    return obj;
   },
   fromPartial(object: Partial<QueryParamsResponse>): QueryParamsResponse {
     const message = createBaseQueryParamsResponse();
@@ -289,6 +328,7 @@ export const QueryParamsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryParamsResponse.typeUrl, QueryParamsResponse);
 function createBaseQueryDelegatorProvidersRequest(): QueryDelegatorProvidersRequest {
   return {
     delegator: "",
@@ -297,6 +337,15 @@ function createBaseQueryDelegatorProvidersRequest(): QueryDelegatorProvidersRequ
 }
 export const QueryDelegatorProvidersRequest = {
   typeUrl: "/lavanet.lava.dualstaking.QueryDelegatorProvidersRequest",
+  is(o: any): o is QueryDelegatorProvidersRequest {
+    return o && (o.$typeUrl === QueryDelegatorProvidersRequest.typeUrl || typeof o.delegator === "string" && typeof o.withPending === "boolean");
+  },
+  isSDK(o: any): o is QueryDelegatorProvidersRequestSDKType {
+    return o && (o.$typeUrl === QueryDelegatorProvidersRequest.typeUrl || typeof o.delegator === "string" && typeof o.with_pending === "boolean");
+  },
+  isAmino(o: any): o is QueryDelegatorProvidersRequestAmino {
+    return o && (o.$typeUrl === QueryDelegatorProvidersRequest.typeUrl || typeof o.delegator === "string" && typeof o.with_pending === "boolean");
+  },
   encode(message: QueryDelegatorProvidersRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegator !== "") {
       writer.uint32(10).string(message.delegator);
@@ -325,6 +374,18 @@ export const QueryDelegatorProvidersRequest = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryDelegatorProvidersRequest {
+    return {
+      delegator: isSet(object.delegator) ? String(object.delegator) : "",
+      withPending: isSet(object.withPending) ? Boolean(object.withPending) : false
+    };
+  },
+  toJSON(message: QueryDelegatorProvidersRequest): JsonSafe<QueryDelegatorProvidersRequest> {
+    const obj: any = {};
+    message.delegator !== undefined && (obj.delegator = message.delegator);
+    message.withPending !== undefined && (obj.withPending = message.withPending);
+    return obj;
   },
   fromPartial(object: Partial<QueryDelegatorProvidersRequest>): QueryDelegatorProvidersRequest {
     const message = createBaseQueryDelegatorProvidersRequest();
@@ -364,6 +425,7 @@ export const QueryDelegatorProvidersRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryDelegatorProvidersRequest.typeUrl, QueryDelegatorProvidersRequest);
 function createBaseQueryDelegatorProvidersResponse(): QueryDelegatorProvidersResponse {
   return {
     delegations: []
@@ -371,6 +433,15 @@ function createBaseQueryDelegatorProvidersResponse(): QueryDelegatorProvidersRes
 }
 export const QueryDelegatorProvidersResponse = {
   typeUrl: "/lavanet.lava.dualstaking.QueryDelegatorProvidersResponse",
+  is(o: any): o is QueryDelegatorProvidersResponse {
+    return o && (o.$typeUrl === QueryDelegatorProvidersResponse.typeUrl || Array.isArray(o.delegations) && (!o.delegations.length || Delegation.is(o.delegations[0])));
+  },
+  isSDK(o: any): o is QueryDelegatorProvidersResponseSDKType {
+    return o && (o.$typeUrl === QueryDelegatorProvidersResponse.typeUrl || Array.isArray(o.delegations) && (!o.delegations.length || Delegation.isSDK(o.delegations[0])));
+  },
+  isAmino(o: any): o is QueryDelegatorProvidersResponseAmino {
+    return o && (o.$typeUrl === QueryDelegatorProvidersResponse.typeUrl || Array.isArray(o.delegations) && (!o.delegations.length || Delegation.isAmino(o.delegations[0])));
+  },
   encode(message: QueryDelegatorProvidersResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.delegations) {
       Delegation.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -393,6 +464,20 @@ export const QueryDelegatorProvidersResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryDelegatorProvidersResponse {
+    return {
+      delegations: Array.isArray(object?.delegations) ? object.delegations.map((e: any) => Delegation.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: QueryDelegatorProvidersResponse): JsonSafe<QueryDelegatorProvidersResponse> {
+    const obj: any = {};
+    if (message.delegations) {
+      obj.delegations = message.delegations.map(e => e ? Delegation.toJSON(e) : undefined);
+    } else {
+      obj.delegations = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<QueryDelegatorProvidersResponse>): QueryDelegatorProvidersResponse {
     const message = createBaseQueryDelegatorProvidersResponse();
@@ -429,6 +514,7 @@ export const QueryDelegatorProvidersResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryDelegatorProvidersResponse.typeUrl, QueryDelegatorProvidersResponse);
 function createBaseQueryProviderDelegatorsRequest(): QueryProviderDelegatorsRequest {
   return {
     provider: "",
@@ -437,6 +523,15 @@ function createBaseQueryProviderDelegatorsRequest(): QueryProviderDelegatorsRequ
 }
 export const QueryProviderDelegatorsRequest = {
   typeUrl: "/lavanet.lava.dualstaking.QueryProviderDelegatorsRequest",
+  is(o: any): o is QueryProviderDelegatorsRequest {
+    return o && (o.$typeUrl === QueryProviderDelegatorsRequest.typeUrl || typeof o.provider === "string" && typeof o.withPending === "boolean");
+  },
+  isSDK(o: any): o is QueryProviderDelegatorsRequestSDKType {
+    return o && (o.$typeUrl === QueryProviderDelegatorsRequest.typeUrl || typeof o.provider === "string" && typeof o.with_pending === "boolean");
+  },
+  isAmino(o: any): o is QueryProviderDelegatorsRequestAmino {
+    return o && (o.$typeUrl === QueryProviderDelegatorsRequest.typeUrl || typeof o.provider === "string" && typeof o.with_pending === "boolean");
+  },
   encode(message: QueryProviderDelegatorsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.provider !== "") {
       writer.uint32(10).string(message.provider);
@@ -465,6 +560,18 @@ export const QueryProviderDelegatorsRequest = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryProviderDelegatorsRequest {
+    return {
+      provider: isSet(object.provider) ? String(object.provider) : "",
+      withPending: isSet(object.withPending) ? Boolean(object.withPending) : false
+    };
+  },
+  toJSON(message: QueryProviderDelegatorsRequest): JsonSafe<QueryProviderDelegatorsRequest> {
+    const obj: any = {};
+    message.provider !== undefined && (obj.provider = message.provider);
+    message.withPending !== undefined && (obj.withPending = message.withPending);
+    return obj;
   },
   fromPartial(object: Partial<QueryProviderDelegatorsRequest>): QueryProviderDelegatorsRequest {
     const message = createBaseQueryProviderDelegatorsRequest();
@@ -504,6 +611,7 @@ export const QueryProviderDelegatorsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryProviderDelegatorsRequest.typeUrl, QueryProviderDelegatorsRequest);
 function createBaseQueryProviderDelegatorsResponse(): QueryProviderDelegatorsResponse {
   return {
     delegations: []
@@ -511,6 +619,15 @@ function createBaseQueryProviderDelegatorsResponse(): QueryProviderDelegatorsRes
 }
 export const QueryProviderDelegatorsResponse = {
   typeUrl: "/lavanet.lava.dualstaking.QueryProviderDelegatorsResponse",
+  is(o: any): o is QueryProviderDelegatorsResponse {
+    return o && (o.$typeUrl === QueryProviderDelegatorsResponse.typeUrl || Array.isArray(o.delegations) && (!o.delegations.length || Delegation.is(o.delegations[0])));
+  },
+  isSDK(o: any): o is QueryProviderDelegatorsResponseSDKType {
+    return o && (o.$typeUrl === QueryProviderDelegatorsResponse.typeUrl || Array.isArray(o.delegations) && (!o.delegations.length || Delegation.isSDK(o.delegations[0])));
+  },
+  isAmino(o: any): o is QueryProviderDelegatorsResponseAmino {
+    return o && (o.$typeUrl === QueryProviderDelegatorsResponse.typeUrl || Array.isArray(o.delegations) && (!o.delegations.length || Delegation.isAmino(o.delegations[0])));
+  },
   encode(message: QueryProviderDelegatorsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.delegations) {
       Delegation.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -533,6 +650,20 @@ export const QueryProviderDelegatorsResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryProviderDelegatorsResponse {
+    return {
+      delegations: Array.isArray(object?.delegations) ? object.delegations.map((e: any) => Delegation.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: QueryProviderDelegatorsResponse): JsonSafe<QueryProviderDelegatorsResponse> {
+    const obj: any = {};
+    if (message.delegations) {
+      obj.delegations = message.delegations.map(e => e ? Delegation.toJSON(e) : undefined);
+    } else {
+      obj.delegations = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<QueryProviderDelegatorsResponse>): QueryProviderDelegatorsResponse {
     const message = createBaseQueryProviderDelegatorsResponse();
@@ -569,6 +700,7 @@ export const QueryProviderDelegatorsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryProviderDelegatorsResponse.typeUrl, QueryProviderDelegatorsResponse);
 function createBaseQueryDelegatorRewardsRequest(): QueryDelegatorRewardsRequest {
   return {
     delegator: "",
@@ -578,6 +710,15 @@ function createBaseQueryDelegatorRewardsRequest(): QueryDelegatorRewardsRequest 
 }
 export const QueryDelegatorRewardsRequest = {
   typeUrl: "/lavanet.lava.dualstaking.QueryDelegatorRewardsRequest",
+  is(o: any): o is QueryDelegatorRewardsRequest {
+    return o && (o.$typeUrl === QueryDelegatorRewardsRequest.typeUrl || typeof o.delegator === "string" && typeof o.provider === "string" && typeof o.chainId === "string");
+  },
+  isSDK(o: any): o is QueryDelegatorRewardsRequestSDKType {
+    return o && (o.$typeUrl === QueryDelegatorRewardsRequest.typeUrl || typeof o.delegator === "string" && typeof o.provider === "string" && typeof o.chain_id === "string");
+  },
+  isAmino(o: any): o is QueryDelegatorRewardsRequestAmino {
+    return o && (o.$typeUrl === QueryDelegatorRewardsRequest.typeUrl || typeof o.delegator === "string" && typeof o.provider === "string" && typeof o.chain_id === "string");
+  },
   encode(message: QueryDelegatorRewardsRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegator !== "") {
       writer.uint32(10).string(message.delegator);
@@ -612,6 +753,20 @@ export const QueryDelegatorRewardsRequest = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryDelegatorRewardsRequest {
+    return {
+      delegator: isSet(object.delegator) ? String(object.delegator) : "",
+      provider: isSet(object.provider) ? String(object.provider) : "",
+      chainId: isSet(object.chainId) ? String(object.chainId) : ""
+    };
+  },
+  toJSON(message: QueryDelegatorRewardsRequest): JsonSafe<QueryDelegatorRewardsRequest> {
+    const obj: any = {};
+    message.delegator !== undefined && (obj.delegator = message.delegator);
+    message.provider !== undefined && (obj.provider = message.provider);
+    message.chainId !== undefined && (obj.chainId = message.chainId);
+    return obj;
   },
   fromPartial(object: Partial<QueryDelegatorRewardsRequest>): QueryDelegatorRewardsRequest {
     const message = createBaseQueryDelegatorRewardsRequest();
@@ -656,6 +811,7 @@ export const QueryDelegatorRewardsRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryDelegatorRewardsRequest.typeUrl, QueryDelegatorRewardsRequest);
 function createBaseQueryDelegatorRewardsResponse(): QueryDelegatorRewardsResponse {
   return {
     rewards: []
@@ -663,6 +819,15 @@ function createBaseQueryDelegatorRewardsResponse(): QueryDelegatorRewardsRespons
 }
 export const QueryDelegatorRewardsResponse = {
   typeUrl: "/lavanet.lava.dualstaking.QueryDelegatorRewardsResponse",
+  is(o: any): o is QueryDelegatorRewardsResponse {
+    return o && (o.$typeUrl === QueryDelegatorRewardsResponse.typeUrl || Array.isArray(o.rewards) && (!o.rewards.length || DelegatorRewardInfo.is(o.rewards[0])));
+  },
+  isSDK(o: any): o is QueryDelegatorRewardsResponseSDKType {
+    return o && (o.$typeUrl === QueryDelegatorRewardsResponse.typeUrl || Array.isArray(o.rewards) && (!o.rewards.length || DelegatorRewardInfo.isSDK(o.rewards[0])));
+  },
+  isAmino(o: any): o is QueryDelegatorRewardsResponseAmino {
+    return o && (o.$typeUrl === QueryDelegatorRewardsResponse.typeUrl || Array.isArray(o.rewards) && (!o.rewards.length || DelegatorRewardInfo.isAmino(o.rewards[0])));
+  },
   encode(message: QueryDelegatorRewardsResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.rewards) {
       DelegatorRewardInfo.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -685,6 +850,20 @@ export const QueryDelegatorRewardsResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryDelegatorRewardsResponse {
+    return {
+      rewards: Array.isArray(object?.rewards) ? object.rewards.map((e: any) => DelegatorRewardInfo.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: QueryDelegatorRewardsResponse): JsonSafe<QueryDelegatorRewardsResponse> {
+    const obj: any = {};
+    if (message.rewards) {
+      obj.rewards = message.rewards.map(e => e ? DelegatorRewardInfo.toJSON(e) : undefined);
+    } else {
+      obj.rewards = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<QueryDelegatorRewardsResponse>): QueryDelegatorRewardsResponse {
     const message = createBaseQueryDelegatorRewardsResponse();
@@ -721,6 +900,7 @@ export const QueryDelegatorRewardsResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryDelegatorRewardsResponse.typeUrl, QueryDelegatorRewardsResponse);
 function createBaseDelegatorRewardInfo(): DelegatorRewardInfo {
   return {
     provider: "",
@@ -730,6 +910,15 @@ function createBaseDelegatorRewardInfo(): DelegatorRewardInfo {
 }
 export const DelegatorRewardInfo = {
   typeUrl: "/lavanet.lava.dualstaking.DelegatorRewardInfo",
+  is(o: any): o is DelegatorRewardInfo {
+    return o && (o.$typeUrl === DelegatorRewardInfo.typeUrl || typeof o.provider === "string" && typeof o.chainId === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])));
+  },
+  isSDK(o: any): o is DelegatorRewardInfoSDKType {
+    return o && (o.$typeUrl === DelegatorRewardInfo.typeUrl || typeof o.provider === "string" && typeof o.chain_id === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])));
+  },
+  isAmino(o: any): o is DelegatorRewardInfoAmino {
+    return o && (o.$typeUrl === DelegatorRewardInfo.typeUrl || typeof o.provider === "string" && typeof o.chain_id === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])));
+  },
   encode(message: DelegatorRewardInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.provider !== "") {
       writer.uint32(10).string(message.provider);
@@ -764,6 +953,24 @@ export const DelegatorRewardInfo = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): DelegatorRewardInfo {
+    return {
+      provider: isSet(object.provider) ? String(object.provider) : "",
+      chainId: isSet(object.chainId) ? String(object.chainId) : "",
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: DelegatorRewardInfo): JsonSafe<DelegatorRewardInfo> {
+    const obj: any = {};
+    message.provider !== undefined && (obj.provider = message.provider);
+    message.chainId !== undefined && (obj.chainId = message.chainId);
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<DelegatorRewardInfo>): DelegatorRewardInfo {
     const message = createBaseDelegatorRewardInfo();
@@ -810,3 +1017,4 @@ export const DelegatorRewardInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(DelegatorRewardInfo.typeUrl, DelegatorRewardInfo);

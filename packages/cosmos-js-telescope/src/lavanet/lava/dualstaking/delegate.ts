@@ -1,6 +1,9 @@
 //@ts-nocheck
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { isSet } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface Delegation {
   /** provider receives the delegated funds */
   provider: string;
@@ -68,6 +71,15 @@ function createBaseDelegation(): Delegation {
 }
 export const Delegation = {
   typeUrl: "/lavanet.lava.dualstaking.Delegation",
+  is(o: any): o is Delegation {
+    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.provider === "string" && typeof o.chainID === "string" && typeof o.delegator === "string" && Coin.is(o.amount) && typeof o.timestamp === "bigint");
+  },
+  isSDK(o: any): o is DelegationSDKType {
+    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.provider === "string" && typeof o.chainID === "string" && typeof o.delegator === "string" && Coin.isSDK(o.amount) && typeof o.timestamp === "bigint");
+  },
+  isAmino(o: any): o is DelegationAmino {
+    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.provider === "string" && typeof o.chainID === "string" && typeof o.delegator === "string" && Coin.isAmino(o.amount) && typeof o.timestamp === "bigint");
+  },
   encode(message: Delegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.provider !== "") {
       writer.uint32(10).string(message.provider);
@@ -114,6 +126,24 @@ export const Delegation = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Delegation {
+    return {
+      provider: isSet(object.provider) ? String(object.provider) : "",
+      chainID: isSet(object.chainID) ? String(object.chainID) : "",
+      delegator: isSet(object.delegator) ? String(object.delegator) : "",
+      amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined,
+      timestamp: isSet(object.timestamp) ? BigInt(object.timestamp.toString()) : BigInt(0)
+    };
+  },
+  toJSON(message: Delegation): JsonSafe<Delegation> {
+    const obj: any = {};
+    message.provider !== undefined && (obj.provider = message.provider);
+    message.chainID !== undefined && (obj.chainID = message.chainID);
+    message.delegator !== undefined && (obj.delegator = message.delegator);
+    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    message.timestamp !== undefined && (obj.timestamp = (message.timestamp || BigInt(0)).toString());
+    return obj;
   },
   fromPartial(object: Partial<Delegation>): Delegation {
     const message = createBaseDelegation();
@@ -168,6 +198,7 @@ export const Delegation = {
     };
   }
 };
+GlobalDecoderRegistry.register(Delegation.typeUrl, Delegation);
 function createBaseDelegator(): Delegator {
   return {
     providers: []
@@ -175,6 +206,15 @@ function createBaseDelegator(): Delegator {
 }
 export const Delegator = {
   typeUrl: "/lavanet.lava.dualstaking.Delegator",
+  is(o: any): o is Delegator {
+    return o && (o.$typeUrl === Delegator.typeUrl || Array.isArray(o.providers) && (!o.providers.length || typeof o.providers[0] === "string"));
+  },
+  isSDK(o: any): o is DelegatorSDKType {
+    return o && (o.$typeUrl === Delegator.typeUrl || Array.isArray(o.providers) && (!o.providers.length || typeof o.providers[0] === "string"));
+  },
+  isAmino(o: any): o is DelegatorAmino {
+    return o && (o.$typeUrl === Delegator.typeUrl || Array.isArray(o.providers) && (!o.providers.length || typeof o.providers[0] === "string"));
+  },
   encode(message: Delegator, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.providers) {
       writer.uint32(10).string(v!);
@@ -197,6 +237,20 @@ export const Delegator = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Delegator {
+    return {
+      providers: Array.isArray(object?.providers) ? object.providers.map((e: any) => String(e)) : []
+    };
+  },
+  toJSON(message: Delegator): JsonSafe<Delegator> {
+    const obj: any = {};
+    if (message.providers) {
+      obj.providers = message.providers.map(e => e);
+    } else {
+      obj.providers = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<Delegator>): Delegator {
     const message = createBaseDelegator();
@@ -233,3 +287,4 @@ export const Delegator = {
     };
   }
 };
+GlobalDecoderRegistry.register(Delegator.typeUrl, Delegator);

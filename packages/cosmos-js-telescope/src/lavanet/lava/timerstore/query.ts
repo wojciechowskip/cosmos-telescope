@@ -1,6 +1,8 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
 export interface QueryAllTimersRequest {
   storeKey: string;
   prefix: string;
@@ -169,6 +171,15 @@ function createBaseQueryAllTimersRequest(): QueryAllTimersRequest {
 }
 export const QueryAllTimersRequest = {
   typeUrl: "/lavanet.lava.timerstore.QueryAllTimersRequest",
+  is(o: any): o is QueryAllTimersRequest {
+    return o && (o.$typeUrl === QueryAllTimersRequest.typeUrl || typeof o.storeKey === "string" && typeof o.prefix === "string");
+  },
+  isSDK(o: any): o is QueryAllTimersRequestSDKType {
+    return o && (o.$typeUrl === QueryAllTimersRequest.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string");
+  },
+  isAmino(o: any): o is QueryAllTimersRequestAmino {
+    return o && (o.$typeUrl === QueryAllTimersRequest.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string");
+  },
   encode(message: QueryAllTimersRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.storeKey !== "") {
       writer.uint32(10).string(message.storeKey);
@@ -197,6 +208,18 @@ export const QueryAllTimersRequest = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryAllTimersRequest {
+    return {
+      storeKey: isSet(object.storeKey) ? String(object.storeKey) : "",
+      prefix: isSet(object.prefix) ? String(object.prefix) : ""
+    };
+  },
+  toJSON(message: QueryAllTimersRequest): JsonSafe<QueryAllTimersRequest> {
+    const obj: any = {};
+    message.storeKey !== undefined && (obj.storeKey = message.storeKey);
+    message.prefix !== undefined && (obj.prefix = message.prefix);
+    return obj;
   },
   fromPartial(object: Partial<QueryAllTimersRequest>): QueryAllTimersRequest {
     const message = createBaseQueryAllTimersRequest();
@@ -236,6 +259,7 @@ export const QueryAllTimersRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllTimersRequest.typeUrl, QueryAllTimersRequest);
 function createBaseTimerInfo(): TimerInfo {
   return {
     blockTime: undefined,
@@ -246,6 +270,15 @@ function createBaseTimerInfo(): TimerInfo {
 }
 export const TimerInfo = {
   typeUrl: "/lavanet.lava.timerstore.TimerInfo",
+  is(o: any): o is TimerInfo {
+    return o && (o.$typeUrl === TimerInfo.typeUrl || typeof o.key === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isSDK(o: any): o is TimerInfoSDKType {
+    return o && (o.$typeUrl === TimerInfo.typeUrl || typeof o.key === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
+  isAmino(o: any): o is TimerInfoAmino {
+    return o && (o.$typeUrl === TimerInfo.typeUrl || typeof o.key === "string" && (o.data instanceof Uint8Array || typeof o.data === "string"));
+  },
   encode(message: TimerInfo, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.blockTime !== undefined) {
       writer.uint32(10).string(message.blockTime);
@@ -286,6 +319,24 @@ export const TimerInfo = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): TimerInfo {
+    return {
+      blockTime: isSet(object.blockTime) ? String(object.blockTime) : undefined,
+      blockHeight: isSet(object.blockHeight) ? BigInt(object.blockHeight.toString()) : undefined,
+      key: isSet(object.key) ? String(object.key) : "",
+      data: isSet(object.data) ? bytesFromBase64(object.data) : new Uint8Array()
+    };
+  },
+  toJSON(message: TimerInfo): JsonSafe<TimerInfo> {
+    const obj: any = {};
+    message.blockTime !== undefined && (obj.blockTime = message.blockTime);
+    if (message.blockHeight !== undefined) {
+      obj.blockHeight = message.blockHeight.toString();
+    }
+    message.key !== undefined && (obj.key = message.key);
+    message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
+    return obj;
   },
   fromPartial(object: Partial<TimerInfo>): TimerInfo {
     const message = createBaseTimerInfo();
@@ -335,6 +386,7 @@ export const TimerInfo = {
     };
   }
 };
+GlobalDecoderRegistry.register(TimerInfo.typeUrl, TimerInfo);
 function createBaseQueryAllTimersResponse(): QueryAllTimersResponse {
   return {
     blockTimeTimers: [],
@@ -344,6 +396,15 @@ function createBaseQueryAllTimersResponse(): QueryAllTimersResponse {
 }
 export const QueryAllTimersResponse = {
   typeUrl: "/lavanet.lava.timerstore.QueryAllTimersResponse",
+  is(o: any): o is QueryAllTimersResponse {
+    return o && (o.$typeUrl === QueryAllTimersResponse.typeUrl || Array.isArray(o.blockTimeTimers) && (!o.blockTimeTimers.length || TimerInfo.is(o.blockTimeTimers[0])) && Array.isArray(o.blockHeightTimers) && (!o.blockHeightTimers.length || TimerInfo.is(o.blockHeightTimers[0])) && typeof o.tick === "string");
+  },
+  isSDK(o: any): o is QueryAllTimersResponseSDKType {
+    return o && (o.$typeUrl === QueryAllTimersResponse.typeUrl || Array.isArray(o.blockTimeTimers) && (!o.blockTimeTimers.length || TimerInfo.isSDK(o.blockTimeTimers[0])) && Array.isArray(o.blockHeightTimers) && (!o.blockHeightTimers.length || TimerInfo.isSDK(o.blockHeightTimers[0])) && typeof o.tick === "string");
+  },
+  isAmino(o: any): o is QueryAllTimersResponseAmino {
+    return o && (o.$typeUrl === QueryAllTimersResponse.typeUrl || Array.isArray(o.blockTimeTimers) && (!o.blockTimeTimers.length || TimerInfo.isAmino(o.blockTimeTimers[0])) && Array.isArray(o.blockHeightTimers) && (!o.blockHeightTimers.length || TimerInfo.isAmino(o.blockHeightTimers[0])) && typeof o.tick === "string");
+  },
   encode(message: QueryAllTimersResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.blockTimeTimers) {
       TimerInfo.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -378,6 +439,28 @@ export const QueryAllTimersResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryAllTimersResponse {
+    return {
+      blockTimeTimers: Array.isArray(object?.blockTimeTimers) ? object.blockTimeTimers.map((e: any) => TimerInfo.fromJSON(e)) : [],
+      blockHeightTimers: Array.isArray(object?.blockHeightTimers) ? object.blockHeightTimers.map((e: any) => TimerInfo.fromJSON(e)) : [],
+      tick: isSet(object.tick) ? String(object.tick) : ""
+    };
+  },
+  toJSON(message: QueryAllTimersResponse): JsonSafe<QueryAllTimersResponse> {
+    const obj: any = {};
+    if (message.blockTimeTimers) {
+      obj.blockTimeTimers = message.blockTimeTimers.map(e => e ? TimerInfo.toJSON(e) : undefined);
+    } else {
+      obj.blockTimeTimers = [];
+    }
+    if (message.blockHeightTimers) {
+      obj.blockHeightTimers = message.blockHeightTimers.map(e => e ? TimerInfo.toJSON(e) : undefined);
+    } else {
+      obj.blockHeightTimers = [];
+    }
+    message.tick !== undefined && (obj.tick = message.tick);
+    return obj;
   },
   fromPartial(object: Partial<QueryAllTimersResponse>): QueryAllTimersResponse {
     const message = createBaseQueryAllTimersResponse();
@@ -426,11 +509,21 @@ export const QueryAllTimersResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryAllTimersResponse.typeUrl, QueryAllTimersResponse);
 function createBaseQueryStoreKeysRequest(): QueryStoreKeysRequest {
   return {};
 }
 export const QueryStoreKeysRequest = {
   typeUrl: "/lavanet.lava.timerstore.QueryStoreKeysRequest",
+  is(o: any): o is QueryStoreKeysRequest {
+    return o && o.$typeUrl === QueryStoreKeysRequest.typeUrl;
+  },
+  isSDK(o: any): o is QueryStoreKeysRequestSDKType {
+    return o && o.$typeUrl === QueryStoreKeysRequest.typeUrl;
+  },
+  isAmino(o: any): o is QueryStoreKeysRequestAmino {
+    return o && o.$typeUrl === QueryStoreKeysRequest.typeUrl;
+  },
   encode(_: QueryStoreKeysRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -447,6 +540,13 @@ export const QueryStoreKeysRequest = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): QueryStoreKeysRequest {
+    return {};
+  },
+  toJSON(_: QueryStoreKeysRequest): JsonSafe<QueryStoreKeysRequest> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<QueryStoreKeysRequest>): QueryStoreKeysRequest {
     const message = createBaseQueryStoreKeysRequest();
@@ -476,6 +576,7 @@ export const QueryStoreKeysRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryStoreKeysRequest.typeUrl, QueryStoreKeysRequest);
 function createBaseStoreKeyAndPrefix(): StoreKeyAndPrefix {
   return {
     storeKey: "",
@@ -484,6 +585,15 @@ function createBaseStoreKeyAndPrefix(): StoreKeyAndPrefix {
 }
 export const StoreKeyAndPrefix = {
   typeUrl: "/lavanet.lava.timerstore.StoreKeyAndPrefix",
+  is(o: any): o is StoreKeyAndPrefix {
+    return o && (o.$typeUrl === StoreKeyAndPrefix.typeUrl || typeof o.storeKey === "string" && typeof o.prefix === "string");
+  },
+  isSDK(o: any): o is StoreKeyAndPrefixSDKType {
+    return o && (o.$typeUrl === StoreKeyAndPrefix.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string");
+  },
+  isAmino(o: any): o is StoreKeyAndPrefixAmino {
+    return o && (o.$typeUrl === StoreKeyAndPrefix.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string");
+  },
   encode(message: StoreKeyAndPrefix, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.storeKey !== "") {
       writer.uint32(10).string(message.storeKey);
@@ -512,6 +622,18 @@ export const StoreKeyAndPrefix = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): StoreKeyAndPrefix {
+    return {
+      storeKey: isSet(object.storeKey) ? String(object.storeKey) : "",
+      prefix: isSet(object.prefix) ? String(object.prefix) : ""
+    };
+  },
+  toJSON(message: StoreKeyAndPrefix): JsonSafe<StoreKeyAndPrefix> {
+    const obj: any = {};
+    message.storeKey !== undefined && (obj.storeKey = message.storeKey);
+    message.prefix !== undefined && (obj.prefix = message.prefix);
+    return obj;
   },
   fromPartial(object: Partial<StoreKeyAndPrefix>): StoreKeyAndPrefix {
     const message = createBaseStoreKeyAndPrefix();
@@ -551,6 +673,7 @@ export const StoreKeyAndPrefix = {
     };
   }
 };
+GlobalDecoderRegistry.register(StoreKeyAndPrefix.typeUrl, StoreKeyAndPrefix);
 function createBaseQueryStoreKeysResponse(): QueryStoreKeysResponse {
   return {
     keys: []
@@ -558,6 +681,15 @@ function createBaseQueryStoreKeysResponse(): QueryStoreKeysResponse {
 }
 export const QueryStoreKeysResponse = {
   typeUrl: "/lavanet.lava.timerstore.QueryStoreKeysResponse",
+  is(o: any): o is QueryStoreKeysResponse {
+    return o && (o.$typeUrl === QueryStoreKeysResponse.typeUrl || Array.isArray(o.keys) && (!o.keys.length || StoreKeyAndPrefix.is(o.keys[0])));
+  },
+  isSDK(o: any): o is QueryStoreKeysResponseSDKType {
+    return o && (o.$typeUrl === QueryStoreKeysResponse.typeUrl || Array.isArray(o.keys) && (!o.keys.length || StoreKeyAndPrefix.isSDK(o.keys[0])));
+  },
+  isAmino(o: any): o is QueryStoreKeysResponseAmino {
+    return o && (o.$typeUrl === QueryStoreKeysResponse.typeUrl || Array.isArray(o.keys) && (!o.keys.length || StoreKeyAndPrefix.isAmino(o.keys[0])));
+  },
   encode(message: QueryStoreKeysResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.keys) {
       StoreKeyAndPrefix.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -580,6 +712,20 @@ export const QueryStoreKeysResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryStoreKeysResponse {
+    return {
+      keys: Array.isArray(object?.keys) ? object.keys.map((e: any) => StoreKeyAndPrefix.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: QueryStoreKeysResponse): JsonSafe<QueryStoreKeysResponse> {
+    const obj: any = {};
+    if (message.keys) {
+      obj.keys = message.keys.map(e => e ? StoreKeyAndPrefix.toJSON(e) : undefined);
+    } else {
+      obj.keys = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<QueryStoreKeysResponse>): QueryStoreKeysResponse {
     const message = createBaseQueryStoreKeysResponse();
@@ -616,6 +762,7 @@ export const QueryStoreKeysResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryStoreKeysResponse.typeUrl, QueryStoreKeysResponse);
 function createBaseQueryNextRequest(): QueryNextRequest {
   return {
     storeKey: "",
@@ -624,6 +771,15 @@ function createBaseQueryNextRequest(): QueryNextRequest {
 }
 export const QueryNextRequest = {
   typeUrl: "/lavanet.lava.timerstore.QueryNextRequest",
+  is(o: any): o is QueryNextRequest {
+    return o && (o.$typeUrl === QueryNextRequest.typeUrl || typeof o.storeKey === "string" && typeof o.prefix === "string");
+  },
+  isSDK(o: any): o is QueryNextRequestSDKType {
+    return o && (o.$typeUrl === QueryNextRequest.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string");
+  },
+  isAmino(o: any): o is QueryNextRequestAmino {
+    return o && (o.$typeUrl === QueryNextRequest.typeUrl || typeof o.store_key === "string" && typeof o.prefix === "string");
+  },
   encode(message: QueryNextRequest, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.storeKey !== "") {
       writer.uint32(10).string(message.storeKey);
@@ -652,6 +808,18 @@ export const QueryNextRequest = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryNextRequest {
+    return {
+      storeKey: isSet(object.storeKey) ? String(object.storeKey) : "",
+      prefix: isSet(object.prefix) ? String(object.prefix) : ""
+    };
+  },
+  toJSON(message: QueryNextRequest): JsonSafe<QueryNextRequest> {
+    const obj: any = {};
+    message.storeKey !== undefined && (obj.storeKey = message.storeKey);
+    message.prefix !== undefined && (obj.prefix = message.prefix);
+    return obj;
   },
   fromPartial(object: Partial<QueryNextRequest>): QueryNextRequest {
     const message = createBaseQueryNextRequest();
@@ -691,6 +859,7 @@ export const QueryNextRequest = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryNextRequest.typeUrl, QueryNextRequest);
 function createBaseQueryNextResponse(): QueryNextResponse {
   return {
     nextBlockHeight: BigInt(0),
@@ -700,6 +869,15 @@ function createBaseQueryNextResponse(): QueryNextResponse {
 }
 export const QueryNextResponse = {
   typeUrl: "/lavanet.lava.timerstore.QueryNextResponse",
+  is(o: any): o is QueryNextResponse {
+    return o && (o.$typeUrl === QueryNextResponse.typeUrl || typeof o.nextBlockHeight === "bigint" && typeof o.nextBlockTime === "string" && typeof o.tick === "string");
+  },
+  isSDK(o: any): o is QueryNextResponseSDKType {
+    return o && (o.$typeUrl === QueryNextResponse.typeUrl || typeof o.nextBlockHeight === "bigint" && typeof o.nextBlockTime === "string" && typeof o.tick === "string");
+  },
+  isAmino(o: any): o is QueryNextResponseAmino {
+    return o && (o.$typeUrl === QueryNextResponse.typeUrl || typeof o.nextBlockHeight === "bigint" && typeof o.nextBlockTime === "string" && typeof o.tick === "string");
+  },
   encode(message: QueryNextResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.nextBlockHeight !== BigInt(0)) {
       writer.uint32(8).uint64(message.nextBlockHeight);
@@ -734,6 +912,20 @@ export const QueryNextResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): QueryNextResponse {
+    return {
+      nextBlockHeight: isSet(object.nextBlockHeight) ? BigInt(object.nextBlockHeight.toString()) : BigInt(0),
+      nextBlockTime: isSet(object.nextBlockTime) ? String(object.nextBlockTime) : "",
+      tick: isSet(object.tick) ? String(object.tick) : ""
+    };
+  },
+  toJSON(message: QueryNextResponse): JsonSafe<QueryNextResponse> {
+    const obj: any = {};
+    message.nextBlockHeight !== undefined && (obj.nextBlockHeight = (message.nextBlockHeight || BigInt(0)).toString());
+    message.nextBlockTime !== undefined && (obj.nextBlockTime = message.nextBlockTime);
+    message.tick !== undefined && (obj.tick = message.tick);
+    return obj;
   },
   fromPartial(object: Partial<QueryNextResponse>): QueryNextResponse {
     const message = createBaseQueryNextResponse();
@@ -778,3 +970,4 @@ export const QueryNextResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(QueryNextResponse.typeUrl, QueryNextResponse);

@@ -5,6 +5,9 @@ import { GenesisStateAmino as GenesisState1Amino } from "../fixationstore/fixati
 import { GenesisStateSDKType as GenesisState1SDKType } from "../fixationstore/fixation";
 import { DelegatorReward, DelegatorRewardAmino, DelegatorRewardSDKType } from "./delegator_reward";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { isSet } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** GenesisState defines the dualstaking module's genesis state. */
 export interface GenesisState {
   params: Params;
@@ -44,6 +47,15 @@ function createBaseGenesisState(): GenesisState {
 }
 export const GenesisState = {
   typeUrl: "/lavanet.lava.dualstaking.GenesisState",
+  is(o: any): o is GenesisState {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.is(o.params) && GenesisState1.is(o.delegationsFS) && GenesisState1.is(o.delegatorsFS) && Array.isArray(o.delegatorRewardList) && (!o.delegatorRewardList.length || DelegatorReward.is(o.delegatorRewardList[0])));
+  },
+  isSDK(o: any): o is GenesisStateSDKType {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isSDK(o.params) && GenesisState1.isSDK(o.delegationsFS) && GenesisState1.isSDK(o.delegatorsFS) && Array.isArray(o.delegator_reward_list) && (!o.delegator_reward_list.length || DelegatorReward.isSDK(o.delegator_reward_list[0])));
+  },
+  isAmino(o: any): o is GenesisStateAmino {
+    return o && (o.$typeUrl === GenesisState.typeUrl || Params.isAmino(o.params) && GenesisState1.isAmino(o.delegationsFS) && GenesisState1.isAmino(o.delegatorsFS) && Array.isArray(o.delegator_reward_list) && (!o.delegator_reward_list.length || DelegatorReward.isAmino(o.delegator_reward_list[0])));
+  },
   encode(message: GenesisState, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(10).fork()).ldelim();
@@ -84,6 +96,26 @@ export const GenesisState = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): GenesisState {
+    return {
+      params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
+      delegationsFS: isSet(object.delegationsFS) ? GenesisState1.fromJSON(object.delegationsFS) : undefined,
+      delegatorsFS: isSet(object.delegatorsFS) ? GenesisState1.fromJSON(object.delegatorsFS) : undefined,
+      delegatorRewardList: Array.isArray(object?.delegatorRewardList) ? object.delegatorRewardList.map((e: any) => DelegatorReward.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: GenesisState): JsonSafe<GenesisState> {
+    const obj: any = {};
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    message.delegationsFS !== undefined && (obj.delegationsFS = message.delegationsFS ? GenesisState1.toJSON(message.delegationsFS) : undefined);
+    message.delegatorsFS !== undefined && (obj.delegatorsFS = message.delegatorsFS ? GenesisState1.toJSON(message.delegatorsFS) : undefined);
+    if (message.delegatorRewardList) {
+      obj.delegatorRewardList = message.delegatorRewardList.map(e => e ? DelegatorReward.toJSON(e) : undefined);
+    } else {
+      obj.delegatorRewardList = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<GenesisState>): GenesisState {
     const message = createBaseGenesisState();
@@ -135,3 +167,4 @@ export const GenesisState = {
     };
   }
 };
+GlobalDecoderRegistry.register(GenesisState.typeUrl, GenesisState);

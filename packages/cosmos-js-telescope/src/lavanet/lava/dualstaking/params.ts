@@ -1,6 +1,9 @@
 //@ts-nocheck
 import { Coin, CoinAmino, CoinSDKType } from "../../../cosmos/base/v1beta1/coin";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { isSet } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
 /** Params defines the parameters for the module. */
 export interface Params {
   /** min self delegation for provider */
@@ -50,6 +53,15 @@ function createBaseParams(): Params {
 }
 export const Params = {
   typeUrl: "/lavanet.lava.dualstaking.Params",
+  is(o: any): o is Params {
+    return o && (o.$typeUrl === Params.typeUrl || Coin.is(o.minSelfDelegation));
+  },
+  isSDK(o: any): o is ParamsSDKType {
+    return o && (o.$typeUrl === Params.typeUrl || Coin.isSDK(o.min_self_delegation));
+  },
+  isAmino(o: any): o is ParamsAmino {
+    return o && (o.$typeUrl === Params.typeUrl || Coin.isAmino(o.min_self_delegation));
+  },
   encode(message: Params, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.minSelfDelegation !== undefined) {
       Coin.encode(message.minSelfDelegation, writer.uint32(10).fork()).ldelim();
@@ -72,6 +84,16 @@ export const Params = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Params {
+    return {
+      minSelfDelegation: isSet(object.minSelfDelegation) ? Coin.fromJSON(object.minSelfDelegation) : undefined
+    };
+  },
+  toJSON(message: Params): JsonSafe<Params> {
+    const obj: any = {};
+    message.minSelfDelegation !== undefined && (obj.minSelfDelegation = message.minSelfDelegation ? Coin.toJSON(message.minSelfDelegation) : undefined);
+    return obj;
   },
   fromPartial(object: Partial<Params>): Params {
     const message = createBaseParams();
@@ -106,6 +128,7 @@ export const Params = {
     };
   }
 };
+GlobalDecoderRegistry.register(Params.typeUrl, Params);
 function createBaseSlashedValidators(): SlashedValidators {
   return {
     validators: []
@@ -113,6 +136,15 @@ function createBaseSlashedValidators(): SlashedValidators {
 }
 export const SlashedValidators = {
   typeUrl: "/lavanet.lava.dualstaking.SlashedValidators",
+  is(o: any): o is SlashedValidators {
+    return o && (o.$typeUrl === SlashedValidators.typeUrl || Array.isArray(o.validators) && (!o.validators.length || typeof o.validators[0] === "string"));
+  },
+  isSDK(o: any): o is SlashedValidatorsSDKType {
+    return o && (o.$typeUrl === SlashedValidators.typeUrl || Array.isArray(o.validators) && (!o.validators.length || typeof o.validators[0] === "string"));
+  },
+  isAmino(o: any): o is SlashedValidatorsAmino {
+    return o && (o.$typeUrl === SlashedValidators.typeUrl || Array.isArray(o.validators) && (!o.validators.length || typeof o.validators[0] === "string"));
+  },
   encode(message: SlashedValidators, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     for (const v of message.validators) {
       writer.uint32(10).string(v!);
@@ -135,6 +167,20 @@ export const SlashedValidators = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): SlashedValidators {
+    return {
+      validators: Array.isArray(object?.validators) ? object.validators.map((e: any) => String(e)) : []
+    };
+  },
+  toJSON(message: SlashedValidators): JsonSafe<SlashedValidators> {
+    const obj: any = {};
+    if (message.validators) {
+      obj.validators = message.validators.map(e => e);
+    } else {
+      obj.validators = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<SlashedValidators>): SlashedValidators {
     const message = createBaseSlashedValidators();
@@ -171,3 +217,4 @@ export const SlashedValidators = {
     };
   }
 };
+GlobalDecoderRegistry.register(SlashedValidators.typeUrl, SlashedValidators);

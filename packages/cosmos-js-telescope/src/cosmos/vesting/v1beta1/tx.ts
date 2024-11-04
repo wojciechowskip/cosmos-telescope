@@ -2,6 +2,9 @@
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { Period, PeriodAmino, PeriodSDKType } from "./vesting";
 import { BinaryReader, BinaryWriter } from "../../../binary";
+import { isSet } from "../../../helpers";
+import { JsonSafe } from "../../../json-safe";
+import { GlobalDecoderRegistry } from "../../../registry";
 /**
  * MsgCreateVestingAccount defines a message that enables creating a vesting
  * account.
@@ -178,6 +181,16 @@ function createBaseMsgCreateVestingAccount(): MsgCreateVestingAccount {
 }
 export const MsgCreateVestingAccount = {
   typeUrl: "/cosmos.vesting.v1beta1.MsgCreateVestingAccount",
+  aminoType: "cosmos-sdk/MsgCreateVestingAccount",
+  is(o: any): o is MsgCreateVestingAccount {
+    return o && (o.$typeUrl === MsgCreateVestingAccount.typeUrl || typeof o.fromAddress === "string" && typeof o.toAddress === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])) && typeof o.endTime === "bigint" && typeof o.delayed === "boolean");
+  },
+  isSDK(o: any): o is MsgCreateVestingAccountSDKType {
+    return o && (o.$typeUrl === MsgCreateVestingAccount.typeUrl || typeof o.from_address === "string" && typeof o.to_address === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])) && typeof o.end_time === "bigint" && typeof o.delayed === "boolean");
+  },
+  isAmino(o: any): o is MsgCreateVestingAccountAmino {
+    return o && (o.$typeUrl === MsgCreateVestingAccount.typeUrl || typeof o.from_address === "string" && typeof o.to_address === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])) && typeof o.end_time === "bigint" && typeof o.delayed === "boolean");
+  },
   encode(message: MsgCreateVestingAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.fromAddress !== "") {
       writer.uint32(10).string(message.fromAddress);
@@ -224,6 +237,28 @@ export const MsgCreateVestingAccount = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): MsgCreateVestingAccount {
+    return {
+      fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
+      toAddress: isSet(object.toAddress) ? String(object.toAddress) : "",
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : [],
+      endTime: isSet(object.endTime) ? BigInt(object.endTime.toString()) : BigInt(0),
+      delayed: isSet(object.delayed) ? Boolean(object.delayed) : false
+    };
+  },
+  toJSON(message: MsgCreateVestingAccount): JsonSafe<MsgCreateVestingAccount> {
+    const obj: any = {};
+    message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
+    message.toAddress !== undefined && (obj.toAddress = message.toAddress);
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    message.endTime !== undefined && (obj.endTime = (message.endTime || BigInt(0)).toString());
+    message.delayed !== undefined && (obj.delayed = message.delayed);
+    return obj;
   },
   fromPartial(object: Partial<MsgCreateVestingAccount>): MsgCreateVestingAccount {
     const message = createBaseMsgCreateVestingAccount();
@@ -286,11 +321,23 @@ export const MsgCreateVestingAccount = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreateVestingAccount.typeUrl, MsgCreateVestingAccount);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCreateVestingAccount.aminoType, MsgCreateVestingAccount.typeUrl);
 function createBaseMsgCreateVestingAccountResponse(): MsgCreateVestingAccountResponse {
   return {};
 }
 export const MsgCreateVestingAccountResponse = {
   typeUrl: "/cosmos.vesting.v1beta1.MsgCreateVestingAccountResponse",
+  aminoType: "cosmos-sdk/MsgCreateVestingAccountResponse",
+  is(o: any): o is MsgCreateVestingAccountResponse {
+    return o && o.$typeUrl === MsgCreateVestingAccountResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgCreateVestingAccountResponseSDKType {
+    return o && o.$typeUrl === MsgCreateVestingAccountResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgCreateVestingAccountResponseAmino {
+    return o && o.$typeUrl === MsgCreateVestingAccountResponse.typeUrl;
+  },
   encode(_: MsgCreateVestingAccountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -307,6 +354,13 @@ export const MsgCreateVestingAccountResponse = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): MsgCreateVestingAccountResponse {
+    return {};
+  },
+  toJSON(_: MsgCreateVestingAccountResponse): JsonSafe<MsgCreateVestingAccountResponse> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<MsgCreateVestingAccountResponse>): MsgCreateVestingAccountResponse {
     const message = createBaseMsgCreateVestingAccountResponse();
@@ -342,6 +396,8 @@ export const MsgCreateVestingAccountResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreateVestingAccountResponse.typeUrl, MsgCreateVestingAccountResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCreateVestingAccountResponse.aminoType, MsgCreateVestingAccountResponse.typeUrl);
 function createBaseMsgCreatePermanentLockedAccount(): MsgCreatePermanentLockedAccount {
   return {
     fromAddress: "",
@@ -351,6 +407,16 @@ function createBaseMsgCreatePermanentLockedAccount(): MsgCreatePermanentLockedAc
 }
 export const MsgCreatePermanentLockedAccount = {
   typeUrl: "/cosmos.vesting.v1beta1.MsgCreatePermanentLockedAccount",
+  aminoType: "cosmos-sdk/MsgCreatePermanentLockedAccount",
+  is(o: any): o is MsgCreatePermanentLockedAccount {
+    return o && (o.$typeUrl === MsgCreatePermanentLockedAccount.typeUrl || typeof o.fromAddress === "string" && typeof o.toAddress === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])));
+  },
+  isSDK(o: any): o is MsgCreatePermanentLockedAccountSDKType {
+    return o && (o.$typeUrl === MsgCreatePermanentLockedAccount.typeUrl || typeof o.from_address === "string" && typeof o.to_address === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])));
+  },
+  isAmino(o: any): o is MsgCreatePermanentLockedAccountAmino {
+    return o && (o.$typeUrl === MsgCreatePermanentLockedAccount.typeUrl || typeof o.from_address === "string" && typeof o.to_address === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])));
+  },
   encode(message: MsgCreatePermanentLockedAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.fromAddress !== "") {
       writer.uint32(10).string(message.fromAddress);
@@ -385,6 +451,24 @@ export const MsgCreatePermanentLockedAccount = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): MsgCreatePermanentLockedAccount {
+    return {
+      fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
+      toAddress: isSet(object.toAddress) ? String(object.toAddress) : "",
+      amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: MsgCreatePermanentLockedAccount): JsonSafe<MsgCreatePermanentLockedAccount> {
+    const obj: any = {};
+    message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
+    message.toAddress !== undefined && (obj.toAddress = message.toAddress);
+    if (message.amount) {
+      obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
+    } else {
+      obj.amount = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<MsgCreatePermanentLockedAccount>): MsgCreatePermanentLockedAccount {
     const message = createBaseMsgCreatePermanentLockedAccount();
@@ -437,11 +521,23 @@ export const MsgCreatePermanentLockedAccount = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreatePermanentLockedAccount.typeUrl, MsgCreatePermanentLockedAccount);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCreatePermanentLockedAccount.aminoType, MsgCreatePermanentLockedAccount.typeUrl);
 function createBaseMsgCreatePermanentLockedAccountResponse(): MsgCreatePermanentLockedAccountResponse {
   return {};
 }
 export const MsgCreatePermanentLockedAccountResponse = {
   typeUrl: "/cosmos.vesting.v1beta1.MsgCreatePermanentLockedAccountResponse",
+  aminoType: "cosmos-sdk/MsgCreatePermanentLockedAccountResponse",
+  is(o: any): o is MsgCreatePermanentLockedAccountResponse {
+    return o && o.$typeUrl === MsgCreatePermanentLockedAccountResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgCreatePermanentLockedAccountResponseSDKType {
+    return o && o.$typeUrl === MsgCreatePermanentLockedAccountResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgCreatePermanentLockedAccountResponseAmino {
+    return o && o.$typeUrl === MsgCreatePermanentLockedAccountResponse.typeUrl;
+  },
   encode(_: MsgCreatePermanentLockedAccountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -458,6 +554,13 @@ export const MsgCreatePermanentLockedAccountResponse = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): MsgCreatePermanentLockedAccountResponse {
+    return {};
+  },
+  toJSON(_: MsgCreatePermanentLockedAccountResponse): JsonSafe<MsgCreatePermanentLockedAccountResponse> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<MsgCreatePermanentLockedAccountResponse>): MsgCreatePermanentLockedAccountResponse {
     const message = createBaseMsgCreatePermanentLockedAccountResponse();
@@ -493,6 +596,8 @@ export const MsgCreatePermanentLockedAccountResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreatePermanentLockedAccountResponse.typeUrl, MsgCreatePermanentLockedAccountResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCreatePermanentLockedAccountResponse.aminoType, MsgCreatePermanentLockedAccountResponse.typeUrl);
 function createBaseMsgCreatePeriodicVestingAccount(): MsgCreatePeriodicVestingAccount {
   return {
     fromAddress: "",
@@ -503,6 +608,16 @@ function createBaseMsgCreatePeriodicVestingAccount(): MsgCreatePeriodicVestingAc
 }
 export const MsgCreatePeriodicVestingAccount = {
   typeUrl: "/cosmos.vesting.v1beta1.MsgCreatePeriodicVestingAccount",
+  aminoType: "cosmos-sdk/MsgCreatePeriodicVestingAccount",
+  is(o: any): o is MsgCreatePeriodicVestingAccount {
+    return o && (o.$typeUrl === MsgCreatePeriodicVestingAccount.typeUrl || typeof o.fromAddress === "string" && typeof o.toAddress === "string" && typeof o.startTime === "bigint" && Array.isArray(o.vestingPeriods) && (!o.vestingPeriods.length || Period.is(o.vestingPeriods[0])));
+  },
+  isSDK(o: any): o is MsgCreatePeriodicVestingAccountSDKType {
+    return o && (o.$typeUrl === MsgCreatePeriodicVestingAccount.typeUrl || typeof o.from_address === "string" && typeof o.to_address === "string" && typeof o.start_time === "bigint" && Array.isArray(o.vesting_periods) && (!o.vesting_periods.length || Period.isSDK(o.vesting_periods[0])));
+  },
+  isAmino(o: any): o is MsgCreatePeriodicVestingAccountAmino {
+    return o && (o.$typeUrl === MsgCreatePeriodicVestingAccount.typeUrl || typeof o.from_address === "string" && typeof o.to_address === "string" && typeof o.start_time === "bigint" && Array.isArray(o.vesting_periods) && (!o.vesting_periods.length || Period.isAmino(o.vesting_periods[0])));
+  },
   encode(message: MsgCreatePeriodicVestingAccount, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.fromAddress !== "") {
       writer.uint32(10).string(message.fromAddress);
@@ -543,6 +658,26 @@ export const MsgCreatePeriodicVestingAccount = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): MsgCreatePeriodicVestingAccount {
+    return {
+      fromAddress: isSet(object.fromAddress) ? String(object.fromAddress) : "",
+      toAddress: isSet(object.toAddress) ? String(object.toAddress) : "",
+      startTime: isSet(object.startTime) ? BigInt(object.startTime.toString()) : BigInt(0),
+      vestingPeriods: Array.isArray(object?.vestingPeriods) ? object.vestingPeriods.map((e: any) => Period.fromJSON(e)) : []
+    };
+  },
+  toJSON(message: MsgCreatePeriodicVestingAccount): JsonSafe<MsgCreatePeriodicVestingAccount> {
+    const obj: any = {};
+    message.fromAddress !== undefined && (obj.fromAddress = message.fromAddress);
+    message.toAddress !== undefined && (obj.toAddress = message.toAddress);
+    message.startTime !== undefined && (obj.startTime = (message.startTime || BigInt(0)).toString());
+    if (message.vestingPeriods) {
+      obj.vestingPeriods = message.vestingPeriods.map(e => e ? Period.toJSON(e) : undefined);
+    } else {
+      obj.vestingPeriods = [];
+    }
+    return obj;
   },
   fromPartial(object: Partial<MsgCreatePeriodicVestingAccount>): MsgCreatePeriodicVestingAccount {
     const message = createBaseMsgCreatePeriodicVestingAccount();
@@ -600,11 +735,23 @@ export const MsgCreatePeriodicVestingAccount = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreatePeriodicVestingAccount.typeUrl, MsgCreatePeriodicVestingAccount);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCreatePeriodicVestingAccount.aminoType, MsgCreatePeriodicVestingAccount.typeUrl);
 function createBaseMsgCreatePeriodicVestingAccountResponse(): MsgCreatePeriodicVestingAccountResponse {
   return {};
 }
 export const MsgCreatePeriodicVestingAccountResponse = {
   typeUrl: "/cosmos.vesting.v1beta1.MsgCreatePeriodicVestingAccountResponse",
+  aminoType: "cosmos-sdk/MsgCreatePeriodicVestingAccountResponse",
+  is(o: any): o is MsgCreatePeriodicVestingAccountResponse {
+    return o && o.$typeUrl === MsgCreatePeriodicVestingAccountResponse.typeUrl;
+  },
+  isSDK(o: any): o is MsgCreatePeriodicVestingAccountResponseSDKType {
+    return o && o.$typeUrl === MsgCreatePeriodicVestingAccountResponse.typeUrl;
+  },
+  isAmino(o: any): o is MsgCreatePeriodicVestingAccountResponseAmino {
+    return o && o.$typeUrl === MsgCreatePeriodicVestingAccountResponse.typeUrl;
+  },
   encode(_: MsgCreatePeriodicVestingAccountResponse, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     return writer;
   },
@@ -621,6 +768,13 @@ export const MsgCreatePeriodicVestingAccountResponse = {
       }
     }
     return message;
+  },
+  fromJSON(_: any): MsgCreatePeriodicVestingAccountResponse {
+    return {};
+  },
+  toJSON(_: MsgCreatePeriodicVestingAccountResponse): JsonSafe<MsgCreatePeriodicVestingAccountResponse> {
+    const obj: any = {};
+    return obj;
   },
   fromPartial(_: Partial<MsgCreatePeriodicVestingAccountResponse>): MsgCreatePeriodicVestingAccountResponse {
     const message = createBaseMsgCreatePeriodicVestingAccountResponse();
@@ -656,3 +810,5 @@ export const MsgCreatePeriodicVestingAccountResponse = {
     };
   }
 };
+GlobalDecoderRegistry.register(MsgCreatePeriodicVestingAccountResponse.typeUrl, MsgCreatePeriodicVestingAccountResponse);
+GlobalDecoderRegistry.registerAminoProtoMapping(MsgCreatePeriodicVestingAccountResponse.aminoType, MsgCreatePeriodicVestingAccountResponse.typeUrl);

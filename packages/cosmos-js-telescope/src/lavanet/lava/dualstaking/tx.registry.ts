@@ -60,6 +60,58 @@ export const MessageComposer = {
       };
     }
   },
+  toJSON: {
+    delegate(value: MsgDelegate) {
+      return {
+        typeUrl: "/lavanet.lava.dualstaking.MsgDelegate",
+        value: MsgDelegate.toJSON(value)
+      };
+    },
+    redelegate(value: MsgRedelegate) {
+      return {
+        typeUrl: "/lavanet.lava.dualstaking.MsgRedelegate",
+        value: MsgRedelegate.toJSON(value)
+      };
+    },
+    unbond(value: MsgUnbond) {
+      return {
+        typeUrl: "/lavanet.lava.dualstaking.MsgUnbond",
+        value: MsgUnbond.toJSON(value)
+      };
+    },
+    claimRewards(value: MsgClaimRewards) {
+      return {
+        typeUrl: "/lavanet.lava.dualstaking.MsgClaimRewards",
+        value: MsgClaimRewards.toJSON(value)
+      };
+    }
+  },
+  fromJSON: {
+    delegate(value: any) {
+      return {
+        typeUrl: "/lavanet.lava.dualstaking.MsgDelegate",
+        value: MsgDelegate.fromJSON(value)
+      };
+    },
+    redelegate(value: any) {
+      return {
+        typeUrl: "/lavanet.lava.dualstaking.MsgRedelegate",
+        value: MsgRedelegate.fromJSON(value)
+      };
+    },
+    unbond(value: any) {
+      return {
+        typeUrl: "/lavanet.lava.dualstaking.MsgUnbond",
+        value: MsgUnbond.fromJSON(value)
+      };
+    },
+    claimRewards(value: any) {
+      return {
+        typeUrl: "/lavanet.lava.dualstaking.MsgClaimRewards",
+        value: MsgClaimRewards.fromJSON(value)
+      };
+    }
+  },
   fromPartial: {
     delegate(value: MsgDelegate) {
       return {

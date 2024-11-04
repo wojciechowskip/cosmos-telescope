@@ -1,5 +1,7 @@
 //@ts-nocheck
 import { BinaryReader, BinaryWriter } from "../../binary";
+import { isSet, bytesFromBase64, base64FromBytes } from "../../helpers";
+import { JsonSafe } from "../../json-safe";
 /**
  * `Any` contains an arbitrary serialized protocol buffer message along with a
  * URL that describes the type of the serialized message.
@@ -334,6 +336,15 @@ function createBaseAny(): Any {
 }
 export const Any = {
   typeUrl: "/google.protobuf.Any",
+  is(o: any): o is Any {
+    return o && (o.$typeUrl === Any.typeUrl || typeof o.typeUrl === "string" && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
+  isSDK(o: any): o is AnySDKType {
+    return o && (o.$typeUrl === Any.typeUrl || typeof o.type_url === "string" && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
+  isAmino(o: any): o is AnyAmino {
+    return o && (o.$typeUrl === Any.typeUrl || typeof o.type === "string" && (o.value instanceof Uint8Array || typeof o.value === "string"));
+  },
   encode(message: Any, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.typeUrl !== "") {
       writer.uint32(10).string(message.typeUrl);
@@ -362,6 +373,18 @@ export const Any = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Any {
+    return {
+      typeUrl: isSet(object.typeUrl) ? String(object.typeUrl) : "",
+      value: isSet(object.value) ? bytesFromBase64(object.value) : new Uint8Array()
+    };
+  },
+  toJSON(message: Any): JsonSafe<Any> {
+    const obj: any = {};
+    message.typeUrl !== undefined && (obj.typeUrl = message.typeUrl);
+    message.value !== undefined && (obj.value = base64FromBytes(message.value !== undefined ? message.value : new Uint8Array()));
+    return obj;
   },
   fromPartial(object: Partial<Any>): Any {
     const message = createBaseAny();

@@ -13,9 +13,27 @@ export const options: TelescopeInput = {
   options: {
     interfaces: {
       enabled: true,
-      useUnionTypes: true
+      useUnionTypes: true,
+      useGlobalDecoderRegistry: true,
     },
     prototypes: {
+      optionalQueryParams: false,
+      useOptionalNullable: true,
+      fieldDefaultIsOptional: false,
+      addTypeUrlToObjects: true,
+      addTypeUrlToDecoders: true,
+      addAminoTypeToObjects: true,
+      methods: {
+        encode: true,
+        decode: true,
+        fromJSON: true,
+        toJSON: true,
+        fromPartial: true,
+        toAmino: true,
+        fromAmino: true,
+        toProto: true,
+        fromProto: true
+      },
       excluded: {
         packages: [
           'ibc.applications.fee.v1', // issue with parsing protos (LCD routes with nested objects in params)
