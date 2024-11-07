@@ -16,6 +16,7 @@ export const options: TelescopeInput = {
       useUnionTypes: true,
       useGlobalDecoderRegistry: true,
     },
+    env: 'v-next',
     prototypes: {
       optionalQueryParams: false,
       useOptionalNullable: true,
