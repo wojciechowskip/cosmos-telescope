@@ -7,7 +7,6 @@ import { GlobalDecoderRegistry } from "../../../registry";
 export interface DelegatorReward {
   delegator: string;
   provider: string;
-  chainId: string;
   amount: Coin[];
 }
 export interface DelegatorRewardProtoMsg {
@@ -17,7 +16,6 @@ export interface DelegatorRewardProtoMsg {
 export interface DelegatorRewardAmino {
   delegator?: string;
   provider?: string;
-  chain_id?: string;
   amount?: CoinAmino[];
 }
 export interface DelegatorRewardAminoMsg {
@@ -27,27 +25,25 @@ export interface DelegatorRewardAminoMsg {
 export interface DelegatorRewardSDKType {
   delegator: string;
   provider: string;
-  chain_id: string;
   amount: CoinSDKType[];
 }
 function createBaseDelegatorReward(): DelegatorReward {
   return {
     delegator: "",
     provider: "",
-    chainId: "",
     amount: []
   };
 }
 export const DelegatorReward = {
   typeUrl: "/lavanet.lava.dualstaking.DelegatorReward",
   is(o: any): o is DelegatorReward {
-    return o && (o.$typeUrl === DelegatorReward.typeUrl || typeof o.delegator === "string" && typeof o.provider === "string" && typeof o.chainId === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])));
+    return o && (o.$typeUrl === DelegatorReward.typeUrl || typeof o.delegator === "string" && typeof o.provider === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.is(o.amount[0])));
   },
   isSDK(o: any): o is DelegatorRewardSDKType {
-    return o && (o.$typeUrl === DelegatorReward.typeUrl || typeof o.delegator === "string" && typeof o.provider === "string" && typeof o.chain_id === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])));
+    return o && (o.$typeUrl === DelegatorReward.typeUrl || typeof o.delegator === "string" && typeof o.provider === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isSDK(o.amount[0])));
   },
   isAmino(o: any): o is DelegatorRewardAmino {
-    return o && (o.$typeUrl === DelegatorReward.typeUrl || typeof o.delegator === "string" && typeof o.provider === "string" && typeof o.chain_id === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])));
+    return o && (o.$typeUrl === DelegatorReward.typeUrl || typeof o.delegator === "string" && typeof o.provider === "string" && Array.isArray(o.amount) && (!o.amount.length || Coin.isAmino(o.amount[0])));
   },
   encode(message: DelegatorReward, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.delegator !== "") {
@@ -55,9 +51,6 @@ export const DelegatorReward = {
     }
     if (message.provider !== "") {
       writer.uint32(18).string(message.provider);
-    }
-    if (message.chainId !== "") {
-      writer.uint32(26).string(message.chainId);
     }
     for (const v of message.amount) {
       Coin.encode(v!, writer.uint32(34).fork()).ldelim();
@@ -77,9 +70,6 @@ export const DelegatorReward = {
         case 2:
           message.provider = reader.string();
           break;
-        case 3:
-          message.chainId = reader.string();
-          break;
         case 4:
           message.amount.push(Coin.decode(reader, reader.uint32()));
           break;
@@ -94,7 +84,6 @@ export const DelegatorReward = {
     return {
       delegator: isSet(object.delegator) ? String(object.delegator) : "",
       provider: isSet(object.provider) ? String(object.provider) : "",
-      chainId: isSet(object.chainId) ? String(object.chainId) : "",
       amount: Array.isArray(object?.amount) ? object.amount.map((e: any) => Coin.fromJSON(e)) : []
     };
   },
@@ -102,7 +91,6 @@ export const DelegatorReward = {
     const obj: any = {};
     message.delegator !== undefined && (obj.delegator = message.delegator);
     message.provider !== undefined && (obj.provider = message.provider);
-    message.chainId !== undefined && (obj.chainId = message.chainId);
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toJSON(e) : undefined);
     } else {
@@ -114,7 +102,6 @@ export const DelegatorReward = {
     const message = createBaseDelegatorReward();
     message.delegator = object.delegator ?? "";
     message.provider = object.provider ?? "";
-    message.chainId = object.chainId ?? "";
     message.amount = object.amount?.map(e => Coin.fromPartial(e)) || [];
     return message;
   },
@@ -126,9 +113,6 @@ export const DelegatorReward = {
     if (object.provider !== undefined && object.provider !== null) {
       message.provider = object.provider;
     }
-    if (object.chain_id !== undefined && object.chain_id !== null) {
-      message.chainId = object.chain_id;
-    }
     message.amount = object.amount?.map(e => Coin.fromAmino(e)) || [];
     return message;
   },
@@ -136,7 +120,6 @@ export const DelegatorReward = {
     const obj: any = {};
     obj.delegator = message.delegator === "" ? undefined : message.delegator;
     obj.provider = message.provider === "" ? undefined : message.provider;
-    obj.chain_id = message.chainId === "" ? undefined : message.chainId;
     if (message.amount) {
       obj.amount = message.amount.map(e => e ? Coin.toAmino(e) : undefined);
     } else {

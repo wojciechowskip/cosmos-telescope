@@ -7,8 +7,6 @@ import { GlobalDecoderRegistry } from "../../../registry";
 export interface Delegation {
   /** provider receives the delegated funds */
   provider: string;
-  /** chainID to which staking delegate funds */
-  chainID: string;
   /** delegator that owns the delegated funds */
   delegator: string;
   amount: Coin;
@@ -22,8 +20,6 @@ export interface DelegationProtoMsg {
 export interface DelegationAmino {
   /** provider receives the delegated funds */
   provider?: string;
-  /** chainID to which staking delegate funds */
-  chainID?: string;
   /** delegator that owns the delegated funds */
   delegator?: string;
   amount?: CoinAmino;
@@ -36,7 +32,6 @@ export interface DelegationAminoMsg {
 }
 export interface DelegationSDKType {
   provider: string;
-  chainID: string;
   delegator: string;
   amount: CoinSDKType;
   timestamp: bigint;
@@ -63,7 +58,6 @@ export interface DelegatorSDKType {
 function createBaseDelegation(): Delegation {
   return {
     provider: "",
-    chainID: "",
     delegator: "",
     amount: Coin.fromPartial({}),
     timestamp: BigInt(0)
@@ -72,20 +66,17 @@ function createBaseDelegation(): Delegation {
 export const Delegation = {
   typeUrl: "/lavanet.lava.dualstaking.Delegation",
   is(o: any): o is Delegation {
-    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.provider === "string" && typeof o.chainID === "string" && typeof o.delegator === "string" && Coin.is(o.amount) && typeof o.timestamp === "bigint");
+    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.provider === "string" && typeof o.delegator === "string" && Coin.is(o.amount) && typeof o.timestamp === "bigint");
   },
   isSDK(o: any): o is DelegationSDKType {
-    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.provider === "string" && typeof o.chainID === "string" && typeof o.delegator === "string" && Coin.isSDK(o.amount) && typeof o.timestamp === "bigint");
+    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.provider === "string" && typeof o.delegator === "string" && Coin.isSDK(o.amount) && typeof o.timestamp === "bigint");
   },
   isAmino(o: any): o is DelegationAmino {
-    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.provider === "string" && typeof o.chainID === "string" && typeof o.delegator === "string" && Coin.isAmino(o.amount) && typeof o.timestamp === "bigint");
+    return o && (o.$typeUrl === Delegation.typeUrl || typeof o.provider === "string" && typeof o.delegator === "string" && Coin.isAmino(o.amount) && typeof o.timestamp === "bigint");
   },
   encode(message: Delegation, writer: BinaryWriter = BinaryWriter.create()): BinaryWriter {
     if (message.provider !== "") {
       writer.uint32(10).string(message.provider);
-    }
-    if (message.chainID !== "") {
-      writer.uint32(18).string(message.chainID);
     }
     if (message.delegator !== "") {
       writer.uint32(26).string(message.delegator);
@@ -108,9 +99,6 @@ export const Delegation = {
         case 1:
           message.provider = reader.string();
           break;
-        case 2:
-          message.chainID = reader.string();
-          break;
         case 3:
           message.delegator = reader.string();
           break;
@@ -130,7 +118,6 @@ export const Delegation = {
   fromJSON(object: any): Delegation {
     return {
       provider: isSet(object.provider) ? String(object.provider) : "",
-      chainID: isSet(object.chainID) ? String(object.chainID) : "",
       delegator: isSet(object.delegator) ? String(object.delegator) : "",
       amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined,
       timestamp: isSet(object.timestamp) ? BigInt(object.timestamp.toString()) : BigInt(0)
@@ -139,7 +126,6 @@ export const Delegation = {
   toJSON(message: Delegation): JsonSafe<Delegation> {
     const obj: any = {};
     message.provider !== undefined && (obj.provider = message.provider);
-    message.chainID !== undefined && (obj.chainID = message.chainID);
     message.delegator !== undefined && (obj.delegator = message.delegator);
     message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     message.timestamp !== undefined && (obj.timestamp = (message.timestamp || BigInt(0)).toString());
@@ -148,7 +134,6 @@ export const Delegation = {
   fromPartial<I extends Exact<DeepPartial<Delegation>, I>>(object: I): Delegation {
     const message = createBaseDelegation();
     message.provider = object.provider ?? "";
-    message.chainID = object.chainID ?? "";
     message.delegator = object.delegator ?? "";
     message.amount = object.amount !== undefined && object.amount !== null ? Coin.fromPartial(object.amount) : undefined;
     message.timestamp = object.timestamp !== undefined && object.timestamp !== null ? BigInt(object.timestamp.toString()) : BigInt(0);
@@ -158,9 +143,6 @@ export const Delegation = {
     const message = createBaseDelegation();
     if (object.provider !== undefined && object.provider !== null) {
       message.provider = object.provider;
-    }
-    if (object.chainID !== undefined && object.chainID !== null) {
-      message.chainID = object.chainID;
     }
     if (object.delegator !== undefined && object.delegator !== null) {
       message.delegator = object.delegator;
@@ -176,7 +158,6 @@ export const Delegation = {
   toAmino(message: Delegation): DelegationAmino {
     const obj: any = {};
     obj.provider = message.provider === "" ? undefined : message.provider;
-    obj.chainID = message.chainID === "" ? undefined : message.chainID;
     obj.delegator = message.delegator === "" ? undefined : message.delegator;
     obj.amount = message.amount ? Coin.toAmino(message.amount) : undefined;
     obj.timestamp = message.timestamp !== BigInt(0) ? (message.timestamp?.toString)() : undefined;
