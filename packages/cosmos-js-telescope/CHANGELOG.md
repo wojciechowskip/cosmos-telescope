@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.34](https://github.com/wojciechowskip/cosmos-telescope/compare/cosmos-js-telescope@0.0.33...cosmos-js-telescope@0.0.34) (2024-11-15)
+
+### Reverts
+
+- Revert "Add env v-next" ([c1640e6](https://github.com/wojciechowskip/cosmos-telescope/commit/c1640e6c9d05216ed77b15c963fc80ecb9efe19b))
+
 ## [0.0.33](https://github.com/wojciechowskip/cosmos-telescope/compare/cosmos-js-telescope@0.0.32...cosmos-js-telescope@0.0.33) (2024-11-07)
 
 **Note:** Version bump only for package cosmos-js-telescope
