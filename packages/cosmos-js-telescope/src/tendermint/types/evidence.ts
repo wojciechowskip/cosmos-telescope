@@ -3,7 +3,7 @@ import { Vote, VoteAmino, VoteSDKType, LightBlock, LightBlockAmino, LightBlockSD
 import { Timestamp } from "../../google/protobuf/timestamp";
 import { Validator, ValidatorAmino, ValidatorSDKType } from "./validator";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, DeepPartial, Exact, toTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, DeepPartial, Exact, toTimestamp, fromTimestamp, fromJsonTimestamp } from "../../helpers";
 import { JsonSafe } from "../../json-safe";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface Evidence {
@@ -277,7 +277,7 @@ export const DuplicateVoteEvidence = {
       voteB: isSet(object.voteB) ? Vote.fromJSON(object.voteB) : undefined,
       totalVotingPower: isSet(object.totalVotingPower) ? BigInt(object.totalVotingPower.toString()) : BigInt(0),
       validatorPower: isSet(object.validatorPower) ? BigInt(object.validatorPower.toString()) : BigInt(0),
-      timestamp: isSet(object.timestamp) ? new Date(object.timestamp) : undefined
+      timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined
     };
   },
   toJSON(message: DuplicateVoteEvidence): JsonSafe<DuplicateVoteEvidence> {
@@ -416,7 +416,7 @@ export const LightClientAttackEvidence = {
       commonHeight: isSet(object.commonHeight) ? BigInt(object.commonHeight.toString()) : BigInt(0),
       byzantineValidators: Array.isArray(object?.byzantineValidators) ? object.byzantineValidators.map((e: any) => Validator.fromJSON(e)) : [],
       totalVotingPower: isSet(object.totalVotingPower) ? BigInt(object.totalVotingPower.toString()) : BigInt(0),
-      timestamp: isSet(object.timestamp) ? new Date(object.timestamp) : undefined
+      timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined
     };
   },
   toJSON(message: LightClientAttackEvidence): JsonSafe<LightClientAttackEvidence> {

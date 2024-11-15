@@ -4,7 +4,7 @@ import { Timestamp } from "../../../google/protobuf/timestamp";
 import { SendAuthorization, SendAuthorizationProtoMsg, SendAuthorizationSDKType } from "../../bank/v1beta1/authz";
 import { StakeAuthorization, StakeAuthorizationProtoMsg, StakeAuthorizationSDKType } from "../../staking/v1beta1/authz";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, DeepPartial, Exact, toTimestamp, fromTimestamp } from "../../../helpers";
+import { isSet, DeepPartial, Exact, toTimestamp, fromTimestamp, fromJsonTimestamp } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -290,7 +290,7 @@ export const Grant = {
   fromJSON(object: any): Grant {
     return {
       authorization: isSet(object.authorization) ? GlobalDecoderRegistry.fromJSON(object.authorization) : undefined,
-      expiration: isSet(object.expiration) ? new Date(object.expiration) : undefined
+      expiration: isSet(object.expiration) ? fromJsonTimestamp(object.expiration) : undefined
     };
   },
   toJSON(message: Grant): JsonSafe<Grant> {
@@ -411,7 +411,7 @@ export const GrantAuthorization = {
       granter: isSet(object.granter) ? String(object.granter) : "",
       grantee: isSet(object.grantee) ? String(object.grantee) : "",
       authorization: isSet(object.authorization) ? GlobalDecoderRegistry.fromJSON(object.authorization) : undefined,
-      expiration: isSet(object.expiration) ? new Date(object.expiration) : undefined
+      expiration: isSet(object.expiration) ? fromJsonTimestamp(object.expiration) : undefined
     };
   },
   toJSON(message: GrantAuthorization): JsonSafe<GrantAuthorization> {

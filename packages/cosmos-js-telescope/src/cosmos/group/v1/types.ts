@@ -3,7 +3,7 @@ import { Timestamp } from "../../../google/protobuf/timestamp";
 import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { toTimestamp, fromTimestamp, isSet, DeepPartial, Exact } from "../../../helpers";
+import { toTimestamp, fromTimestamp, isSet, fromJsonTimestamp, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /** VoteOption enumerates the valid vote options for a given proposal. */
@@ -829,7 +829,7 @@ export const Member = {
       address: isSet(object.address) ? String(object.address) : "",
       weight: isSet(object.weight) ? String(object.weight) : "",
       metadata: isSet(object.metadata) ? String(object.metadata) : "",
-      addedAt: isSet(object.addedAt) ? new Date(object.addedAt) : undefined
+      addedAt: isSet(object.addedAt) ? fromJsonTimestamp(object.addedAt) : undefined
     };
   },
   toJSON(message: Member): JsonSafe<Member> {
@@ -1392,7 +1392,7 @@ export const GroupInfo = {
       metadata: isSet(object.metadata) ? String(object.metadata) : "",
       version: isSet(object.version) ? BigInt(object.version.toString()) : BigInt(0),
       totalWeight: isSet(object.totalWeight) ? String(object.totalWeight) : "",
-      createdAt: isSet(object.createdAt) ? new Date(object.createdAt) : undefined
+      createdAt: isSet(object.createdAt) ? fromJsonTimestamp(object.createdAt) : undefined
     };
   },
   toJSON(message: GroupInfo): JsonSafe<GroupInfo> {
@@ -1666,7 +1666,7 @@ export const GroupPolicyInfo = {
       metadata: isSet(object.metadata) ? String(object.metadata) : "",
       version: isSet(object.version) ? BigInt(object.version.toString()) : BigInt(0),
       decisionPolicy: isSet(object.decisionPolicy) ? GlobalDecoderRegistry.fromJSON(object.decisionPolicy) : undefined,
-      createdAt: isSet(object.createdAt) ? new Date(object.createdAt) : undefined
+      createdAt: isSet(object.createdAt) ? fromJsonTimestamp(object.createdAt) : undefined
     };
   },
   toJSON(message: GroupPolicyInfo): JsonSafe<GroupPolicyInfo> {
@@ -1881,13 +1881,13 @@ export const Proposal = {
       address: isSet(object.address) ? String(object.address) : "",
       metadata: isSet(object.metadata) ? String(object.metadata) : "",
       proposers: Array.isArray(object?.proposers) ? object.proposers.map((e: any) => String(e)) : [],
-      submitTime: isSet(object.submitTime) ? new Date(object.submitTime) : undefined,
+      submitTime: isSet(object.submitTime) ? fromJsonTimestamp(object.submitTime) : undefined,
       groupVersion: isSet(object.groupVersion) ? BigInt(object.groupVersion.toString()) : BigInt(0),
       groupPolicyVersion: isSet(object.groupPolicyVersion) ? BigInt(object.groupPolicyVersion.toString()) : BigInt(0),
       status: isSet(object.status) ? proposalStatusFromJSON(object.status) : -1,
       result: isSet(object.result) ? proposalResultFromJSON(object.result) : -1,
       finalTallyResult: isSet(object.finalTallyResult) ? TallyResult.fromJSON(object.finalTallyResult) : undefined,
-      votingPeriodEnd: isSet(object.votingPeriodEnd) ? new Date(object.votingPeriodEnd) : undefined,
+      votingPeriodEnd: isSet(object.votingPeriodEnd) ? fromJsonTimestamp(object.votingPeriodEnd) : undefined,
       executorResult: isSet(object.executorResult) ? proposalExecutorResultFromJSON(object.executorResult) : -1,
       messages: Array.isArray(object?.messages) ? object.messages.map((e: any) => Any.fromJSON(e)) : []
     };
@@ -2229,7 +2229,7 @@ export const Vote = {
       voter: isSet(object.voter) ? String(object.voter) : "",
       option: isSet(object.option) ? voteOptionFromJSON(object.option) : -1,
       metadata: isSet(object.metadata) ? String(object.metadata) : "",
-      submitTime: isSet(object.submitTime) ? new Date(object.submitTime) : undefined
+      submitTime: isSet(object.submitTime) ? fromJsonTimestamp(object.submitTime) : undefined
     };
   },
   toJSON(message: Vote): JsonSafe<Vote> {

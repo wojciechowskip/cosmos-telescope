@@ -44,6 +44,3 @@ export class MsgClientImpl implements Msg {
     return promise.then(data => MsgCreatePeriodicVestingAccountResponse.decode(new BinaryReader(data)));
   }
 }
-export const createClientImpl = (rpc: TxRpc) => {
-  return new MsgClientImpl(rpc);
-};

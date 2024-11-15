@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { Timestamp } from "../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes, toTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, DeepPartial, Exact, bytesFromBase64, base64FromBytes, toTimestamp, fromTimestamp, fromJsonTimestamp } from "../../helpers";
 import { JsonSafe } from "../../json-safe";
 import { GlobalDecoderRegistry } from "../../registry";
 export interface ProtocolVersion {
@@ -580,7 +580,7 @@ export const PeerInfo = {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       addressInfo: Array.isArray(object?.addressInfo) ? object.addressInfo.map((e: any) => PeerAddressInfo.fromJSON(e)) : [],
-      lastConnected: isSet(object.lastConnected) ? new Date(object.lastConnected) : undefined
+      lastConnected: isSet(object.lastConnected) ? fromJsonTimestamp(object.lastConnected) : undefined
     };
   },
   toJSON(message: PeerInfo): JsonSafe<PeerInfo> {
@@ -703,8 +703,8 @@ export const PeerAddressInfo = {
   fromJSON(object: any): PeerAddressInfo {
     return {
       address: isSet(object.address) ? String(object.address) : "",
-      lastDialSuccess: isSet(object.lastDialSuccess) ? new Date(object.lastDialSuccess) : undefined,
-      lastDialFailure: isSet(object.lastDialFailure) ? new Date(object.lastDialFailure) : undefined,
+      lastDialSuccess: isSet(object.lastDialSuccess) ? fromJsonTimestamp(object.lastDialSuccess) : undefined,
+      lastDialFailure: isSet(object.lastDialFailure) ? fromJsonTimestamp(object.lastDialFailure) : undefined,
       dialFailures: isSet(object.dialFailures) ? Number(object.dialFailures) : 0
     };
   },

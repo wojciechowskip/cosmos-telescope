@@ -4,7 +4,7 @@ import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { Timestamp } from "../../../google/protobuf/timestamp";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, DeepPartial, Exact, toTimestamp, fromTimestamp } from "../../../helpers";
+import { isSet, DeepPartial, Exact, toTimestamp, fromTimestamp, fromJsonTimestamp } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { encodePubkey, decodePubkey } from "@cosmjs/proto-signing";
 import { GlobalDecoderRegistry } from "../../../registry";
@@ -1281,7 +1281,7 @@ export const MsgBeginRedelegateResponse = {
   },
   fromJSON(object: any): MsgBeginRedelegateResponse {
     return {
-      completionTime: isSet(object.completionTime) ? new Date(object.completionTime) : undefined
+      completionTime: isSet(object.completionTime) ? fromJsonTimestamp(object.completionTime) : undefined
     };
   },
   toJSON(message: MsgBeginRedelegateResponse): JsonSafe<MsgBeginRedelegateResponse> {
@@ -1498,7 +1498,7 @@ export const MsgUndelegateResponse = {
   },
   fromJSON(object: any): MsgUndelegateResponse {
     return {
-      completionTime: isSet(object.completionTime) ? new Date(object.completionTime) : undefined,
+      completionTime: isSet(object.completionTime) ? fromJsonTimestamp(object.completionTime) : undefined,
       amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined
     };
   },

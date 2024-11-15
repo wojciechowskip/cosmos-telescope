@@ -4,7 +4,7 @@ import { Timestamp } from "../../../google/protobuf/timestamp";
 import { Duration, DurationAmino, DurationSDKType } from "../../../google/protobuf/duration";
 import { Any, AnyProtoMsg, AnyAmino, AnySDKType } from "../../../google/protobuf/any";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { toTimestamp, fromTimestamp, isSet, DeepPartial, Exact } from "../../../helpers";
+import { toTimestamp, fromTimestamp, isSet, fromJsonTimestamp, DeepPartial, Exact } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 /**
@@ -244,7 +244,7 @@ export const BasicAllowance = {
   fromJSON(object: any): BasicAllowance {
     return {
       spendLimit: Array.isArray(object?.spendLimit) ? object.spendLimit.map((e: any) => Coin.fromJSON(e)) : [],
-      expiration: isSet(object.expiration) ? new Date(object.expiration) : undefined
+      expiration: isSet(object.expiration) ? fromJsonTimestamp(object.expiration) : undefined
     };
   },
   toJSON(message: BasicAllowance): JsonSafe<BasicAllowance> {
@@ -380,7 +380,7 @@ export const PeriodicAllowance = {
       period: isSet(object.period) ? Duration.fromJSON(object.period) : undefined,
       periodSpendLimit: Array.isArray(object?.periodSpendLimit) ? object.periodSpendLimit.map((e: any) => Coin.fromJSON(e)) : [],
       periodCanSpend: Array.isArray(object?.periodCanSpend) ? object.periodCanSpend.map((e: any) => Coin.fromJSON(e)) : [],
-      periodReset: isSet(object.periodReset) ? new Date(object.periodReset) : undefined
+      periodReset: isSet(object.periodReset) ? fromJsonTimestamp(object.periodReset) : undefined
     };
   },
   toJSON(message: PeriodicAllowance): JsonSafe<PeriodicAllowance> {

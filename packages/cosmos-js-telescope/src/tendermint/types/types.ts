@@ -4,7 +4,7 @@ import { Consensus, ConsensusAmino, ConsensusSDKType } from "../version/types";
 import { Timestamp } from "../../google/protobuf/timestamp";
 import { ValidatorSet, ValidatorSetAmino, ValidatorSetSDKType } from "./validator";
 import { BinaryReader, BinaryWriter } from "../../binary";
-import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact, toTimestamp, fromTimestamp } from "../../helpers";
+import { isSet, bytesFromBase64, base64FromBytes, DeepPartial, Exact, toTimestamp, fromTimestamp, fromJsonTimestamp } from "../../helpers";
 import { JsonSafe } from "../../json-safe";
 import { GlobalDecoderRegistry } from "../../registry";
 /** BlockIdFlag indicates which BlcokID the signature is for */
@@ -956,7 +956,7 @@ export const Header = {
       version: isSet(object.version) ? Consensus.fromJSON(object.version) : undefined,
       chainId: isSet(object.chainId) ? String(object.chainId) : "",
       height: isSet(object.height) ? BigInt(object.height.toString()) : BigInt(0),
-      time: isSet(object.time) ? new Date(object.time) : undefined,
+      time: isSet(object.time) ? fromJsonTimestamp(object.time) : undefined,
       lastBlockId: isSet(object.lastBlockId) ? BlockID.fromJSON(object.lastBlockId) : undefined,
       lastCommitHash: isSet(object.lastCommitHash) ? bytesFromBase64(object.lastCommitHash) : new Uint8Array(),
       dataHash: isSet(object.dataHash) ? bytesFromBase64(object.dataHash) : new Uint8Array(),
@@ -1269,7 +1269,7 @@ export const Vote = {
       height: isSet(object.height) ? BigInt(object.height.toString()) : BigInt(0),
       round: isSet(object.round) ? Number(object.round) : 0,
       blockId: isSet(object.blockId) ? BlockID.fromJSON(object.blockId) : undefined,
-      timestamp: isSet(object.timestamp) ? new Date(object.timestamp) : undefined,
+      timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
       validatorAddress: isSet(object.validatorAddress) ? bytesFromBase64(object.validatorAddress) : new Uint8Array(),
       validatorIndex: isSet(object.validatorIndex) ? Number(object.validatorIndex) : 0,
       signature: isSet(object.signature) ? bytesFromBase64(object.signature) : new Uint8Array()
@@ -1551,7 +1551,7 @@ export const CommitSig = {
     return {
       blockIdFlag: isSet(object.blockIdFlag) ? blockIDFlagFromJSON(object.blockIdFlag) : -1,
       validatorAddress: isSet(object.validatorAddress) ? bytesFromBase64(object.validatorAddress) : new Uint8Array(),
-      timestamp: isSet(object.timestamp) ? new Date(object.timestamp) : undefined,
+      timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
       signature: isSet(object.signature) ? bytesFromBase64(object.signature) : new Uint8Array()
     };
   },
@@ -1700,7 +1700,7 @@ export const Proposal = {
       round: isSet(object.round) ? Number(object.round) : 0,
       polRound: isSet(object.polRound) ? Number(object.polRound) : 0,
       blockId: isSet(object.blockId) ? BlockID.fromJSON(object.blockId) : undefined,
-      timestamp: isSet(object.timestamp) ? new Date(object.timestamp) : undefined,
+      timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
       signature: isSet(object.signature) ? bytesFromBase64(object.signature) : new Uint8Array()
     };
   },

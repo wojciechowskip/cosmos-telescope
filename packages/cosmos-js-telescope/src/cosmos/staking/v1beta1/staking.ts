@@ -6,7 +6,7 @@ import { Duration, DurationAmino, DurationSDKType } from "../../../google/protob
 import { Coin, CoinAmino, CoinSDKType } from "../../base/v1beta1/coin";
 import { ValidatorUpdate, ValidatorUpdateAmino, ValidatorUpdateSDKType } from "../../../tendermint/abci/types";
 import { BinaryReader, BinaryWriter } from "../../../binary";
-import { isSet, DeepPartial, Exact, toTimestamp, fromTimestamp } from "../../../helpers";
+import { isSet, DeepPartial, Exact, toTimestamp, fromTimestamp, fromJsonTimestamp } from "../../../helpers";
 import { JsonSafe } from "../../../json-safe";
 import { GlobalDecoderRegistry } from "../../../registry";
 import { Decimal } from "@cosmjs/math";
@@ -1221,7 +1221,7 @@ export const Commission = {
   fromJSON(object: any): Commission {
     return {
       commissionRates: isSet(object.commissionRates) ? CommissionRates.fromJSON(object.commissionRates) : undefined,
-      updateTime: isSet(object.updateTime) ? new Date(object.updateTime) : undefined
+      updateTime: isSet(object.updateTime) ? fromJsonTimestamp(object.updateTime) : undefined
     };
   },
   toJSON(message: Commission): JsonSafe<Commission> {
@@ -1566,7 +1566,7 @@ export const Validator = {
       delegatorShares: isSet(object.delegatorShares) ? String(object.delegatorShares) : "",
       description: isSet(object.description) ? Description.fromJSON(object.description) : undefined,
       unbondingHeight: isSet(object.unbondingHeight) ? BigInt(object.unbondingHeight.toString()) : BigInt(0),
-      unbondingTime: isSet(object.unbondingTime) ? new Date(object.unbondingTime) : undefined,
+      unbondingTime: isSet(object.unbondingTime) ? fromJsonTimestamp(object.unbondingTime) : undefined,
       commission: isSet(object.commission) ? Commission.fromJSON(object.commission) : undefined,
       minSelfDelegation: isSet(object.minSelfDelegation) ? String(object.minSelfDelegation) : "",
       unbondingOnHoldRefCount: isSet(object.unbondingOnHoldRefCount) ? BigInt(object.unbondingOnHoldRefCount.toString()) : BigInt(0),
@@ -2534,7 +2534,7 @@ export const UnbondingDelegationEntry = {
   fromJSON(object: any): UnbondingDelegationEntry {
     return {
       creationHeight: isSet(object.creationHeight) ? BigInt(object.creationHeight.toString()) : BigInt(0),
-      completionTime: isSet(object.completionTime) ? new Date(object.completionTime) : undefined,
+      completionTime: isSet(object.completionTime) ? fromJsonTimestamp(object.completionTime) : undefined,
       initialBalance: isSet(object.initialBalance) ? String(object.initialBalance) : "",
       balance: isSet(object.balance) ? String(object.balance) : "",
       unbondingId: isSet(object.unbondingId) ? BigInt(object.unbondingId.toString()) : BigInt(0),
@@ -2695,7 +2695,7 @@ export const RedelegationEntry = {
   fromJSON(object: any): RedelegationEntry {
     return {
       creationHeight: isSet(object.creationHeight) ? BigInt(object.creationHeight.toString()) : BigInt(0),
-      completionTime: isSet(object.completionTime) ? new Date(object.completionTime) : undefined,
+      completionTime: isSet(object.completionTime) ? fromJsonTimestamp(object.completionTime) : undefined,
       initialBalance: isSet(object.initialBalance) ? String(object.initialBalance) : "",
       sharesDst: isSet(object.sharesDst) ? String(object.sharesDst) : "",
       unbondingId: isSet(object.unbondingId) ? BigInt(object.unbondingId.toString()) : BigInt(0),
