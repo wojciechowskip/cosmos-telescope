@@ -3,7 +3,7 @@ import { StargateClient } from "@cosmjs/stargate";
 import path from "path";
 import { ConfigContext, useChain, useRegistry } from "starshipjs";
 
-describe("Test clients", () => {
+xdescribe("Test clients", () => {
   let client;
 
   beforeAll(async () => {

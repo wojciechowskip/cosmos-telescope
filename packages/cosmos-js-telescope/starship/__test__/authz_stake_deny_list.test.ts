@@ -7,16 +7,18 @@ import {
   useRegistry,
 } from "starshipjs";
 
-import { createAminoWallet } from "../src";
+import { createAminoWallet, createProtoWallet } from "../src";
 import { createRPCQueryClient } from "../../src/cosmos/rpc.query";
 import { getSigningCosmosClient } from "../../src";
 import { Grant } from "../../src/cosmos/authz/v1beta1/authz";
-import { MessageComposer } from "../../src/cosmos/authz/v1beta1/tx.registry";
+import { MessageComposer as AuthzMessageComposer } from "../../src/cosmos/authz/v1beta1/tx.registry";
 import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
 import {
   StakeAuthorization,
   StakeAuthorization_Validators,
 } from "../../src/cosmos/staking/v1beta1/authz";
+import { Any } from "../../src/google/protobuf/any";
+import { MsgDelegate } from "../../src/cosmos/staking/v1beta1/tx";
 
 describe("Authz Stake Auth with Deny List", () => {
   let test1Wallet: OfflineSigner,
@@ -39,7 +41,7 @@ describe("Authz Stake Auth with Deny List", () => {
     rpcEndpoint = await getRpcEndpoint();
 
     test1Wallet = await createAminoWallet(generateMnemonic(), prefix);
-    test2Wallet = await createAminoWallet(generateMnemonic(), prefix);
+    test2Wallet = await createProtoWallet(generateMnemonic(), prefix);
     fee = { amount: [{ denom, amount: "100000" }], gas: "550000" };
 
     t1Addr = (await test1Wallet.getAccounts())[0].address;
@@ -56,7 +58,13 @@ describe("Authz Stake Auth with Deny List", () => {
       signer: test1Wallet,
     });
 
-    const msg = MessageComposer.fromPartial.grant({
+    const validators = await queryClient.cosmos.staking.v1beta1.validators({
+      status: "BOND_STATUS_BONDED",
+    });
+
+    const onlyOneVal = validators.validators[0].operatorAddress;
+
+    const msg = AuthzMessageComposer.fromPartial.grant({
       grantee: t2Addr,
       granter: t1Addr,
       grant: Grant.fromPartial({
@@ -90,5 +98,37 @@ describe("Authz Stake Auth with Deny List", () => {
     expect(grants.grants.length).toBe(1);
     expect(grants.grants[0].grantee).toBe(t2Addr);
     expect(grants.grants[0].granter).toBe(t1Addr);
+
+    const msgDelegate = MsgDelegate.fromPartial({
+      delegatorAddress: t1Addr,
+      validatorAddress: onlyOneVal,
+      amount: { denom: "uatom", amount: "100000" },
+    });
+
+    // Encode msgDelegate as an `Any` type
+    const encodedMsgDelegate = Any.fromPartial({
+      typeUrl: "/cosmos.staking.v1beta1.MsgDelegate",
+      value: MsgDelegate.encode(msgDelegate).finish(), // Serialize msgDelegate
+    });
+
+    const msgExec = AuthzMessageComposer.fromPartial.exec({
+      grantee: t2Addr,
+      msgs: [encodedMsgDelegate]
+    });
+
+    const signingClient2 = await getSigningCosmosClient({
+      rpcEndpoint,
+      signer: test2Wallet,
+    });
+
+    const delegateionResult = await signingClient2.signAndBroadcast(t2Addr, [msgExec], fee);
+
+    assertIsDeliverTxSuccess(delegateionResult);
+
+    const validatorsOfDelegator = await queryClient.cosmos.staking.v1beta1.delegatorValidators({
+      delegatorAddr: t1Addr,
+    });
+
+    expect(validatorsOfDelegator.validators.length).toBe(1);
   });
 });
