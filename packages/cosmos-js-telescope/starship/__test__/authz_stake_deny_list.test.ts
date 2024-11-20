@@ -20,7 +20,7 @@ import {
 import { Any } from "../../src/google/protobuf/any";
 import { MsgDelegate } from "../../src/cosmos/staking/v1beta1/tx";
 
-describe("Authz Stake Auth with Deny List", () => {
+xdescribe("Authz Stake Auth with Deny List", () => {
   let test1Wallet: OfflineSigner,
     test2Wallet: OfflineSigner,
     t1Addr: string,

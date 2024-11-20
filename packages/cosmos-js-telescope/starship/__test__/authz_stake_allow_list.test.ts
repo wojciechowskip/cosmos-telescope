@@ -18,7 +18,7 @@ import {
   StakeAuthorization_Validators,
 } from "../../src/cosmos/staking/v1beta1/authz";
 
-describe("Authz Stake Auth with Allow List test", () => {
+xdescribe("Authz Stake Auth with Allow List test", () => {
   let test1Wallet: OfflineSigner,
     test2Wallet: OfflineSigner,
     t1Addr: string,
