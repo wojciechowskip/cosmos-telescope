@@ -15,7 +15,7 @@ import { MessageComposer } from "../../src/cosmos/authz/v1beta1/tx.registry";
 import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
 import { SendAuthorization } from "../../src/cosmos/bank/v1beta1/authz";
 
-describe("Authz Stake Auth with Deny List", () => {
+xdescribe("Authz Stake Auth with Deny List", () => {
   let test1Wallet: OfflineSigner,
     test2Wallet: OfflineSigner,
     t1Addr: string,

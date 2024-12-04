@@ -8,8 +8,18 @@ chains:
       rest: 1313
       rpc: 26653
       faucet: 8001
-  - id: gaia-1
-    name: cosmoshub
+# Image on which Stake Auth + deny list works (?) WHY?
+#  - id: gaia-1
+#    name: cosmoshub
+#    numValidators: 1
+#    ports:
+#      rest: 1317
+#      rpc: 26657
+#      faucet: 8002
+# Image with debug while verify signing, here Stake Auth + deny list does not work (same on real gaia)
+  - id: sim-1
+    name: simapp
+    image: patrickwww/cosmos-sdk-local-debug
     numValidators: 1
     ports:
       rest: 1317

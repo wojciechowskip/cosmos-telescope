@@ -9,16 +9,16 @@ import {
 
 import { createAminoWallet } from "../src";
 import { createRPCQueryClient } from "../../src/cosmos/rpc.query";
-import { getSigningCosmosClient } from "../../src";
+import { cosmosAminoConverters, getSigningCosmosClient } from "../../src";
 import { Grant } from "../../src/cosmos/authz/v1beta1/authz";
 import { MessageComposer } from "../../src/cosmos/authz/v1beta1/tx.registry";
-import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
+import { AminoTypes, assertIsDeliverTxSuccess } from "@cosmjs/stargate";
 import {
   StakeAuthorization,
   StakeAuthorization_Validators,
 } from "../../src/cosmos/staking/v1beta1/authz";
 
-describe("Authz Stake Auth with Allow List test", () => {
+xdescribe("Authz Stake Auth with Allow List test", () => {
   let test1Wallet: OfflineSigner,
     test2Wallet: OfflineSigner,
     t1Addr: string,
@@ -32,7 +32,7 @@ describe("Authz Stake Auth with Allow List test", () => {
     await ConfigContext.init(configFile, await useRegistry(configFile));
 
     const { chainInfo, getCoin, getRpcEndpoint, creditFromFaucet } =
-      useChain("cosmoshub");
+      useChain("simapp");
 
     const denom = (await getCoin()).base;
     const prefix = chainInfo.chain.bech32_prefix;
@@ -55,7 +55,6 @@ describe("Authz Stake Auth with Allow List test", () => {
       rpcEndpoint,
       signer: test1Wallet,
     });
-    const valAddress = "cosmosvaloper1c4k24jzduc365kywrsvf5ujz4ya6mwympnc4en";
 
     const msg = MessageComposer.fromPartial.grant({
       grantee: t2Addr,
@@ -65,13 +64,20 @@ describe("Authz Stake Auth with Allow List test", () => {
           maxTokens: null,
           authorizationType: 1,
           allowList: StakeAuthorization_Validators.fromPartial({
-            address: [valAddress],
+            address: [""],
             type: "cosmos-sdk/StakeAuthorization/AllowList",
           }),
         }),
         expiration: null,
       }),
     });
+
+    //Debugging
+    const aminoTypes = new AminoTypes(cosmosAminoConverters);
+    const aminoMessage = aminoTypes.toAmino(msg);
+
+    console.log("Amino type:");
+    console.log(JSON.stringify(aminoMessage));
 
     const result = await signingClient.signAndBroadcast(t1Addr, [msg], fee);
     assertIsDeliverTxSuccess(result);

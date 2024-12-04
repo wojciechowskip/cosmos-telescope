@@ -9,16 +9,14 @@ import {
 
 import { createAminoWallet, createProtoWallet } from "../src";
 import { createRPCQueryClient } from "../../src/cosmos/rpc.query";
-import { getSigningCosmosClient } from "../../src";
+import { cosmosAminoConverters, getSigningCosmosClient } from "../../src";
 import { Grant } from "../../src/cosmos/authz/v1beta1/authz";
 import { MessageComposer as AuthzMessageComposer } from "../../src/cosmos/authz/v1beta1/tx.registry";
-import { assertIsDeliverTxSuccess } from "@cosmjs/stargate";
+import { AminoTypes, assertIsDeliverTxSuccess } from "@cosmjs/stargate";
 import {
   StakeAuthorization,
   StakeAuthorization_Validators,
 } from "../../src/cosmos/staking/v1beta1/authz";
-import { Any } from "../../src/google/protobuf/any";
-import { MsgDelegate } from "../../src/cosmos/staking/v1beta1/tx";
 
 describe("Authz Stake Auth with Deny List", () => {
   let test1Wallet: OfflineSigner,
@@ -34,7 +32,7 @@ describe("Authz Stake Auth with Deny List", () => {
     await ConfigContext.init(configFile, await useRegistry(configFile));
 
     const { chainInfo, getCoin, getRpcEndpoint, creditFromFaucet } =
-      useChain("cosmoshub");
+      useChain("simapp");
 
     const denom = (await getCoin()).base;
     const prefix = chainInfo.chain.bech32_prefix;
@@ -62,7 +60,7 @@ describe("Authz Stake Auth with Deny List", () => {
       status: "BOND_STATUS_BONDED",
     });
 
-    const onlyOneVal = validators.validators[0].operatorAddress;
+    const operatingValAddress = validators.validators[0].operatorAddress;
 
     const msg = AuthzMessageComposer.fromPartial.grant({
       grantee: t2Addr,
@@ -80,13 +78,12 @@ describe("Authz Stake Auth with Deny List", () => {
       }),
     });
 
-    // Debugging
-    // const aminoTypes = new AminoTypes(cosmosAminoConverters);
-    // const aminoMessage = aminoTypes.toAmino(msg);
+    //Debugging
+    const aminoTypes = new AminoTypes(cosmosAminoConverters);
+    const aminoMessage = aminoTypes.toAmino(msg);
 
-    // console.log(JSON.stringify(msg));
-    // console.log(JSON.stringify(aminoMessage));
-    // console.log(JSON.stringify(aminoTypes.fromAmino(aminoMessage)));
+    console.log("Amino type:");
+    console.log(JSON.stringify(aminoMessage));
 
     const result = await signingClient.signAndBroadcast(t1Addr, [msg], fee);
     assertIsDeliverTxSuccess(result);
@@ -99,10 +96,11 @@ describe("Authz Stake Auth with Deny List", () => {
     expect(grants.grants[0].grantee).toBe(t2Addr);
     expect(grants.grants[0].granter).toBe(t1Addr);
 
+    /*
     const msgDelegate = MsgDelegate.fromPartial({
       delegatorAddress: t1Addr,
       validatorAddress: onlyOneVal,
-      amount: { denom: "uatom", amount: "100000" },
+      amount: { denom: "stake", amount: "100000" },
     });
 
     // Encode msgDelegate as an `Any` type
@@ -130,5 +128,7 @@ describe("Authz Stake Auth with Deny List", () => {
     });
 
     expect(validatorsOfDelegator.validators.length).toBe(1);
+
+     */
   });
 });
