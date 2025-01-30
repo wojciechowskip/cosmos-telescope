@@ -40,7 +40,10 @@ export const createRPCMsgClient = async ({
   },
   lavanet: {
     lava: {
-      dualstaking: new (await import("./lava/dualstaking/tx.rpc.msg")).MsgClientImpl(rpc)
+      dualstaking: new (await import("./lava/dualstaking/tx.rpc.msg")).MsgClientImpl(rpc),
+      pairing: new (await import("./lava/pairing/tx.rpc.msg")).MsgClientImpl(rpc),
+      projects: new (await import("./lava/projects/tx.rpc.msg")).MsgClientImpl(rpc),
+      subscription: new (await import("./lava/subscription/tx.rpc.msg")).MsgClientImpl(rpc)
     }
   }
 });
