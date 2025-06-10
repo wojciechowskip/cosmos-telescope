@@ -59,30 +59,30 @@ import * as _129 from "./lava/subscription/subscription";
 import * as _130 from "./lava/subscription/tx";
 import * as _131 from "./lava/timerstore/query";
 import * as _132 from "./lava/timerstore/timer";
-import * as _190 from "./lava/dualstaking/tx.amino";
-import * as _191 from "./lava/pairing/tx.amino";
-import * as _192 from "./lava/projects/tx.amino";
-import * as _193 from "./lava/subscription/tx.amino";
-import * as _194 from "./lava/dualstaking/tx.registry";
-import * as _195 from "./lava/pairing/tx.registry";
-import * as _196 from "./lava/projects/tx.registry";
-import * as _197 from "./lava/subscription/tx.registry";
-import * as _198 from "./lava/downtime/v1/query.rpc.Query";
-import * as _199 from "./lava/dualstaking/query.rpc.Query";
-import * as _200 from "./lava/epochstorage/query.rpc.Query";
-import * as _201 from "./lava/fixationstore/query.rpc.Query";
-import * as _202 from "./lava/pairing/query.rpc.Query";
-import * as _203 from "./lava/plans/query.rpc.Query";
-import * as _204 from "./lava/projects/query.rpc.Query";
-import * as _205 from "./lava/spec/query.rpc.Query";
-import * as _206 from "./lava/subscription/query.rpc.Query";
-import * as _207 from "./lava/timerstore/query.rpc.Query";
-import * as _208 from "./lava/dualstaking/tx.rpc.msg";
-import * as _209 from "./lava/pairing/tx.rpc.msg";
-import * as _210 from "./lava/projects/tx.rpc.msg";
-import * as _211 from "./lava/subscription/tx.rpc.msg";
-import * as _214 from "./rpc.query";
-import * as _215 from "./rpc.tx";
+import * as _217 from "./lava/dualstaking/tx.amino";
+import * as _218 from "./lava/pairing/tx.amino";
+import * as _219 from "./lava/projects/tx.amino";
+import * as _220 from "./lava/subscription/tx.amino";
+import * as _221 from "./lava/dualstaking/tx.registry";
+import * as _222 from "./lava/pairing/tx.registry";
+import * as _223 from "./lava/projects/tx.registry";
+import * as _224 from "./lava/subscription/tx.registry";
+import * as _225 from "./lava/downtime/v1/query.rpc.Query";
+import * as _226 from "./lava/dualstaking/query.rpc.Query";
+import * as _227 from "./lava/epochstorage/query.rpc.Query";
+import * as _228 from "./lava/fixationstore/query.rpc.Query";
+import * as _229 from "./lava/pairing/query.rpc.Query";
+import * as _230 from "./lava/plans/query.rpc.Query";
+import * as _231 from "./lava/projects/query.rpc.Query";
+import * as _232 from "./lava/spec/query.rpc.Query";
+import * as _233 from "./lava/subscription/query.rpc.Query";
+import * as _234 from "./lava/timerstore/query.rpc.Query";
+import * as _235 from "./lava/dualstaking/tx.rpc.msg";
+import * as _236 from "./lava/pairing/tx.rpc.msg";
+import * as _237 from "./lava/projects/tx.rpc.msg";
+import * as _238 from "./lava/subscription/tx.rpc.msg";
+import * as _268 from "./rpc.query";
+import * as _269 from "./rpc.tx";
 export namespace lavanet {
   export namespace lava {
     export namespace downtime {
@@ -90,7 +90,7 @@ export namespace lavanet {
         ..._73,
         ..._74,
         ..._75,
-        ..._198
+        ..._225
       };
     }
     export const dualstaking = {
@@ -100,10 +100,10 @@ export namespace lavanet {
       ..._79,
       ..._80,
       ..._81,
-      ..._190,
-      ..._194,
-      ..._199,
-      ..._208
+      ..._217,
+      ..._221,
+      ..._226,
+      ..._235
     };
     export const epochstorage = {
       ..._82,
@@ -116,12 +116,12 @@ export namespace lavanet {
       ..._89,
       ..._90,
       ..._91,
-      ..._200
+      ..._227
     };
     export const fixationstore = {
       ..._92,
       ..._93,
-      ..._201
+      ..._228
     };
     export const pairing = {
       ..._94,
@@ -135,10 +135,10 @@ export namespace lavanet {
       ..._102,
       ..._103,
       ..._104,
-      ..._191,
-      ..._195,
-      ..._202,
-      ..._209
+      ..._218,
+      ..._222,
+      ..._229,
+      ..._236
     };
     export const plans = {
       ..._105,
@@ -148,7 +148,7 @@ export namespace lavanet {
       ..._109,
       ..._110,
       ..._111,
-      ..._203
+      ..._230
     };
     export const projects = {
       ..._112,
@@ -156,10 +156,10 @@ export namespace lavanet {
       ..._114,
       ..._115,
       ..._116,
-      ..._192,
-      ..._196,
-      ..._204,
-      ..._210
+      ..._219,
+      ..._223,
+      ..._231,
+      ..._237
     };
     export const spec = {
       ..._117,
@@ -169,7 +169,7 @@ export namespace lavanet {
       ..._121,
       ..._122,
       ..._123,
-      ..._205
+      ..._232
     };
     export const subscription = {
       ..._124,
@@ -179,19 +179,19 @@ export namespace lavanet {
       ..._128,
       ..._129,
       ..._130,
-      ..._193,
-      ..._197,
-      ..._206,
-      ..._211
+      ..._220,
+      ..._224,
+      ..._233,
+      ..._238
     };
     export const timerstore = {
       ..._131,
       ..._132,
-      ..._207
+      ..._234
     };
   }
   export const ClientFactory = {
-    ..._214,
-    ..._215
+    ..._268,
+    ..._269
   };
 }

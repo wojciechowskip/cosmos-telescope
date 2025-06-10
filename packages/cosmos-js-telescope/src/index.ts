@@ -13,6 +13,8 @@ export * from "./gogoproto/bundle";
 export * from "./google/bundle";
 export * from "./lavanet/bundle";
 export * from "./lavanet/client";
+export * from "./osmosis/bundle";
+export * from "./osmosis/client";
 export * from "./tendermint/bundle";
 export * from "./json-safe";
 export * from "./varint";
