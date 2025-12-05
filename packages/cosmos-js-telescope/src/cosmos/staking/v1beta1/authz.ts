@@ -101,19 +101,15 @@ export interface StakeAuthorizationAmino {
    * empty, there is no spend limit and any amount of coins can be delegated.
    */
   max_tokens?: CoinAmino;
-  // Auto generated code:
-  // /**
-  //  * allow_list specifies list of validator addresses to whom grantee can delegate tokens on behalf of granter's
-  //  * account.
-  //  */
-  // allow_list?: StakeAuthorization_ValidatorsAmino;
-  // /** deny_list specifies list of validator addresses to whom grantee can not delegate tokens. */
-  // deny_list?: StakeAuthorization_ValidatorsAmino;
-  // /** authorization_type defines one of AuthorizationType. */
+  /**
+   * allow_list specifies list of validator addresses to whom grantee can delegate tokens on behalf of granter's
+   * account.
+   */
+  allow_list?: StakeAuthorization_ValidatorsAmino;
+  /** deny_list specifies list of validator addresses to whom grantee can not delegate tokens. */
+  deny_list?: StakeAuthorization_ValidatorsAmino;
+  /** authorization_type defines one of AuthorizationType. */
   authorization_type?: AuthorizationType;
-
-  // Custom code to make it work:
-  Validators?: StakeAuthorization_ValidatorsAmino;
 }
 export interface StakeAuthorizationAminoMsg {
   type: "cosmos-sdk/StakeAuthorization";
@@ -134,7 +130,6 @@ export interface StakeAuthorizationSDKType {
 /** Validators defines list of validator addresses. */
 export interface StakeAuthorization_Validators {
   address: string[];
-  type: string;
 }
 export interface StakeAuthorization_ValidatorsProtoMsg {
   typeUrl: "/cosmos.staking.v1beta1.Validators";
@@ -142,19 +137,7 @@ export interface StakeAuthorization_ValidatorsProtoMsg {
 }
 /** Validators defines list of validator addresses. */
 export interface StakeAuthorization_ValidatorsAmino {
-  // Auto generated code:
-  // address?: string[];
-
-  // Custom code to make it work:
-  type: string;
-  value: {
-    allow_list: {
-      address?: string[];
-    } | undefined;
-    deny_list: {
-      address?: string[];
-    } | undefined;
-  }
+  address?: string[];
 }
 export interface StakeAuthorization_ValidatorsAminoMsg {
   type: "cosmos-sdk/Validators";
@@ -255,36 +238,22 @@ export const StakeAuthorization = {
     if (object.max_tokens !== undefined && object.max_tokens !== null) {
       message.maxTokens = Coin.fromAmino(object.max_tokens);
     }
-    // Auto generated code:
-    // if (object.allow_list !== undefined && object.allow_list !== null) {
-    //   message.allowList = StakeAuthorization_Validators.fromAmino(object.allow_list);
-    // }
-    // if (object.deny_list !== undefined && object.deny_list !== null) {
-    //   message.denyList = StakeAuthorization_Validators.fromAmino(object.deny_list);
-    // }
+    if (object.allow_list !== undefined && object.allow_list !== null) {
+      message.allowList = StakeAuthorization_Validators.fromAmino(object.allow_list);
+    }
+    if (object.deny_list !== undefined && object.deny_list !== null) {
+      message.denyList = StakeAuthorization_Validators.fromAmino(object.deny_list);
+    }
     if (object.authorization_type !== undefined && object.authorization_type !== null) {
       message.authorizationType = object.authorization_type;
     }
-    // Custom code to make it work
-    if (object.Validators !== undefined && object.Validators !== null) {
-      if (object.Validators.type === 'cosmos-sdk/StakeAuthorization/AllowList') {
-        message.allowList = StakeAuthorization_Validators.fromAmino(object.Validators);
-      } else if (object.Validators.type === 'cosmos-sdk/StakeAuthorization/DenyList') {
-        message.denyList = StakeAuthorization_Validators.fromAmino(object.Validators);
-      }
-    }
-
     return message;
   },
   toAmino(message: StakeAuthorization): StakeAuthorizationAmino {
     const obj: any = {};
     obj.max_tokens = message.maxTokens ? Coin.toAmino(message.maxTokens) : undefined;
-    // Auto generated code:
-    // obj.allow_list = message.allowList ? StakeAuthorization_Validators.toAmino(message.allowList) : undefined;
-    // obj.deny_list = message.denyList ? StakeAuthorization_Validators.toAmino(message.denyList) : undefined;
-    // Custom code to make it work
-    const isAllowOrDenyListProvided = message.allowList || message.denyList;
-    obj.Validators = isAllowOrDenyListProvided ? StakeAuthorization_Validators.toAmino(message.allowList || message.denyList) : undefined;
+    obj.allow_list = message.allowList ? StakeAuthorization_Validators.toAmino(message.allowList) : undefined;
+    obj.deny_list = message.denyList ? StakeAuthorization_Validators.toAmino(message.denyList) : undefined;
     obj.authorization_type = message.authorizationType === 0 ? undefined : message.authorizationType;
     return obj;
   },
@@ -369,52 +338,19 @@ export const StakeAuthorization_Validators = {
   fromPartial<I extends Exact<DeepPartial<StakeAuthorization_Validators>, I>>(object: I): StakeAuthorization_Validators {
     const message = createBaseStakeAuthorization_Validators();
     message.address = object.address?.map(e => e) || [];
-    message.type = object.type ? object.type : undefined;
     return message;
   },
   fromAmino(object: StakeAuthorization_ValidatorsAmino): StakeAuthorization_Validators {
-    // Auto generated code:
-    // const message = createBaseStakeAuthorization_Validators();
-    // message.address = object.address?.map(e => e) || [];
-
-    // Custom code to make it work:
-    const message = {};
-    const type = object.type;
-    const isAllowListType = type === "cosmos-sdk/StakeAuthorization/AllowList";
-    // const isDenyListType = type === 'cosmos-sdk/StakeAuthorization/DenyList';
-    const address = isAllowListType ? object.value.allow_list.address : object.value.deny_list.address;
-    message.address = address?.map(e => e) || [];
-
+    const message = createBaseStakeAuthorization_Validators();
+    message.address = object.address?.map(e => e) || [];
     return message;
   },
   toAmino(message: StakeAuthorization_Validators): StakeAuthorization_ValidatorsAmino {
     const obj: any = {};
-    // Auto generated code:
-    // if (message.address) {
-    //   obj.address = message.address.map(e => e);
-    // } else {
-    //   obj.address = message.address;
-    // }
-
-    // Custom code to make it work:
-    obj.type = message.type;
-
-    const isAllowListType = message.type === "cosmos-sdk/StakeAuthorization/AllowList";
-    const isDenyListType = message.type === "cosmos-sdk/StakeAuthorization/DenyList";
-
-    obj.value = {};
-    if (isAllowListType) {
-      obj.value = {
-        allow_list: {
-          address: message.address ? message.address.map(e => e) : message.address
-        }
-      };
-    } else if (isDenyListType) {
-      obj.value = {
-        deny_list: {
-          address: message.address ? message.address.map(e => e) : message.address
-        }
-      };
+    if (message.address) {
+      obj.address = message.address.map(e => e);
+    } else {
+      obj.address = message.address;
     }
     return obj;
   },
@@ -423,7 +359,7 @@ export const StakeAuthorization_Validators = {
   },
   toAminoMsg(message: StakeAuthorization_Validators): StakeAuthorization_ValidatorsAminoMsg {
     return {
-      type: "cosmos-sdk/StakeAuthorization/DenyList",
+      type: "cosmos-sdk/Validators",
       value: StakeAuthorization_Validators.toAmino(message)
     };
   },

@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 import { GeneratedType, Registry, OfflineSigner } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
 import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
@@ -17,8 +17,10 @@ export const lavanetAminoConverters = {
   ...lavanetLavaSubscriptionTxAmino.AminoConverter
 };
 export const lavanetProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...lavanetLavaDualstakingTxRegistry.registry, ...lavanetLavaPairingTxRegistry.registry, ...lavanetLavaProjectsTxRegistry.registry, ...lavanetLavaSubscriptionTxRegistry.registry];
-export const getSigningLavanetClientOptions: SigningStargateClient = ({
+export const getSigningLavanetClientOptions = ({
   defaultTypes = defaultRegistryTypes
+}: {
+  defaultTypes?: ReadonlyArray<[string, GeneratedType]>;
 } = {}): {
   registry: Registry;
   aminoTypes: AminoTypes;

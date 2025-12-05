@@ -6,6 +6,8 @@
   */
  
 export * from "./amino/bundle";
+export * from "./babylon/bundle";
+export * from "./babylon/client";
 export * from "./cosmos_proto/bundle";
 export * from "./cosmos/bundle";
 export * from "./cosmos/client";

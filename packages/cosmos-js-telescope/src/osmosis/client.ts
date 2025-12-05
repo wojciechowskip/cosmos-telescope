@@ -1,11 +1,6 @@
-//@ts-nocheck
+// @ts-nocheck
 import { GeneratedType, Registry, OfflineSigner } from "@cosmjs/proto-signing";
-import {
-  defaultRegistryTypes,
-  AminoTypes,
-  SigningStargateClient,
-  SigningStargateClientOptions,
-} from "@cosmjs/stargate";
+import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
 import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
 import * as osmosisConcentratedliquidityPoolmodelConcentratedV1beta1TxRegistry from "./concentratedliquidity/poolmodel/concentrated/v1beta1/tx.registry";
 import * as osmosisConcentratedliquidityV1beta1TxRegistry from "./concentratedliquidity/v1beta1/tx.registry";
@@ -31,8 +26,10 @@ export const osmosisAminoConverters = {
   ...osmosisPoolmanagerV1beta1TxAmino.AminoConverter
 };
 export const osmosisProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...osmosisConcentratedliquidityPoolmodelConcentratedV1beta1TxRegistry.registry, ...osmosisConcentratedliquidityV1beta1TxRegistry.registry, ...osmosisGammPoolmodelsBalancerV1beta1TxRegistry.registry, ...osmosisGammPoolmodelsStableswapV1beta1TxRegistry.registry, ...osmosisGammV1beta1TxRegistry.registry, ...osmosisLockupTxRegistry.registry, ...osmosisPoolmanagerV1beta1TxRegistry.registry];
-export const getSigningOsmosisClientOptions: SigningStargateClient = ({
+export const getSigningOsmosisClientOptions = ({
   defaultTypes = defaultRegistryTypes
+}: {
+  defaultTypes?: ReadonlyArray<[string, GeneratedType]>;
 } = {}): {
   registry: Registry;
   aminoTypes: AminoTypes;
