@@ -12,6 +12,8 @@ import * as _10 from "./incentive/params";
 import * as _11 from "./incentive/query";
 import * as _12 from "./incentive/rewards";
 import * as _13 from "./incentive/tx";
+import * as _14 from "./btcstaking/v1/btcstaking";
+import * as _15 from "./btcstaking/v1/tx";
 import * as _184 from "./epoching/v1/tx.amino";
 import * as _185 from "./incentive/tx.amino";
 import * as _186 from "./epoching/v1/tx.registry";
@@ -20,9 +22,21 @@ import * as _188 from "./epoching/v1/query.rpc.Query";
 import * as _189 from "./incentive/query.rpc.Query";
 import * as _190 from "./epoching/v1/tx.rpc.msg";
 import * as _191 from "./incentive/tx.rpc.msg";
+import * as _192 from "./btcstaking/v1/tx.amino";
+import * as _193 from "./btcstaking/v1/tx.registry";
+import * as _194 from "./btcstaking/v1/tx.rpc.msg";
 import * as _287 from "./rpc.query";
 import * as _288 from "./rpc.tx";
 export namespace babylon {
+  export namespace btcstaking {
+    export const v1 = {
+      ..._14,
+      ..._15,
+      ..._192,
+      ..._193,
+      ..._194
+    };
+  }
   export namespace epoching {
     export const v1 = {
       ..._1,

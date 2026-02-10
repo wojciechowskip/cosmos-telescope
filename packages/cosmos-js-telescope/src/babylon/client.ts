@@ -2,15 +2,18 @@
 import { GeneratedType, Registry, OfflineSigner } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes, AminoTypes, SigningStargateClient } from "@cosmjs/stargate";
 import { HttpEndpoint } from "@cosmjs/tendermint-rpc";
+import * as babylonBtcstakingV1TxRegistry from "./btcstaking/v1/tx.registry";
 import * as babylonEpochingV1TxRegistry from "./epoching/v1/tx.registry";
 import * as babylonIncentiveTxRegistry from "./incentive/tx.registry";
+import * as babylonBtcstakingV1TxAmino from "./btcstaking/v1/tx.amino";
 import * as babylonEpochingV1TxAmino from "./epoching/v1/tx.amino";
 import * as babylonIncentiveTxAmino from "./incentive/tx.amino";
 export const babylonAminoConverters = {
+  ...babylonBtcstakingV1TxAmino.AminoConverter,
   ...babylonEpochingV1TxAmino.AminoConverter,
   ...babylonIncentiveTxAmino.AminoConverter
 };
-export const babylonProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...babylonEpochingV1TxRegistry.registry, ...babylonIncentiveTxRegistry.registry];
+export const babylonProtoRegistry: ReadonlyArray<[string, GeneratedType]> = [...babylonBtcstakingV1TxRegistry.registry, ...babylonEpochingV1TxRegistry.registry, ...babylonIncentiveTxRegistry.registry];
 export const getSigningBabylonClientOptions = ({
   defaultTypes = defaultRegistryTypes
 }: {

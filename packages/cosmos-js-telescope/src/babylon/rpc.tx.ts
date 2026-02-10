@@ -6,6 +6,9 @@ export const createRPCMsgClient = async ({
   rpc: Rpc;
 }) => ({
   babylon: {
+    btcstaking: {
+      v1: new (await import("./btcstaking/v1/tx.rpc.msg")).MsgClientImpl(rpc)
+    },
     epoching: {
       v1: new (await import("./epoching/v1/tx.rpc.msg")).MsgClientImpl(rpc)
     },

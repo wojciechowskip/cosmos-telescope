@@ -8,7 +8,20 @@
       "Bash(find:*)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(npm run codegen:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(npx tsc:*)",
+      "Bash(gh api:*)",
+      "Bash(git -C /Users/patrykwojciechowski/Workspace/cosmos-js-telescope log --oneline -20)",
+      "Bash(git -C /Users/patrykwojciechowski/Workspace/cosmos-js-telescope show a242dbf --name-status)",
+      "Bash(git -C /Users/patrykwojciechowski/Workspace/cosmos-js-telescope show a242dbf)",
+      "Bash(git -C /Users/patrykwojciechowski/Workspace/cosmos-js-telescope log --oneline --all -30)",
+      "Bash(git -C /Users/patrykwojciechowski/Workspace/cosmos-js-telescope tag -l \"cosmos-js-telescope@*\")",
+      "Bash(yarn lerna --help:*)",
+      "Bash(yarn lerna version --help:*)",
+      "Bash(yarn lerna publish --help:*)",
+      "Bash(git -C /Users/patrykwojciechowski/Workspace/cosmos-js-telescope log --oneline 4880f6c...de53916)",
+      "Bash(git -C /Users/patrykwojciechowski/Workspace/cosmos-js-telescope show 4880f6c)",
+      "Bash(git -C /Users/patrykwojciechowski/Workspace/cosmos-js-telescope log --all --format=\"%H %s\")"
     ],
     "deny": [],
     "ask": []
